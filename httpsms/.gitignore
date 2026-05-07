@@ -1,0 +1,12 @@
+.idea
+.env*
+!.env.docker
+!.env.production
+*serviceAccountKey.json
+android/app/debug/
+*main.exe*
+android/app/release/
+
+tests/firebase-credentials.json
+tests/emulator/emulator.exe
+SECURITY_AUDIT_REPORT.md

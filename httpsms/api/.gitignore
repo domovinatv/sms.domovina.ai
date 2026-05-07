@@ -1,0 +1,11 @@
+.env.local
+*main.exe
+tmp
+$path
+
+.env*
+.flaskenv*
+!.env.project
+!.env.vault
+!.env.docker
+cmd/experiments/*
