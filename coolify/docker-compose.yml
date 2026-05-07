@@ -88,6 +88,8 @@ services:
         CLOUDFLARE_TURNSTILE_SITE_KEY: ${CLOUDFLARE_TURNSTILE_SITE_KEY:-}
         CHECKOUT_URL: ${CHECKOUT_URL:-}
         ENTERPRISE_CHECKOUT_URL: ${ENTERPRISE_CHECKOUT_URL:-}
+        APP_URL: ${APP_URL}
+        APP_NAME: ${APP_NAME}
     restart: unless-stopped
     depends_on:
       api:
