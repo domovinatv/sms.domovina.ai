@@ -93,7 +93,7 @@ services:
       api:
         condition: service_started
     expose:
-      - "3000"
+      - "80"
 
 volumes:
   postgres-data:

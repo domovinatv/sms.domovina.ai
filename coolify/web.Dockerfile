@@ -39,7 +39,8 @@ COPY httpsms/web/ ./
 RUN pnpm run generate
 
 FROM nginx:stable-alpine AS production
+RUN rm -rf /usr/share/nginx/html/*
 COPY --from=build /app/dist /usr/share/nginx/html
-COPY httpsms/web/nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 3000
+COPY coolify/nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
