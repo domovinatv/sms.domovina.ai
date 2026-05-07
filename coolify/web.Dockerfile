@@ -30,10 +30,10 @@ ENV FIREBASE_API_KEY=$FIREBASE_API_KEY \
     CHECKOUT_URL=$CHECKOUT_URL \
     ENTERPRISE_CHECKOUT_URL=$ENTERPRISE_CHECKOUT_URL
 
-RUN apk add --no-cache python3 make g++ && npm install -g pnpm
+RUN apk add --no-cache python3 make g++ && npm install -g pnpm@9
 
 COPY httpsms/web/package.json httpsms/web/pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
+RUN pnpm install
 
 COPY httpsms/web/ ./
 RUN pnpm run generate
