@@ -184,7 +184,10 @@ function findCodeInContent(content: string): string | null {
   return null;
 }
 
-app.post("/webhook", async (c) => {
+// Catchall POST: httpsms webhook URL might be set to /, /webhook, /sms, etc.
+// Treat any POST that has the X-Event-Type header as a webhook delivery so the
+// user doesn't have to fight URL-path strictness.
+app.post("*", async (c) => {
   const sig = await checkSignature(c.req.header("authorization"));
   const eventType = c.req.header("x-event-type") ?? "(unknown)";
 
