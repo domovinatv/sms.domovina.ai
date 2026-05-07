@@ -10,11 +10,11 @@
     <string name="get_your_api_key">Get Your API Key at\nsms.domovina.ai/settings</string>
     <string name="main_log_out">Log Out</string>
     <string name="login_phone_number_hint">e.g +18005550199 (international format)</string>
-    <string name="login_server_url_hint">e.g https://api.sms.domovina.ai</string>
+    <string name="login_server_url_hint">e.g https://sms-api.domovina.ai</string>
     <string name="phone_number">Phone Number</string>
     <string name="send_heartbeat">Send Heartbeat</string>
     <string name="server_url">Server URL</string>
-    <string name="default_server_url">https://api.sms.domovina.ai</string>
+    <string name="default_server_url">https://sms-api.domovina.ai</string>
     <string name="app_version">sms.domovina.ai - %s</string>
     <string name="disable_battery_optimization">Disable Battery Optimization</string>
     <string name="enable_sms_permission">Enable SMS Permission</string>

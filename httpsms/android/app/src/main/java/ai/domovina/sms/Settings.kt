@@ -298,7 +298,7 @@ object Settings {
     }
 
     fun getServerUrlOrDefault(context:Context): URI {
-        val urlString = getServerUrl(context) ?: "https://api.sms.domovina.ai"
+        val urlString = getServerUrl(context) ?: "https://sms-api.domovina.ai"
         return URI(urlString)
     }
 
