@@ -288,6 +288,11 @@ const DEMO_HTML = `<!doctype html>
   .sub { color: #8b949e; margin-top: 0; margin-bottom: 2rem; }
   button { background: #238636; color: #fff; border: 0; padding: .8rem 1.4rem; font-size: 1rem; border-radius: .4rem; cursor: pointer; }
   button:disabled { background: #30363d; cursor: not-allowed; }
+  .actions { display: flex; gap: .6rem; margin: 1.2rem 0 .6rem; }
+  .action-btn { flex: 1; text-align: center; padding: .9rem 1rem; font-size: 1rem; border-radius: .4rem; cursor: pointer; text-decoration: none; border: 1px solid #30363d; background: #21262d; color: #e6edf3; font-family: inherit; }
+  .action-btn.primary { background: #238636; border-color: #238636; }
+  .action-btn:active { transform: translateY(1px); }
+  .hint { font-size: .85rem; color: #8b949e; margin: .25rem 0 0; }
   .card { background: #161b22; border: 1px solid #30363d; border-radius: .6rem; padding: 1.4rem; margin-top: 1.5rem; }
   .code { font-family: ui-monospace, monospace; font-size: 2.4rem; letter-spacing: .15em; font-weight: 700; color: #58a6ff; }
   .row { display: flex; justify-content: space-between; padding: .35rem 0; border-bottom: 1px solid #21262d; font-size: .9rem; }
@@ -305,22 +310,29 @@ const DEMO_HTML = `<!doctype html>
   <p style="margin-top:0">Send an SMS containing this code from the phone you want to verify:</p>
   <p class="code" id="code"></p>
   <p>to <strong id="num"></strong></p>
+  <div class="actions">
+    <a id="smsLink" class="action-btn primary" href="#">📱 Open SMS app</a>
+    <button class="action-btn" onclick="copyCode()">Copy code</button>
+  </div>
+  <p class="hint">On mobile, tap "Open SMS app" — your default messenger opens with the recipient and code prefilled. Hit send.</p>
   <hr style="border-color:#30363d" />
   <div class="row"><span>Status</span><span id="status" class="status-pending">pending</span></div>
   <div class="row"><span>Expires</span><span id="exp"></span></div>
   <div class="row"><span>Verified phone</span><span id="phone">—</span></div>
 </div>
 <script>
-let id, timer;
+let id, timer, code, num;
 async function start() {
   const btn = document.getElementById("btn");
   btn.disabled = true; btn.textContent = "Starting…";
   const r = await fetch("/api/verifications", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ purpose: "demo" }) });
   const v = await r.json();
-  id = v.id;
-  document.getElementById("code").textContent = v.code;
-  document.getElementById("num").textContent = v.gateway_number;
+  id = v.id; code = v.code; num = v.gateway_number;
+  document.getElementById("code").textContent = code;
+  document.getElementById("num").textContent = num;
   document.getElementById("exp").textContent = new Date(v.expires_at).toLocaleTimeString();
+  // sms: URI — "?body=" works on Android 5+ and iOS 8+. Encode body for safety.
+  document.getElementById("smsLink").href = "sms:" + encodeURIComponent(num) + "?body=" + encodeURIComponent(code);
   document.getElementById("card").style.display = "block";
   btn.style.display = "none";
   timer = setInterval(poll, 1500);
@@ -334,6 +346,17 @@ async function poll() {
   s.className = "status-" + v.status;
   document.getElementById("phone").textContent = v.verified_phone ?? "—";
   if (v.status !== "pending") clearInterval(timer);
+}
+async function copyCode() {
+  try {
+    await navigator.clipboard.writeText(code);
+    const b = event.target;
+    const orig = b.textContent;
+    b.textContent = "Copied ✓";
+    setTimeout(() => { b.textContent = orig; }, 1500);
+  } catch (e) {
+    alert("Code: " + code);
+  }
 }
 </script>
 `;
