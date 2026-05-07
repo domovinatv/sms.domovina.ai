@@ -126,8 +126,9 @@ internal class SentReceiver : BroadcastReceiver() {
             val timestamp = this.inputData.getString(Constants.KEY_MESSAGE_TIMESTAMP)
 
             Timber.i("[${timestamp}] sending [FAILED] message event with ID [${messageId}] and reason [$reason]")
+            InMemoryLog.smsFailed(messageId!!, reason ?: "unknown")
 
-            if (HttpSmsApiService.create(applicationContext).sendFailedEvent(messageId!!, timestamp!!, reason!!)){
+            if (HttpSmsApiService.create(applicationContext).sendFailedEvent(messageId, timestamp!!, reason!!)){
                 return Result.success()
             }
             return Result.retry()

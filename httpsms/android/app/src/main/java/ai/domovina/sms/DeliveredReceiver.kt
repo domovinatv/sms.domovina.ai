@@ -85,8 +85,9 @@ internal class DeliveredReceiver : BroadcastReceiver() {
             val timestamp = this.inputData.getString(Constants.KEY_MESSAGE_TIMESTAMP)
 
             Timber.i("[${timestamp}] sending [DELIVERED] message event with ID [${messageId}]")
+            InMemoryLog.smsDelivered(messageId!!)
 
-            if (HttpSmsApiService.create(applicationContext).sendDeliveredEvent(messageId!!, timestamp!!)){
+            if (HttpSmsApiService.create(applicationContext).sendDeliveredEvent(messageId, timestamp!!)){
                 return Result.success()
             }
             return Result.retry()
@@ -100,8 +101,9 @@ internal class DeliveredReceiver : BroadcastReceiver() {
             val timestamp = this.inputData.getString(Constants.KEY_MESSAGE_TIMESTAMP)
 
             Timber.i("[${timestamp}] sending [FAILED] message event with ID [${messageId}] and reason [$reason]")
+            InMemoryLog.smsFailed(messageId!!, reason ?: "unknown")
 
-            if (HttpSmsApiService.create(applicationContext).sendFailedEvent(messageId!!, timestamp!!, reason!!)){
+            if (HttpSmsApiService.create(applicationContext).sendFailedEvent(messageId, timestamp!!, reason!!)){
                 return Result.success()
             }
             return Result.retry()

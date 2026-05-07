@@ -178,6 +178,7 @@ class ReceivedReceiver: BroadcastReceiver()
             val from = this.inputData.getString(Constants.KEY_MESSAGE_FROM)!!
             val to = this.inputData.getString(Constants.KEY_MESSAGE_TO)!!
             val content = this.inputData.getString(Constants.KEY_MESSAGE_CONTENT)!!
+            InMemoryLog.smsReceived(from, to, content)
             val encrypted = this.inputData.getBoolean(Constants.KEY_MESSAGE_ENCRYPTED, false)
             val timestamp = this.inputData.getString(Constants.KEY_MESSAGE_TIMESTAMP)!!
 

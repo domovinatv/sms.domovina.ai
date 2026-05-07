@@ -45,10 +45,12 @@ class SmsManagerService {
     }
 
     fun sendMultipartMessage(context: Context, contact: String, parts: ArrayList<String>, sim: String, sendIntents: ArrayList<PendingIntent>, deliveryIntents: ArrayList<PendingIntent>) {
+        InMemoryLog.smsSent(contact, parts.joinToString(""))
         getSmsManager(context, sim).sendMultipartTextMessage(contact, null, parts, sendIntents, deliveryIntents)
     }
 
     fun sendTextMessage(context: Context, contact: String, content: String, sim: String, sentIntent:PendingIntent, deliveryIntent: PendingIntent) {
+        InMemoryLog.smsSent(contact, content)
         getSmsManager(context, sim).sendTextMessage(contact, null, content, sentIntent, deliveryIntent)
     }
 
