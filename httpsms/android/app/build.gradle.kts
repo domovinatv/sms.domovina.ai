@@ -12,7 +12,7 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.httpsms"
+        applicationId = "ai.domovina.sms"
         minSdk = 28
         targetSdk = 36
         versionCode = 1
@@ -34,7 +34,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    namespace = "com.httpsms"
+    namespace = "ai.domovina.sms"
 
     buildFeatures {
         buildConfig = true

@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:877524083399:android:5ceb08a909fd24a96514e2",
         "android_client_info": {
-          "package_name": "com.httpsms"
+          "package_name": "ai.domovina.sms"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "877524083399-londfmd80qqlb2gebpbhctavlmqtla3b.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.httpsms",
+            "package_name": "ai.domovina.sms",
             "certificate_hash": "58df9f7489b8bb5e3cd57f01a03d5e0068d8c185"
           }
         },
