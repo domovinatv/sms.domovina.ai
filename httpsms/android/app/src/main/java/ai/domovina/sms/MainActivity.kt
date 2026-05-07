@@ -38,9 +38,30 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.TimeUnit
 import android.provider.Settings as ProviderSettings
+import android.view.Menu
+import android.view.MenuItem
 
 
 class MainActivity : AppCompatActivity() {
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menu.add(0, MENU_ITEM_LOGS, 0, "Show logs")
+            .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == MENU_ITEM_LOGS) {
+            startActivity(Intent(this, LogActivity::class.java))
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    companion object {
+        private const val MENU_ITEM_LOGS = 1001
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -356,7 +377,7 @@ class MainActivity : AppCompatActivity() {
 
                 if (exception != null) {
                     Timber.w("heartbeat sending failed with [$exception]")
-                    Toast.makeText(context, exception, Toast.LENGTH_LONG).show()
+                    showHeartbeatError(exception)
                     return@run
                 }
                 Toast.makeText(context, "Heartbeat sent successfully", Toast.LENGTH_SHORT).show()
@@ -374,17 +395,36 @@ class MainActivity : AppCompatActivity() {
                 if (Settings.getActiveStatus(applicationContext, Constants.SIM2)) {
                     phoneNumbers.add(Settings.getSIM2PhoneNumber(applicationContext))
                 }
-                val isStored = HttpSmsApiService.create(context).storeHeartbeat(phoneNumbers.toTypedArray(), charging)
-                if (!isStored) {
-                    error = "Could not send heartbeat make sure the phone is connected to the internet"
-                }
+                HttpSmsApiService.create(context).storeHeartbeat(phoneNumbers.toTypedArray(), charging)
                 Settings.setHeartbeatTimestampAsync(applicationContext, System.currentTimeMillis())
             } catch (exception: Exception) {
                 Timber.e(exception)
-                error = exception.javaClass.simpleName
+                error = "${exception.javaClass.simpleName}: ${exception.message}"
             }
             liveData.postValue(error)
             Timber.d("finished sending pulse")
         }.start()
+    }
+
+    private fun showHeartbeatError(message: String) {
+        val tv = TextView(this).apply {
+            text = message
+            setTextIsSelectable(true)
+            setPadding(48, 32, 48, 32)
+            textSize = 12f
+            setTextColor(0xFFE0E0E0.toInt())
+            typeface = android.graphics.Typeface.MONOSPACE
+        }
+        val scroll = android.widget.ScrollView(this).apply { addView(tv) }
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Heartbeat error")
+            .setView(scroll)
+            .setPositiveButton("OK", null)
+            .setNeutralButton("Copy") { _, _ ->
+                val cm = getSystemService(android.content.ClipboardManager::class.java)
+                cm.setPrimaryClip(android.content.ClipData.newPlainText("heartbeat-error", message))
+                Toast.makeText(this, "Copied to clipboard", Toast.LENGTH_SHORT).show()
+            }
+            .show()
     }
 }

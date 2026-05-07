@@ -47,6 +47,9 @@
             tools:ignore="LockedOrientationActivity" />
         <activity android:name=".SettingsActivity" android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
+        <activity android:name=".LogActivity" android:screenOrientation="portrait"
+            android:label="Logs"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"

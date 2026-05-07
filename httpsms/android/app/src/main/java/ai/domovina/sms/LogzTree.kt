@@ -1,82 +1,46 @@
 package ai.domovina.sms
 
 import android.content.Context
-import android.os.Build
-import com.beust.klaxon.Json
-import com.beust.klaxon.Klaxon
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
 import timber.log.Timber
-import java.time.ZoneOffset
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
-import io.sentry.Sentry
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.concurrent.ConcurrentLinkedDeque
 
-class LogzTree(val context: Context): Timber.DebugTree() {
-    private val client = OkHttpClient()
+object InMemoryLog {
+    private const val MAX_ENTRIES = 2000
+    private val buffer = ConcurrentLinkedDeque<String>()
+    private val df = SimpleDateFormat("HH:mm:ss.SSS", Locale.US)
 
+    fun append(level: String, tag: String?, message: String, t: Throwable? = null) {
+        val ts = df.format(Date())
+        val trace = t?.let {
+            "\n  ${it.javaClass.simpleName}: ${it.message}\n  " +
+                it.stackTraceToString().lines().take(8).joinToString("\n  ")
+        } ?: ""
+        buffer.addLast("$ts $level ${tag ?: "?"}: $message$trace")
+        while (buffer.size > MAX_ENTRIES) buffer.pollFirst()
+    }
+
+    fun snapshot(): List<String> = buffer.toList()
+
+    fun clear() {
+        buffer.clear()
+    }
+}
+
+class LogzTree(val context: Context) : Timber.DebugTree() {
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
-        val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-        val logEntry = LogEntry(
-            BuildConfig.APPLICATION_ID,
-            BuildConfig.VERSION_NAME,
-            priority,
-            severity(priority),
-            tag,
-            message,
-            Build.MODEL,
-            Build.BRAND,
-            Build.DEVICE,
-            Build.VERSION.SDK_INT,
-            ZonedDateTime.now(ZoneOffset.UTC).format(formatter),
-            Settings.getUserID(context),
-            t
-        )
-
-        val body = Klaxon().toJsonString(listOf(logEntry)).toRequestBody("application/json".toMediaType())
-        val request: Request = Request.Builder()
-            .url("https://api.axiom.co/v1/datasets/production/ingest")
-            .post(body)
-            .header("Content-Type", "application/json")
-            .header("Authorization", "Bearer xaat-2a2e0b73-3702-4971-a80f-be3956934950")
-            .build()
-
-        Thread {
-            try {
-                val response = client.newCall(request).execute()
-                response.body?.close()
-            } catch(ex: Exception) {
-                Sentry.captureException(ex)
-            }
-        }.start()
-    }
-
-    private fun severity(priority: Int): String {
-        return when(priority) {
-            3 -> "DEBUG"
-            4 -> "INFO"
-            5 -> "WARNING"
-            6 -> "ERROR"
-            7 -> "ASSERT"
-            else -> "VERBOSE"
+        super.log(priority, tag, message, t)
+        val level = when (priority) {
+            2 -> "V"
+            3 -> "D"
+            4 -> "I"
+            5 -> "W"
+            6 -> "E"
+            7 -> "A"
+            else -> "?"
         }
+        InMemoryLog.append(level, tag, message, t)
     }
-
-    class LogEntry(
-        val name: String,
-        val release: String,
-        val priority: Int,
-        val severity: String,
-        val tag: String?,
-        val message: String,
-        val model: String,
-        val brand: String,
-        val device: String,
-        val version: Int,
-        @Json(name = "@timestamp")
-        val dt: String,
-        val userID: String,
-        val throwable: Throwable?)
 }

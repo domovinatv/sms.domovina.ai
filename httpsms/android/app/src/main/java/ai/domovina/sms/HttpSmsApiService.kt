@@ -147,12 +147,15 @@ class HttpSmsApiService(private val apiKey: String, private val baseURL: URI) {
             .build()
 
         val response = client.newCall(request).execute()
+        val responseBody = response.body?.string() ?: ""
         if (!response.isSuccessful) {
-            Timber.e("error response [${response.body?.string()}] with code [${response.code}] while sending heartbeat [$body] for phone numbers [${phoneNumbers.joinToString()}]")
             response.close()
-            return false
+            throw RuntimeException(
+                "HTTP ${response.code} from ${request.url}\n\n" +
+                "Request body:\n$body\n\n" +
+                "Response body:\n$responseBody"
+            )
         }
-
         response.close()
         Timber.i( "heartbeat stored successfully for phone numbers [${phoneNumbers.joinToString()}]" )
         return true
