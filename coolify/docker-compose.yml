@@ -28,7 +28,7 @@ services:
 
   api:
     build:
-      context: ..
+      context: .
       dockerfile: coolify/api.Dockerfile
     restart: unless-stopped
     depends_on:
@@ -72,7 +72,7 @@ services:
 
   web:
     build:
-      context: ..
+      context: .
       dockerfile: coolify/web.Dockerfile
       args:
         FIREBASE_API_KEY: ${FIREBASE_API_KEY}
