@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">httpSMS</string>
+    <string name="nextRefreshTime">23/06/2022 18:58:30</string>
+    <string name="menuIconDescription">Menu Icon</string>
+    <string name="menuIconName">More</string>
+    <string name="notification_channel_default">com.httpsms.notification.default</string>
+    <string name="sign_in_button">Login With API Key</string>
+    <string name="text_area_api_key">API Key</string>
+    <string name="img_http_sms_logo">HTTP Sms Logo</string>
+    <string name="get_your_api_key">Get Your API Key at\nhttpsms.com/settings</string>
+    <string name="main_log_out">Log Out</string>
+    <string name="login_phone_number_hint">e.g +18005550199 (international format)</string>
+    <string name="login_server_url_hint">e.g https://api.httpsms.com</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="send_heartbeat">Send Heartbeat</string>
+    <string name="server_url">Server URL</string>
+    <string name="default_server_url">https://api.httpsms.com</string>
+    <string name="app_version">httpsms.com - %s</string>
+    <string name="disable_battery_optimization">Disable Battery Optimization</string>
+    <string name="enable_sms_permission">Enable SMS Permission</string>
+    <string name="main_app_settings">App Settings</string>
+    <string name="settings_sim1">SIM1</string>
+    <string name="settings_sim_2">SIM2</string>
+    <string name="settings_outgoing_messages_sim1">Enable SIM1 outgoing messages</string>
+    <string name="settings_incoming_messages_sim1">Enable SIM1 incoming messages</string>
+    <string name="settings_incoming_messages_sim2">Enable SIM2 incoming messages</string>
+    <string name="settings_outgoing_messages_sim2">Enable SIM2 outgoing messages</string>
+    <string name="login_phone_number_sim1">Phone number (SIM1)</string>
+    <string name="login_phone_number_sim2">Phone number (SIM2)</string>
+    <string name="encryption_key">Encryption Key</string>
+    <string name="encrypt_received_messages">Encrypt received messages</string>
+    <string name="enable_debug_logs">Enable debug logs</string>
+    <string name="enable_incoming_call_events_sim1">Enable SIM1 missed call events</string>
+    <string name="enable_sim2_incoming_call_events">Enable SIM2 missed call events</string>
+</resources>
