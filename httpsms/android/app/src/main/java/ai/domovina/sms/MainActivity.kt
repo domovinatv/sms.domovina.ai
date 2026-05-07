@@ -252,6 +252,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun registerListeners() {
         findViewById<MaterialButton>(R.id.mainSettingsButton).setOnClickListener { onSettingsClick() }
+        findViewById<MaterialButton>(R.id.mainLogsButton).setOnClickListener {
+            startActivity(Intent(this, LogActivity::class.java))
+        }
     }
 
     private fun onSettingsClick() {
