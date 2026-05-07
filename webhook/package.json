@@ -1,0 +1,12 @@
+{
+  "name": "webhook",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --hot index.ts",
+    "start": "bun run index.ts"
+  },
+  "dependencies": {
+    "hono": "^4.6.0"
+  }
+}
