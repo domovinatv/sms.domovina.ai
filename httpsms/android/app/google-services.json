@@ -1,41 +1,33 @@
 {
   "project_info": {
-    "project_number": "877524083399",
-    "project_id": "httpsms-86c51",
-    "storage_bucket": "httpsms-86c51.appspot.com"
+    "project_number": "975158202240",
+    "project_id": "sms-domovina-ai-production",
+    "storage_bucket": "sms-domovina-ai-production.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:877524083399:android:5ceb08a909fd24a96514e2",
+        "mobilesdk_app_id": "1:975158202240:android:a1552a713ff767f3df3b65",
         "android_client_info": {
           "package_name": "ai.domovina.sms"
         }
       },
       "oauth_client": [
         {
-          "client_id": "877524083399-londfmd80qqlb2gebpbhctavlmqtla3b.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "ai.domovina.sms",
-            "certificate_hash": "58df9f7489b8bb5e3cd57f01a03d5e0068d8c185"
-          }
-        },
-        {
-          "client_id": "877524083399-7pn57hd8k2js6tc93i428ko1m51mj50r.apps.googleusercontent.com",
+          "client_id": "975158202240-fqq69hljcsgeuu6a4t61qke5trsr1qle.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBKiokmk5qhE2Zc5F97KWzOvRe8FDDuxDg"
+          "current_key": "AIzaSyAhTZ3L_VgC9LGSREIdJtJQHN7VaNSQAj4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "877524083399-7pn57hd8k2js6tc93i428ko1m51mj50r.apps.googleusercontent.com",
+              "client_id": "975158202240-fqq69hljcsgeuu6a4t61qke5trsr1qle.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
