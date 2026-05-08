@@ -22,7 +22,16 @@ export interface AppOptions {
   gatewayNumber: string;
   ttlMs: number;
   codeLen: number;
+  /** Optional log sink. Defaults to console.log unless NODE_ENV=test. */
+  log?: (line: string) => void;
 }
+
+const DIM = (s: string) => `\x1b[2m${s}\x1b[0m`;
+const CYAN = (s: string) => `\x1b[36m${s}\x1b[0m`;
+const GREEN = (s: string) => `\x1b[32m${s}\x1b[0m`;
+const YELLOW = (s: string) => `\x1b[33m${s}\x1b[0m`;
+const RED = (s: string) => `\x1b[31m${s}\x1b[0m`;
+const BOLD = (s: string) => `\x1b[1m${s}\x1b[0m`;
 
 // Avoid ambiguous chars in SMS: no 0/O, 1/I/L, 5/S, 8/B, 2/Z
 export const CODE_ALPHABET = "ACDEFGHJKMNPQRTUVWXY3467";
@@ -99,6 +108,12 @@ export function createApp(opts: AppOptions): AppHandle {
   const verifications = new Map<string, Verification>();
   const codeToId = new Map<string, string>();
 
+  const log =
+    opts.log ??
+    (process.env.NODE_ENV === "test"
+      ? () => {}
+      : (line: string) => console.log(`${DIM(new Date().toISOString())}  ${line}`));
+
   const sweepExpired = () => {
     const now = Date.now();
     for (const v of verifications.values()) {
@@ -130,6 +145,7 @@ export function createApp(opts: AppOptions): AppHandle {
     };
     verifications.set(id, v);
     codeToId.set(code, id);
+    log(`${CYAN("verification.start")} id=${id.slice(0, 8)} code=${BOLD(code)} purpose=${purpose ?? "-"}`);
     return c.json({
       ...publicView(v),
       instructions: `Send an SMS containing the code "${code}" to ${opts.gatewayNumber} from the phone you want to verify. Code is case-insensitive and can be embedded in any text.`,
@@ -168,6 +184,13 @@ export function createApp(opts: AppOptions): AppHandle {
   app.post("*", async (c) => {
     const sig = await checkSignature(c.req.header("authorization"), opts.signingKey);
     const eventType = c.req.header("x-event-type") ?? "(unknown)";
+    const sigBadge =
+      sig.kind === "valid"
+        ? GREEN("✓ valid")
+        : sig.kind === "invalid"
+          ? RED(`✗ invalid (${sig.error})`)
+          : YELLOW("⚠ missing");
+    log(`${CYAN("webhook.in")}  event=${YELLOW(eventType)} sig=${sigBadge}`);
 
     if (sig.kind === "invalid") {
       return c.json({ error: "invalid signature" }, 401);
@@ -175,6 +198,7 @@ export function createApp(opts: AppOptions): AppHandle {
     // Production: also reject "missing". Allowed here so manual curl tests work.
 
     if (eventType !== "message.phone.received") {
+      log(DIM(`  ignored (event type not message.phone.received)`));
       return c.json({ ok: true, ignored: true });
     }
 
@@ -186,26 +210,35 @@ export function createApp(opts: AppOptions): AppHandle {
 
     const data = payload?.data ?? payload;
     const from: string | undefined = data?.contact ?? data?.from;
+    const to: string | undefined = data?.owner ?? data?.to;
     const content: string | undefined = data?.content;
 
     if (!from || !content) {
+      log(RED(`  malformed payload (missing from/content)`));
       return c.json({ error: "malformed_payload" }, 400);
     }
 
+    log(`  ${DIM("from=")}${from} ${DIM("to=")}${to ?? "?"} ${DIM("content=")}${JSON.stringify(content)}`);
+
     const code = findCodeInContent(content, codeToId.keys());
-    if (!code) return c.json({ ok: true, matched: false });
+    if (!code) {
+      log(YELLOW(`  no known code found in content; ignoring`));
+      return c.json({ ok: true, matched: false });
+    }
 
     const id = codeToId.get(code)!;
     const v = verifications.get(id);
     if (!v) return c.json({ ok: true, matched: false });
 
     if (v.status !== "pending") {
+      log(YELLOW(`  code ${code} already ${v.status}; ignoring`));
       return c.json({ ok: true, matched: true, status: v.status });
     }
 
     if (v.expiresAt < Date.now()) {
       v.status = "expired";
       codeToId.delete(code);
+      log(YELLOW(`  code ${code} expired before SMS arrived`));
       return c.json({ ok: true, matched: true, status: "expired" });
     }
 
@@ -213,6 +246,7 @@ export function createApp(opts: AppOptions): AppHandle {
     v.verifiedAt = Date.now();
     v.verifiedPhone = from;
     codeToId.delete(code); // single-use
+    log(GREEN(`  ✓ verified id=${id.slice(0, 8)} code=${code} phone=${from}`));
 
     return c.json({
       ok: true,
