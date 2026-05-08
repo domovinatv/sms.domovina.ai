@@ -1,8 +1,8 @@
 <template>
   <v-sheet
-    class="pa-4 d-flex"
+    class="pa-4 d-flex thread-list-header"
     :elevation="$vuetify.breakpoint.lgAndUp ? 0 : 2"
-    :color="$vuetify.breakpoint.lgAndUp ? 'grey darken-4' : 'black'"
+    color="white"
   >
     <div :class="{ 'px-2': $vuetify.breakpoint.mdAndDown }">
       <v-toolbar-title>

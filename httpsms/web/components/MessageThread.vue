@@ -18,7 +18,7 @@
         !$store.getters.getIsArchived
       "
       class="text-center mt-8 mx-3"
-      :color="$vuetify.breakpoint.mdAndDown ? '#121212' : '#363636'"
+      color="grey lighten-5"
     >
       <div v-if="$vuetify.breakpoint.mdAndDown">
         <v-img

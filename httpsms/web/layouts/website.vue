@@ -80,7 +80,7 @@
     <v-footer class="pt-8 pb-4" color="grey lighten-5" light>
       <v-container>
         <v-row>
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="3">
             <nuxt-link to="/" class="text-decoration-none d-flex align-center">
               <v-avatar tile size="36">
                 <v-img contain :src="require('@/assets/img/logo.svg')"></v-img>
@@ -112,7 +112,7 @@
               <v-icon>{{ mdiGithub }}</v-icon>
             </v-btn>
           </v-col>
-          <v-col cols="6" md="4">
+          <v-col cols="6" md="3">
             <h2 class="text-h6 mb-2">Razvoj</h2>
             <ul style="list-style: none" class="pa-0">
               <li class="mb-2">
@@ -153,7 +153,61 @@
               </li>
             </ul>
           </v-col>
-          <v-col cols="6" md="4">
+          <v-col cols="6" md="3">
+            <h2 class="text-h6 mb-2">Kontakt</h2>
+            <p class="body-2 mb-1 font-weight-bold">Matija Stepanić</p>
+            <p class="caption text--secondary mb-3">
+              CEO,
+              <a
+                href="https://italk.hr"
+                target="_blank"
+                rel="noopener"
+                class="text--primary text-decoration-none font-weight-bold"
+                >ITalk d.o.o.</a
+              >
+            </p>
+            <ul style="list-style: none" class="pa-0">
+              <li class="mb-2">
+                <v-hover v-slot="{ hover }">
+                  <a
+                    href="https://www.linkedin.com/in/stepanic/"
+                    target="_blank"
+                    rel="noopener"
+                    class="text--primary text-decoration-none"
+                    :class="{ 'text-decoration-underline': hover }"
+                  >
+                    LinkedIn
+                    <v-icon small>{{ mdiLinkedin }}</v-icon>
+                  </a>
+                </v-hover>
+              </li>
+              <li class="mb-2">
+                <v-hover v-slot="{ hover }">
+                  <a
+                    href="tel:+385989679022"
+                    class="text--primary text-decoration-none"
+                    :class="{ 'text-decoration-underline': hover }"
+                  >
+                    +385 98 967 9022
+                    <v-icon small>{{ mdiPhone }}</v-icon>
+                  </a>
+                </v-hover>
+              </li>
+              <li class="mb-2">
+                <v-hover v-slot="{ hover }">
+                  <a
+                    href="mailto:support@domovina.ai"
+                    class="text--primary text-decoration-none"
+                    :class="{ 'text-decoration-underline': hover }"
+                  >
+                    support@domovina.ai
+                    <v-icon small>{{ mdiEmailOutline }}</v-icon>
+                  </a>
+                </v-hover>
+              </li>
+            </ul>
+          </v-col>
+          <v-col cols="6" md="3">
             <h2 class="text-h6 mb-2">Pravno</h2>
             <ul style="list-style: none" class="pa-0">
               <li class="mb-2">
@@ -180,19 +234,42 @@
                   </nuxt-link>
                 </v-hover>
               </li>
-              <li class="mt-2">
-                <v-hover v-slot="{ hover }">
-                  <a
-                    class="text--primary text-decoration-none"
-                    :class="{ 'text-decoration-underline': hover }"
-                    href="mailto:support@domovina.ai"
-                  >
-                    Podrška
-                    <v-icon small>{{ mdiEmailOutline }}</v-icon>
-                  </a>
-                </v-hover>
-              </li>
             </ul>
+          </v-col>
+        </v-row>
+        <v-divider class="my-6"></v-divider>
+        <v-row>
+          <v-col cols="12" md="8">
+            <p class="caption text--secondary mb-1">
+              &copy; {{ year }}
+              <a
+                href="https://italk.hr"
+                target="_blank"
+                rel="noopener"
+                class="text--primary text-decoration-none font-weight-bold"
+                >ITalk d.o.o.</a
+              >
+              &mdash; Domovina SMS, samostalno hostani SMS gateway za Hrvatsku.
+            </p>
+            <p class="caption text--secondary mb-0">
+              Temeljen na otvorenom projektu
+              <a
+                href="https://github.com/NdoleStudio/httpsms"
+                target="_blank"
+                rel="noopener"
+                class="text--primary text-decoration-none font-weight-bold"
+                >httpSMS by NdoleStudio</a
+              >
+              (AGPL-3.0). Hvala kreatoru na izvornom kodu.
+            </p>
+          </v-col>
+          <v-col cols="12" md="4" class="text-md-right">
+            <p class="caption text--secondary mb-0">
+              Verzija
+              <code class="caption">main</code>
+              &middot; Status:
+              <span class="success--text font-weight-bold">aktivno</span>
+            </p>
           </v-col>
         </v-row>
       </v-container>
@@ -211,6 +288,8 @@ import {
   mdiEmailOutline,
   mdiBookOpenVariant,
   mdiShieldCheckOutline,
+  mdiLinkedin,
+  mdiPhone,
 } from '@mdi/js'
 
 export default Vue.extend({
@@ -224,6 +303,9 @@ export default Vue.extend({
       mdiEmailOutline,
       mdiBookOpenVariant,
       mdiShieldCheckOutline,
+      mdiLinkedin,
+      mdiPhone,
+      year: new Date().getFullYear(),
     }
   },
 })

@@ -6,6 +6,8 @@
       :width="400"
       app
       fixed
+      color="white"
+      class="brand-drawer"
     >
       <template #prepend>
         <v-divider
@@ -104,6 +106,18 @@ export default class DefaultLayout extends Vue {
     }
   }
 
+  .brand-drawer {
+    border-right: 1px solid #e1e5ea !important;
+  }
+
+  .thread-list-header {
+    border-bottom: 1px solid #e1e5ea !important;
+  }
+
+  .composer-footer {
+    border-top: 1px solid #e1e5ea !important;
+  }
+
   .v-navigation-drawer__message-thread {
     height: calc(100vh - 120px);
 
@@ -114,12 +128,12 @@ export default class DefaultLayout extends Vue {
 
     /* Track */
     &::-webkit-scrollbar-track {
-      background: #363636;
+      background: #f5f7f9;
     }
 
     /* Handle */
     &::-webkit-scrollbar-thumb {
-      background: #666666;
+      background: #c1c8d1;
       border-radius: 8px;
     }
   }

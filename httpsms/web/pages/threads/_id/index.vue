@@ -292,7 +292,7 @@
             </v-col>
           </v-row>
         </div>
-        <v-footer absolute padless color="#121212">
+        <v-footer absolute padless color="grey lighten-4" class="composer-footer">
           <v-container class="pb-0">
             <v-form
               ref="form"
