@@ -92,9 +92,29 @@
         <receiver android:enabled="true"
             android:name=".receivers.BootReceiver"
             android:exported="true"
+            android:directBootAware="true"
             android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
             <intent-filter>
+                <!-- Standard boot complete (after user unlocks for the first time). -->
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <!-- Fires before unlock on Direct Boot devices. We schedule for the
+                     unlock event from here since SharedPreferences is encrypted. -->
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED"/>
+                <!-- App was just updated by the system (Play Store / sideload). Restart service. -->
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+                <!-- Legacy HTC/Samsung quick-boot intent (some OEMs still emit this only). -->
+                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
+            </intent-filter>
+        </receiver>
+
+        <!-- Listen for the user-unlock event so Direct Boot can hand off to a
+             normal startup once SharedPreferences becomes accessible. -->
+        <receiver android:enabled="true"
+            android:name=".receivers.UserUnlockedReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.USER_UNLOCKED"/>
             </intent-filter>
         </receiver>
 

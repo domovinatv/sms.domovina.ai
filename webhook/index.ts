@@ -169,17 +169,14 @@ async function checkSignature(authorization: string | undefined): Promise<Signat
   }
 }
 
-const CODE_RE = new RegExp(`[${CODE_ALPHABET}]{${CODE_LEN}}`, "g");
-
 function findCodeInContent(content: string): string | null {
-  // Be permissive: extract all candidate runs of code-alphabet chars at exact length.
-  // Avoid greedily eating numbers / mixed strings; uppercase first.
+  // Walk all currently-pending codes and check substring (case-insensitive).
+  // Cheap because there are typically tens of pending codes at most. Lets
+  // users embed the code anywhere: "code A4YTAP", "preffixa4ytap", "...A4YTAP."
+  // all match — no whitespace or boundary requirements.
   const upper = content.toUpperCase();
-  const matches = upper.match(CODE_RE);
-  if (!matches) return null;
-  // First registered code wins (avoids matching a code that was never issued).
-  for (const m of matches) {
-    if (codeToId.has(m)) return m;
+  for (const code of codeToId.keys()) {
+    if (upper.includes(code)) return code;
   }
   return null;
 }
