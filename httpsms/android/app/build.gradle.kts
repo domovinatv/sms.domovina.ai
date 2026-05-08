@@ -28,6 +28,10 @@ android {
             manifestPlaceholders["sentryEnvironment"] = "production"
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            // Reuse debug signing so the APK installs on personal devices
+            // without a custom keystore. For Play Store distribution, replace
+            // this with a dedicated release keystore (signingConfigs.create).
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
