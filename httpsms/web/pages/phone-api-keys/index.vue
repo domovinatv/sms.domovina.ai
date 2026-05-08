@@ -49,7 +49,7 @@
                   <v-card-title>Create Phone API Key</v-card-title>
                   <v-card-subtitle class="mt-2"
                     >After creating the API key you can use it to login to the
-                    httpSMS Android app on your phone</v-card-subtitle
+                    Domovina SMS Android app on your phone</v-card-subtitle
                   >
                   <v-card-text>
                     <v-form>
@@ -87,7 +87,7 @@
               <v-spacer />
               <v-btn
                 v-if="$vuetify.breakpoint.lgAndUp"
-                href="https://docs.httpsms.com/features/phone-api-keys"
+                href="https://github.com/domovinatv/sms.domovina.ai/features/phone-api-keys"
                 color="secondary"
                 class="mt-1"
                 >Documentation</v-btn
@@ -96,18 +96,18 @@
             <p class="text--secondary">
               If you have multiple phones, you can create a unique phone API
               keys for your different Android phones. These API keys can only be
-              used on the specific mobile phone when it calls the httpSMS server
+              used on the specific mobile phone when it calls the Domovina SMS server
               for specific actions like sending heartbeats, registering received
               messages, delivery reports etc. If you want to interact with the
               full
               <a
                 class="text-decoration-none"
                 target="_blank"
-                href="https://api.httpsms.com"
-                >httpSMS API</a
+                href="https://sms-api.domovina.ai"
+                >Domovina SMS API</a
               >, use the API key under your account settings page instead
               <router-link class="text-decoration-none" to="/settings"
-                >https://httpsms.com/settings</router-link
+                >https://sms.domovina.ai/settings</router-link
               >.
             </p>
             <v-simple-table class="mb-4 api-key-table">
@@ -191,7 +191,7 @@
           <a
             class="text-decoration-none"
             :href="$store.getters.getAppData.appDownloadUrl"
-            >httpSMS app</a
+            >Domovina SMS app</a
           >
           on your Android phone to login.</v-card-subtitle
         >
@@ -230,7 +230,7 @@
           <code>{{ activePhoneApiKey?.name }}</code> API Key?
         </v-card-title>
         <v-card-text>
-          You will have to logout and login again on the <b>httpSMS</b> Android
+          You will have to logout and login again on the <b>Domovina SMS</b> Android
           app on all of the phones which are currently using this API key.
         </v-card-text>
         <v-card-actions class="pb-4">
@@ -257,7 +257,7 @@
           This will remove the
           <code>{{ activePhoneNumber | phoneNumber }}</code> from your phone API
           key. You will have to logout and login again on the
-          <b>httpSMS</b> Android app on the phone which is currently using this
+          <b>Domovina SMS</b> Android app on the phone which is currently using this
           API key.
         </v-card-text>
         <v-card-actions class="pb-4">
@@ -347,7 +347,7 @@ export default Vue.extend({
   },
   head() {
     return {
-      title: 'Phone API keys - httpSMS',
+      title: 'Phone API keys - Domovina SMS',
     }
   },
   computed: {},

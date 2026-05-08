@@ -94,7 +94,7 @@ export default {
   },
   head() {
     return {
-      title: 'New Message - httpSMS',
+      title: 'New Message - Domovina SMS',
     }
   },
 

@@ -17,9 +17,9 @@
               class="mx-auto d-inline-block"
               :src="require('@/assets/img/logo.svg')"
               style="max-width: 32px"
-              alt="httpSMS Logo"
+              alt="Domovina SMS Logo"
             />
-            Loading the httpSMS dashboard
+            Loading the Domovina SMS dashboard
           </h2>
           <v-progress-circular
             indeterminate

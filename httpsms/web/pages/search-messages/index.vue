@@ -130,7 +130,7 @@
                   {{ selectedMessages.length }} selected messages?
                 </v-card-title>
                 <v-card-text>
-                  The messages will be deleted permanently from the httpSMS
+                  The messages will be deleted permanently from the Domovina SMS
                   server and cannot be recovered.
                 </v-card-text>
                 <v-card-actions class="pb-4">
@@ -355,7 +355,7 @@ export default Vue.extend({
   },
   head() {
     return {
-      title: 'Search your Messages - httpSMS',
+      title: 'Search your Messages - Domovina SMS',
     }
   },
   computed: {
@@ -434,7 +434,7 @@ export default Vue.extend({
       link.setAttribute('href', encodedUri)
       link.setAttribute(
         'download',
-        `httpsms-${new Date().toJSON().slice(0, 10)}.csv`,
+        `domovina-sms-${new Date().toJSON().slice(0, 10)}.csv`,
       )
       document.body.appendChild(link) // Required for FF
 

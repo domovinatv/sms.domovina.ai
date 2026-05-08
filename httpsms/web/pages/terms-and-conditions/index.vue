@@ -12,10 +12,10 @@
           the app, and you also shouldn’t try to translate the app into other
           languages or make derivative versions. The app itself, and all the
           trademarks, copyright, database rights, and other intellectual
-          property rights related to it, still belong to Ndole Studio.
+          property rights related to it, still belong to DOMOVINA.ai.
         </p>
         <p>
-          Ndole Studio is committed to ensuring that the app is as useful and
+          DOMOVINA.ai is committed to ensuring that the app is as useful and
           efficient as possible. For that reason, we reserve the right to make
           changes to the app or to charge for its services, at any time and for
           any reason. We will never charge you for the app or its services
@@ -76,11 +76,11 @@
           </li>
         </ul>
         <p>
-          You should be aware that there are certain things that Ndole Studio
+          You should be aware that there are certain things that DOMOVINA.ai
           will not take responsibility for. Certain functions of the app will
           require the app to have an active internet connection. The connection
-          can be Wi-Fi or provided by your mobile network provider, but Ndole
-          Studio cannot take responsibility for the app not working at full
+          can be Wi-Fi or provided by your mobile network provider, but
+          DOMOVINA.ai cannot take responsibility for the app not working at full
           functionality if you don’t have access to Wi-Fi, and you don’t have
           any of your data allowance left.
         </p>
@@ -98,17 +98,17 @@
           from the bill payer for using the app.
         </p>
         <p>
-          Along the same lines, Ndole Studio cannot always take responsibility
+          Along the same lines, DOMOVINA.ai cannot always take responsibility
           for the way you use the app i.e. You need to make sure that your
           device stays charged – if it runs out of battery and you can’t turn it
-          on to avail the Service, Ndole Studio cannot accept responsibility.
+          on to avail the Service, DOMOVINA.ai cannot accept responsibility.
         </p>
         <p>
-          With respect to Ndole Studio’s responsibility for your use of the app,
+          With respect to DOMOVINA.ai’s responsibility for your use of the app,
           when you’re using the app, it’s important to bear in mind that
           although we endeavor to ensure that it is updated and correct at all
           times, we do rely on third parties to provide information to us so
-          that we can make it available to you. Ndole Studio accepts no
+          that we can make it available to you. DOMOVINA.ai accepts no
           liability for any loss, direct or indirect, you experience as a result
           of relying wholly on this functionality of the app.
         </p>
@@ -117,7 +117,7 @@
           available on Android – the requirements for the system(and for any
           additional systems we decide to extend the availability of the app to)
           may change, and you’ll need to download the updates if you want to
-          keep using the app. Ndole Studio does not promise that it will always
+          keep using the app. DOMOVINA.ai does not promise that it will always
           update the app so that it is relevant to you and/or works with the
           Android version that you have installed on your device. However, you
           promise to always accept updates to the application when offered to
@@ -143,8 +143,8 @@
           Conditions, do not hesitate to contact us at
           <a
             class="text-decoration-none font-weight-bold"
-            href="mailto:support@httpsms.com"
-            >support@httpsms.com</a
+            href="mailto:support@domovina.ai"
+            >support@domovina.ai</a
           >.
         </p>
         <v-divider class="mx-16"></v-divider>
@@ -169,7 +169,7 @@ export default Vue.extend({
   },
   head() {
     return {
-      title: 'Terms And Conditions - httpSMS',
+      title: 'Terms And Conditions - Domovina SMS',
     }
   },
 })

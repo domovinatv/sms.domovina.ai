@@ -1,45 +1,34 @@
 <template>
-  <v-app dark>
-    <v-app-bar elevate-on-scroll color="#121212" height="70" fixed>
+  <v-app>
+    <v-divider class="tricolor-stripe" />
+    <v-app-bar
+      elevate-on-scroll
+      color="white"
+      height="70"
+      fixed
+      light
+      flat
+      class="brand-app-bar"
+    >
       <v-container>
         <v-row>
-          <v-col class="w-full d-flex">
+          <v-col class="w-full d-flex align-center">
             <nuxt-link
               to="/"
-              class="text-decoration-none d-flex"
-              :class="{ 'mt-5': $vuetify.breakpoint.mdAndUp }"
+              class="text-decoration-none d-flex align-center"
             >
-              <v-avatar tile size="33" class="mt-1">
+              <v-avatar tile size="40">
                 <v-img contain :src="require('@/assets/img/logo.svg')"></v-img>
               </v-avatar>
               <h3
-                v-if="$vuetify.breakpoint.lgAndUp"
-                class="text-h4 ml-1 text--primary"
+                v-if="$vuetify.breakpoint.smAndUp"
+                class="brand-wordmark ml-2"
               >
-                httpSMS
+                <span class="brand-name">DOMOVINA</span><span class="brand-tld">.ai</span>
+                <span class="brand-sub">SMS</span>
               </h3>
             </nuxt-link>
             <v-spacer></v-spacer>
-            <v-btn
-              v-show="$vuetify.breakpoint.lgAndUp"
-              large
-              text
-              color="primary"
-              class="my-5 mr-2"
-              @click="goToPricing"
-            >
-              Pricing
-            </v-btn>
-            <v-btn
-              v-show="$vuetify.breakpoint.lgAndUp"
-              large
-              text
-              color="primary"
-              class="my-5 mr-2"
-              :to="{ name: 'blog' }"
-            >
-              Blog
-            </v-btn>
             <v-btn
               v-show="
                 $vuetify.breakpoint.lgAndUp &&
@@ -51,7 +40,7 @@
               class="my-5 mr-2"
               :to="{ name: 'login' }"
             >
-              Login
+              Prijava
             </v-btn>
             <v-btn
               v-show="$store.getters.getAuthUser === null"
@@ -64,8 +53,8 @@
               :large="$vuetify.breakpoint.lgAndUp"
               :to="{ name: 'login' }"
             >
-              Get Started
-              <span v-show="$vuetify.breakpoint.lgAndUp">&nbsp;For Free</span>
+              Započni
+              <span v-show="$vuetify.breakpoint.lgAndUp">&nbsp;besplatno</span>
             </v-btn>
             <v-btn
               v-show="$store.getters.getAuthUser !== null"
@@ -88,126 +77,52 @@
       <toast></toast>
       <Nuxt />
     </v-main>
-    <v-footer class="pt-4">
+    <v-footer class="pt-8 pb-4" color="grey lighten-5" light>
       <v-container>
         <v-row>
-          <v-col cols="12" md="3">
-            <nuxt-link to="/" class="text-decoration-none d-flex">
-              <v-avatar tile size="33" class="mt-1">
+          <v-col cols="12" md="4">
+            <nuxt-link to="/" class="text-decoration-none d-flex align-center">
+              <v-avatar tile size="36">
                 <v-img contain :src="require('@/assets/img/logo.svg')"></v-img>
               </v-avatar>
-              <h3 class="text-h4 ml-1 text--primary">httpSMS</h3>
+              <h3 class="brand-wordmark ml-2">
+                <span class="brand-name">DOMOVINA</span><span class="brand-tld">.ai</span>
+                <span class="brand-sub">SMS</span>
+              </h3>
             </nuxt-link>
-            <div class="subtitle-2 mb-4 text--secondary">
-              Made With <v-icon color="#cf1112">{{ mdiHeart }}</v-icon> in
-              Tallinn
-              <v-img
-                class="d-inline-block"
-                width="20"
-                src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Flag_of_Estonia.svg"
-              ></v-img>
-            </div>
-            <p class="mt-n3">
-              <v-btn href="https://twitter.com/httpsmsHQ" icon color="#1DA1F2">
-                <v-icon>{{ mdiTwitter }}</v-icon>
-              </v-btn>
-              <v-btn
-                :href="$store.getters.getAppData.githubUrl"
-                icon
-                large
-                color="#ffffff"
-              >
-                <v-icon>{{ mdiGithub }}</v-icon>
-              </v-btn>
-              <v-btn
-                href="https://discord.gg/kGk8HVqeEZ"
-                icon
-                large
-                color="#5865f2"
-              >
-                <v-img
-                  contain
-                  height="24"
-                  width="24"
-                  :src="require('assets/img/discord-logo-blue.svg')"
-                ></v-img>
-              </v-btn>
+            <p class="subtitle-2 text--secondary mt-3 mb-2">
+              Napravljeno s
+              <v-icon small color="#FF0000">{{ mdiHeart }}</v-icon>
+              u Hrvatskoj
             </p>
-            <a
-              href="https://www.saashub.com/httpsms?utm_source=badge&utm_campaign=badge&utm_content=httpsms&badge_variant=color&badge_kind=approved"
-              target="_blank"
+            <p class="caption text--secondary mb-3">
+              Dio platforme
+              <a
+                href="https://domovina.ai"
+                class="text--primary text-decoration-none font-weight-bold"
+                >DOMOVINA.ai</a
+              >.
+            </p>
+            <v-btn
+              href="https://github.com/domovinatv/sms.domovina.ai"
+              icon
+              color="primary"
+              aria-label="GitHub"
             >
-              <img
-                src="https://cdn-b.saashub.com/img/badges/approved-color.png?v=1"
-                alt="httpSMS badge"
-                style="max-width: 150px"
-              />
-            </a>
+              <v-icon>{{ mdiGithub }}</v-icon>
+            </v-btn>
           </v-col>
-          <v-col cols="12" md="3">
-            <h2 class="text-h6 mb-2">Resources</h2>
+          <v-col cols="6" md="4">
+            <h2 class="text-h6 mb-2">Razvoj</h2>
             <ul style="list-style: none" class="pa-0">
               <li class="mb-2">
                 <v-hover v-slot="{ hover }">
                   <a
-                    class="text--primary text-decoration-none"
-                    :class="{ 'text-decoration-underline': hover }"
-                    @click.stop="goToPricing"
-                  >
-                    Pricing
-                    <v-icon small>{{ mdiCreditCardOutline }}</v-icon>
-                  </a>
-                </v-hover>
-              </li>
-              <li class="mb-2">
-                <v-hover v-slot="{ hover }">
-                  <a
-                    href="https://httpsms.lemonsqueezy.com/affiliates"
+                    href="https://github.com/domovinatv/sms.domovina.ai"
                     class="text--primary text-decoration-none"
                     :class="{ 'text-decoration-underline': hover }"
                   >
-                    Affiliates
-                    <v-icon color="warning" small>{{ mdiShieldStar }}</v-icon>
-                  </a>
-                </v-hover>
-              </li>
-              <li class="mb-2">
-                <v-hover v-slot="{ hover }">
-                  <a
-                    href="https://status.httpsms.com"
-                    class="text--primary text-decoration-none"
-                    :class="{ 'text-decoration-underline': hover }"
-                  >
-                    Site status
-                    <v-icon color="success" x-small>{{ mdiCircle }}</v-icon>
-                  </a>
-                </v-hover>
-              </li>
-              <li class="mb-2">
-                <v-hover v-slot="{ hover }">
-                  <nuxt-link
-                    class="text--primary text-decoration-none"
-                    :class="{ 'text-decoration-underline': hover }"
-                    to="/blog"
-                  >
-                    Blog
-                    <v-icon small>{{ mdiPost }}</v-icon>
-                  </nuxt-link>
-                </v-hover>
-              </li>
-            </ul>
-          </v-col>
-          <v-col cols="12" md="3">
-            <h2 class="text-h6 mb-2">Developers</h2>
-            <ul style="list-style: none" class="pa-0">
-              <li class="mb-2">
-                <v-hover v-slot="{ hover }">
-                  <a
-                    :href="$store.getters.getAppData.documentationUrl"
-                    class="text--primary text-decoration-none"
-                    :class="{ 'text-decoration-underline': hover }"
-                  >
-                    Documentation
+                    Dokumentacija
                     <v-icon small>{{ mdiBookOpenVariant }}</v-icon>
                   </a>
                 </v-hover>
@@ -215,11 +130,11 @@
               <li class="mb-2">
                 <v-hover v-slot="{ hover }">
                   <a
-                    :href="$store.getters.getAppData.githubUrl"
+                    href="https://github.com/domovinatv/sms.domovina.ai"
                     class="text--primary text-decoration-none"
                     :class="{ 'text-decoration-underline': hover }"
                   >
-                    Github
+                    GitHub
                     <v-icon small>{{ mdiGithub }}</v-icon>
                   </a>
                 </v-hover>
@@ -227,31 +142,19 @@
               <li class="mb-2">
                 <v-hover v-slot="{ hover }">
                   <a
-                    href="https://sandbox.httpsms.com"
+                    href="https://otp.domovina.ai"
                     class="text--primary text-decoration-none"
                     :class="{ 'text-decoration-underline': hover }"
                   >
-                    Sandbox
-                    <v-icon small color="pink">{{ mdiCreation }}</v-icon>
-                  </a>
-                </v-hover>
-              </li>
-              <li class="mb-2">
-                <v-hover v-slot="{ hover }">
-                  <a
-                    href="https://httpsms.featurebase.app"
-                    class="text--primary text-decoration-none"
-                    :class="{ 'text-decoration-underline': hover }"
-                  >
-                    Request Feature
-                    <v-icon small color="yellow">{{ mdiLightbulbOn50 }}</v-icon>
+                    Provjera broja (OTP)
+                    <v-icon small color="accent">{{ mdiShieldCheckOutline }}</v-icon>
                   </a>
                 </v-hover>
               </li>
             </ul>
           </v-col>
-          <v-col cols="12" md="3">
-            <h2 class="text-h6 mb-2">Legal</h2>
+          <v-col cols="6" md="4">
+            <h2 class="text-h6 mb-2">Pravno</h2>
             <ul style="list-style: none" class="pa-0">
               <li class="mb-2">
                 <v-hover v-slot="{ hover }">
@@ -260,19 +163,19 @@
                     :class="{ 'text-decoration-underline': hover }"
                     to="/terms-and-conditions"
                   >
-                    Terms & Conditions
+                    Uvjeti korištenja
                     <v-icon small>{{ mdiScaleBalance }}</v-icon>
                   </nuxt-link>
                 </v-hover>
               </li>
-              <li>
+              <li class="mb-2">
                 <v-hover v-slot="{ hover }">
                   <nuxt-link
                     class="text--primary text-decoration-none"
                     :class="{ 'text-decoration-underline': hover }"
                     to="/privacy-policy"
                   >
-                    Privacy Policy
+                    Politika privatnosti
                     <v-icon small>{{ mdiEyeOffOutline }}</v-icon>
                   </nuxt-link>
                 </v-hover>
@@ -282,9 +185,9 @@
                   <a
                     class="text--primary text-decoration-none"
                     :class="{ 'text-decoration-underline': hover }"
-                    href="mailto:support@httpsms.com"
+                    href="mailto:support@domovina.ai"
                   >
-                    Contact Support
+                    Podrška
                     <v-icon small>{{ mdiEmailOutline }}</v-icon>
                   </a>
                 </v-hover>
@@ -294,72 +197,76 @@
         </v-row>
       </v-container>
     </v-footer>
+    <v-divider class="tricolor-stripe" />
   </v-app>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import {
-  mdiLoginVariant,
-  mdiArrowRight,
   mdiGithub,
-  mdiCircle,
-  mdiTwitter,
   mdiHeart,
-  mdiShieldStar,
-  mdiLightbulbOn50,
-  mdiCreation,
-  mdiDomain,
   mdiEyeOffOutline,
-  mdiPost,
-  mdiCreditCardOutline,
   mdiScaleBalance,
   mdiEmailOutline,
   mdiBookOpenVariant,
+  mdiShieldCheckOutline,
 } from '@mdi/js'
 
 export default Vue.extend({
   name: 'WebsiteLayout',
   data() {
     return {
-      mdiLoginVariant,
-      mdiArrowRight,
       mdiGithub,
-      mdiTwitter,
       mdiHeart,
-      mdiCreation,
       mdiScaleBalance,
       mdiEyeOffOutline,
-      mdiCreditCardOutline,
       mdiEmailOutline,
-      mdiPost,
-      mdiDomain,
-      mdiCircle,
-      mdiShieldStar,
-      mdiLightbulbOn50,
       mdiBookOpenVariant,
+      mdiShieldCheckOutline,
     }
-  },
-  methods: {
-    goToPricing() {
-      if (this.$route.name === 'index') {
-        this.$vuetify.goTo('#pricing')
-      } else {
-        this.$router.push('/#pricing')
-      }
-    },
   },
 })
 </script>
 
 <style lang="scss">
 .v-application {
-  .logo-badge {
-    .v-badge__wrapper {
-      span {
-        margin-bottom: -8px;
-      }
+  .brand-app-bar {
+    border-bottom: 1px solid #e1e5ea;
+  }
+  .brand-wordmark {
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    display: inline-flex;
+    align-items: baseline;
+    .brand-name {
+      color: #002f6c;
     }
+    .brand-tld {
+      color: #ff0000;
+    }
+    .brand-sub {
+      color: #5a6570;
+      font-size: 0.7rem;
+      font-weight: 700;
+      margin-left: 0.5rem;
+      letter-spacing: 0.12em;
+    }
+  }
+  .tricolor-stripe {
+    height: 6px;
+    background: linear-gradient(
+      to right,
+      #ff0000 0%,
+      #ff0000 33.33%,
+      #ffffff 33.33%,
+      #ffffff 66.66%,
+      #002f6c 66.66%,
+      #002f6c 100%
+    );
+    border: 0;
   }
 }
 </style>

@@ -66,7 +66,7 @@
         @click="
           $store.dispatch('addNotification', {
             type: 'info',
-            message: 'Downloading the httpSMS Android App',
+            message: 'Downloading the Domovina SMS Android App',
           })
         "
       >

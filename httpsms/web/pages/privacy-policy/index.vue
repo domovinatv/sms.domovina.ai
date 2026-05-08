@@ -4,8 +4,8 @@
       <v-col cols="10" offset="1" class="mt-8">
         <h1 class="text-h3 mb-4">Privacy Policy</h1>
         <p>
-          Ndole Studio built the httpSMS service as an open source project. This
-          SERVICE is provided by Ndole Studio and is intended for use as is.
+          DOMOVINA.ai built the Domovina SMS service as an open source project. This
+          SERVICE is provided by DOMOVINA.ai and is intended for use as is.
           This page is used to inform visitors regarding our policies with the
           collection, use, and disclosure of Personal Information if anyone
           decided to use our Service. If you choose to use our Service, then you
@@ -14,7 +14,7 @@
           and improving the Service. We will not use or share your information
           with anyone except as described in this Privacy Policy. The terms used
           in this Privacy Policy have the same meanings as in our Terms and
-          Conditions, which are accessible at httpSMS unless otherwise defined
+          Conditions, which are accessible at Domovina SMS unless otherwise defined
           in this Privacy Policy.
         </p>
         <h2 class="text-h6 text--secondary">Information Collection and Use</h2>
@@ -26,9 +26,9 @@
           policy.
         </p>
         <p>
-          httpSMS does use third-party services that may collect information
+          Domovina SMS does use third-party services that may collect information
           used to identify you. Link to the privacy policy of third-party
-          service providers used by httpSMS
+          service providers used by Domovina SMS
         </p>
         <ul class="mb-4">
           <li>
@@ -157,8 +157,8 @@
           not hesitate to contact us at
           <a
             class="text-decoration-none font-weight-bold"
-            href="mailto:support@httpsms.com"
-            >support@httpsms.com</a
+            href="mailto:support@domovina.ai"
+            >support@domovina.ai</a
           >.
         </p>
         <v-divider class="mx-16"></v-divider>
@@ -183,7 +183,7 @@ export default Vue.extend({
   },
   head() {
     return {
-      title: 'Privacy Policy - httpSMS',
+      title: 'Privacy Policy - Domovina SMS',
     }
   },
 })

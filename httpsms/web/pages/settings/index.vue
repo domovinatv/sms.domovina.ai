@@ -55,7 +55,7 @@
             <p class="text--secondary">
               Use your API Key in the <code>x-api-key</code> HTTP Header when
               sending requests to
-              <code>https://api.httpsms.com</code> endpoints.
+              <code>https://sms-api.domovina.ai</code> endpoints.
             </p>
             <div v-if="apiKey === ''" class="mb-n9 pl-3 pt-5">
               <v-progress-circular
@@ -104,7 +104,7 @@
                   <v-card-subtitle class="mt-2 text-center"
                     >Scan this QR code with the
                     <a :href="$store.getters.getAppData.appDownloadUrl"
-                      >httpSMS app</a
+                      >Domovina SMS app</a
                     >
                     on your Android phone to login.</v-card-subtitle
                   >
@@ -152,7 +152,7 @@
                   </v-card-title>
                   <v-card-text>
                     You will have to logout and login again on the
-                    <b>httpSMS</b> Android app with your new API key after you
+                    <b>Domovina SMS</b> Android app with your new API key after you
                     rotate it.
                   </v-card-text>
                   <v-card-actions class="pb-4">
@@ -242,7 +242,7 @@
               <v-btn
                 v-if="$vuetify.breakpoint.lgAndUp"
                 class="ml-4"
-                href="https://docs.httpsms.com/webhooks/introduction"
+                href="https://github.com/domovinatv/sms.domovina.ai/webhooks/introduction"
                 >Documentation</v-btn
               >
             </div>
@@ -252,8 +252,8 @@
             </h5>
             <p class="text--secondary">
               Send and receive SMS messages without leaving your discord server
-              with the httpSMS discord app using the
-              <code>/httpsms</code> command.
+              with the Domovina SMS discord app using the
+              <code>/domovina-sms</code> command.
             </p>
             <div v-if="loadingDiscordIntegrations">
               <v-progress-circular
@@ -385,7 +385,7 @@
               delivered when the schedule opens according to your
               <a
                 class="text-decoration-none"
-                href="https://docs.httpsms.com/features/control-sms-send-rate"
+                href="https://github.com/domovinatv/sms.domovina.ai/features/control-sms-send-rate"
                 >configured send rate</a
               >.
             </p>
@@ -444,7 +444,7 @@
               Email Notifications
             </h5>
             <p class="text--secondary">
-              Manage the email notifications which you receive from httpSMS.
+              Manage the email notifications which you receive from Domovina SMS.
               Feel free to turn on/off individual notifications anytime so you
               don't get overloaded with emails
             </p>
@@ -491,16 +491,16 @@
             </h5>
             <p v-if="hasActiveSubscription" class="text--secondary">
               You cannot delete your account because you have an active
-              subscription on httpSMS.
+              subscription on Domovina SMS.
               <router-link class="text-decoration-none" to="/billing"
                 >Cancel your subscription</router-link
               >
               before deleting your account.
             </p>
             <p v-else class="text--secondary">
-              You can delete all your data on httpSMS by clicking the button
+              You can delete all your data on Domovina SMS by clicking the button
               below. This action is <b>irreversible</b> and all your data will
-              be permanently deleted from the httpSMS database instantly and it
+              be permanently deleted from the Domovina SMS database instantly and it
               cannot be recovered.
             </p>
             <v-btn
@@ -520,12 +520,12 @@
             >
               <v-card>
                 <v-card-title class="justify-center text-center"
-                  >Delete your httpSMS account</v-card-title
+                  >Delete your Domovina SMS account</v-card-title
                 >
                 <v-card-text class="mt-2 text-center">
                   Are you sure you want to delete your account? This action is
                   <b>irreversible</b> and all your data will be permanently
-                  deleted from the httpSMS database instantly.
+                  deleted from the Domovina SMS database instantly.
                 </v-card-text>
                 <v-card-actions>
                   <v-btn
@@ -708,7 +708,7 @@
                 persistent-hint
                 :error="errorMessages.has('url')"
                 :error-messages="errorMessages.get('url')"
-                hint="A POST request will be sent to this URL every time an event is triggered in httpSMS."
+                hint="A POST request will be sent to this URL every time an event is triggered in Domovina SMS."
                 placeholder="https://example.com/webhook"
               >
               </v-text-field>
@@ -723,7 +723,7 @@
                 placeholder="******************"
                 :error="errorMessages.has('signing_key')"
                 :error-messages="errorMessages.get('signing_key')"
-                hint="The signing key is used to verify the webhook is sent from httpSMS."
+                hint="The signing key is used to verify the webhook is sent from Domovina SMS."
               >
               </v-text-field>
               <v-select
@@ -737,7 +737,7 @@
                 dense
                 :error="errorMessages.has('events')"
                 :error-messages="errorMessages.get('events')"
-                hint="Select multiple httpSMS events to watch for"
+                hint="Select multiple Domovina SMS events to watch for"
                 persistent-hint
               ></v-select>
               <v-select
@@ -807,7 +807,7 @@
           <v-row>
             <v-col class="pt-8">
               <p class="mt-n4 subtitle-1">
-                Click the button below to add the httpSMS bot to your discord
+                Click the button below to add the Domovina SMS bot to your discord
                 server. You need to do this so we can have permission to send
                 and receive messages on your discord server.
               </p>
@@ -1250,7 +1250,7 @@ export default Vue.extend({
   },
   head() {
     return {
-      title: 'Settings - httpSMS',
+      title: 'Settings - Domovina SMS',
     }
   },
   computed: {

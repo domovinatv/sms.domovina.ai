@@ -960,7 +960,7 @@ export default Vue.extend({
   },
   head() {
     return {
-      title: 'Usage & Billing - httpSMS',
+      title: 'Usage & Billing - Domovina SMS',
     }
   },
   computed: {

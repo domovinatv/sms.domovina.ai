@@ -17,8 +17,8 @@
         <v-row>
           <v-col cols="12">
             <p>
-              Every 15 minutes, the httpSMS app on your Android phone sends a
-              heartbeat event to the httpsms API to show that it is alive. The
+              Every 15 minutes, the Domovina SMS app on your Android phone sends a
+              heartbeat event to the Domovina SMS API to show that it is alive. The
               reason for this is because the Android operating system sometimes
               kills an application to save battery
               <a
@@ -29,7 +29,7 @@
               >.
             </p>
             <p>
-              If httpSMS doesn't get any heartbeat event in a 1-hour interval,
+              If Domovina SMS doesn't get any heartbeat event in a 1-hour interval,
               you will get an email notification about it so you can check if
               there is an issue with your Android phone.
             </p>
@@ -40,7 +40,7 @@
           <v-col cols="12">
             <p>
               The table below shows the last 100 heartbeat events received from
-              the httpSMS app on your Android phone.
+              the Domovina SMS app on your Android phone.
             </p>
             <v-data-table
               :value="selected"

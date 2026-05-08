@@ -5,20 +5,14 @@ export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s',
-    title: 'Convert your android phone into an SMS gateway - httpSMS',
+    title: 'Domovina SMS — Pretvorite Android telefon u SMS gateway',
     htmlAttrs: {
-      lang: 'en',
+      lang: 'hr',
     },
     script: [
       {
         hid: 'integrations',
         src: '/integrations.js',
-        async: true,
-        defer: true,
-      },
-      {
-        hid: 'lemonsqueezy',
-        src: 'https://lmsqueezy.com/affiliate.js',
         async: true,
         defer: true,
       },
@@ -34,33 +28,52 @@ export default {
         hid: 'description',
         name: 'description',
         content:
-          'Use your android phone to send and receive SMS messages using a simple HTTP API.',
+          'Šaljite i primajte SMS poruke kroz svoj Android telefon putem jednostavnog HTTP API-ja. Dio platforme DOMOVINA.ai.',
       },
       { name: 'format-detection', content: 'telephone=no' },
-      { hid: 'twitter:site', name: 'twitter:site', content: '@NdoleStudio' },
+      { name: 'theme-color', content: '#002F6C' },
       {
         hid: 'twitter:card',
         name: 'twitter:card',
         content: 'summary_large_image',
       },
       {
+        hid: 'og:type',
+        property: 'og:type',
+        content: 'website',
+      },
+      {
+        hid: 'og:locale',
+        property: 'og:locale',
+        content: 'hr_HR',
+      },
+      {
+        hid: 'og:site_name',
+        property: 'og:site_name',
+        content: 'Domovina SMS',
+      },
+      {
         hid: 'og:title',
-        name: 'og:title',
-        content: 'Convert your android phone into an SMS gateway - httpSMS',
+        property: 'og:title',
+        content: 'Domovina SMS — Pretvorite Android telefon u SMS gateway',
       },
       {
         hid: 'og:description',
-        name: 'og:description',
+        property: 'og:description',
         content:
-          'Use your android phone to send and receive SMS messages using a simple HTTP API.',
+          'Šaljite i primajte SMS poruke kroz svoj Android telefon putem jednostavnog HTTP API-ja. Dio platforme DOMOVINA.ai.',
       },
       {
         hid: 'og:image',
-        name: 'og:image',
-        content: 'https://httpsms.com/header.png',
+        property: 'og:image',
+        content: 'https://sms.domovina.ai/header.png',
       },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [
+      { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -127,6 +140,7 @@ export default {
   ],
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
+  // Domovina brand palette: navy #002F6C primary, red #FF0000 accent.
   vuetify: {
     treeShake: true,
     customVariables: ['~/assets/variables.scss'],
@@ -134,12 +148,33 @@ export default {
       icons: 'mdiSvg',
     },
     theme: {
-      dark: true,
+      dark: false,
+      themes: {
+        light: {
+          primary: '#002F6C',
+          secondary: '#5A6570',
+          accent: '#FF0000',
+          error: '#B42318',
+          warning: '#B45309',
+          info: '#002F6C',
+          success: '#2E8540',
+          background: '#FFFFFF',
+        },
+        dark: {
+          primary: '#5C8AD6',
+          secondary: '#8A95A5',
+          accent: '#FF4D4D',
+          error: '#F87171',
+          warning: '#FBBF24',
+          info: '#5C8AD6',
+          success: '#3FB950',
+        },
+      },
     },
   },
 
   sitemap: {
-    hostname: 'https://httpsms.com',
+    hostname: 'https://sms.domovina.ai',
     gzip: true,
     trailingSlash: true,
     exclude: [

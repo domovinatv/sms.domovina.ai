@@ -28,14 +28,14 @@
               <a
                 class="text-decoration-none"
                 download
-                href="/templates/httpsms-bulk.csv"
+                href="/templates/domovina-sms-bulk.csv"
                 >CSV template</a
               >
               or our
               <a
                 class="text-decoration-none"
                 download
-                href="/templates/httpsms-bulk.xlsx"
+                href="/templates/domovina-sms-bulk.xlsx"
                 >Excel template</a
               >
               and upload it here to send your SMS messages to multiple
@@ -88,7 +88,7 @@
                   v-if="$vuetify.breakpoint.mdAndUp"
                   plain
                   color="info"
-                  href="mailto:arnold@httpsms.com?subject=I'm having trouble with the bulk messages"
+                  href="mailto:support@domovina.ai?subject=I'm having trouble with the bulk messages"
                 >
                   I Need Help
                 </v-btn>
@@ -152,7 +152,7 @@ export default Vue.extend({
   },
   head() {
     return {
-      title: 'Send Bulk Messages - httpSMS',
+      title: 'Send Bulk Messages - Domovina SMS',
     }
   },
   computed: {},

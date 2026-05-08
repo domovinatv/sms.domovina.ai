@@ -409,7 +409,7 @@ export default Vue.extend({
   },
   head() {
     return {
-      title: 'Messages - httpSMS',
+      title: 'Messages - Domovina SMS',
     }
   },
   computed: {

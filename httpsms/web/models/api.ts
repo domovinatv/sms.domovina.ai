@@ -345,7 +345,7 @@ export interface RequestsMessageBulkSend {
   /** @example "This is a sample text message" */
   content: string
   /**
-   * Encrypted is used to determine if the content is end-to-end encrypted. Make sure to set the encryption key on the httpSMS mobile app
+   * Encrypted is used to determine if the content is end-to-end encrypted. Make sure to set the encryption key on the Domovina SMS mobile app
    * @example false
    */
   encrypted?: boolean
@@ -395,7 +395,7 @@ export interface RequestsMessageReceive {
   /** @example "This is a sample text message received on a phone" */
   content: string
   /**
-   * Encrypted is used to determine if the content is end-to-end encrypted. Make sure to set the encryption key on the httpSMS mobile app
+   * Encrypted is used to determine if the content is end-to-end encrypted. Make sure to set the encryption key on the Domovina SMS mobile app
    * @example false
    */
   encrypted: boolean
@@ -424,7 +424,7 @@ export interface RequestsMessageSend {
   /** @example "This is a sample text message" */
   content: string
   /**
-   * Encrypted is an optional parameter used to determine if the content is end-to-end encrypted. Make sure to set the encryption key on the httpSMS mobile app
+   * Encrypted is an optional parameter used to determine if the content is end-to-end encrypted. Make sure to set the encryption key on the Domovina SMS mobile app
    * @example false
    */
   encrypted?: boolean
