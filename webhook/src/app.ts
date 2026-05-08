@@ -215,7 +215,7 @@ export function createApp(opts: AppOptions): AppHandle {
     log(`${CYAN("verification.start")} id=${id.slice(0, 8)} code=${BOLD(code)} gateway=${gatewayNumber} tier=${pick.tier} purpose=${purpose ?? "-"}`);
     return c.json({
       ...publicView(v),
-      instructions: `Send an SMS containing the code "${code}" to ${gatewayNumber} from the phone you want to verify. Code is case-insensitive and can be embedded in any text.`,
+      instructions: `Pošaljite SMS koji sadrži kod „${code}" na broj ${gatewayNumber} s telefona koji želite potvrditi. Kod nije osjetljiv na velika i mala slova te može biti unutar bilo kojeg teksta.`,
     });
   });
 

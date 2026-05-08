@@ -85,7 +85,7 @@ export const OG_IMAGE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="1200
 Provjera broja telefona
 </text>
 <text x="600" y="555" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="22" fill="#5A6570" letter-spacing="0.5">
-Potvrdite broj jednim SMS-om — besplatno, bez koda
+Potvrdite broj jednim SMS-om — besplatno i bez čekanja
 </text>
 </svg>`;
 
@@ -285,7 +285,7 @@ footer a:hover { text-decoration: underline; }
       <a id="smsLink" class="action-btn primary" href="#">Otvori SMS aplikaciju</a>
       <button class="action-btn" type="button" id="copyBtn" onclick="copyCode()">Kopiraj kod</button>
     </div>
-    <p class="hint">Na mobitelu kliknite "Otvori SMS aplikaciju" — vaš SMS klijent će se otvoriti s prefilovanim brojem i kodom. Samo pošaljite poruku.</p>
+    <p class="hint">Na mobitelu pritisnite „Otvori SMS aplikaciju" — vaš SMS klijent otvorit će se s unaprijed unesenim brojem i kodom. Samo pošaljite poruku.</p>
     <hr class="divider" />
     <div class="row"><span class="label">Status</span><span class="value" id="status">u tijeku</span></div>
     <div class="row"><span class="label">Istječe u</span><span class="value" id="exp">—</span></div>
