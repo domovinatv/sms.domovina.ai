@@ -38,6 +38,23 @@ export interface Storage {
   markVerified(id: string, phone: string): Verification | undefined;
   /** Bulk mark stale pending rows as expired. */
   sweepExpired(now: number): void;
+
+  // ── Gateway health tracking ────────────────────────────────────────────
+  /** Upsert a heartbeat from a gateway phone. */
+  recordHeartbeat(number: string, status: GatewayStatus, at: number): void;
+  /** All known gateways, most-recently-heard first. */
+  listGateways(): GatewayRow[];
+  /** Numbers with status='online' AND last_heartbeat_at >= cutoff. */
+  onlineGateways(cutoff: number): string[];
+}
+
+export type GatewayStatus = "online" | "offline";
+
+export interface GatewayRow {
+  number: string;
+  firstSeenAt: number;
+  lastHeartbeatAt: number;
+  status: GatewayStatus;
 }
 
 // ── Memory implementation ──────────────────────────────────────────────────
@@ -54,6 +71,7 @@ export interface MemoryStorage extends Storage {
 export function createMemoryStorage(): MemoryStorage {
   const verifications = new Map<string, Verification>();
   const codeToId = new Map<string, string>();
+  const gateways = new Map<string, GatewayRow>();
 
   return {
     state: { verifications, codeToId },
@@ -111,6 +129,28 @@ export function createMemoryStorage(): MemoryStorage {
           codeToId.delete(v.code);
         }
       }
+    },
+
+    recordHeartbeat(number, status, at) {
+      const existing = gateways.get(number);
+      gateways.set(number, {
+        number,
+        firstSeenAt: existing?.firstSeenAt ?? at,
+        lastHeartbeatAt: at,
+        status,
+      });
+    },
+
+    listGateways() {
+      return Array.from(gateways.values()).sort(
+        (a, b) => b.lastHeartbeatAt - a.lastHeartbeatAt
+      );
+    },
+
+    onlineGateways(cutoff) {
+      return Array.from(gateways.values())
+        .filter((g) => g.status === "online" && g.lastHeartbeatAt >= cutoff)
+        .map((g) => g.number);
     },
   };
 }

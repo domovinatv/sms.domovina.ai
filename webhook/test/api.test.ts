@@ -125,15 +125,148 @@ describe("Reverse OTP integration", () => {
     expect(r.status).toBe(200);
   });
 
-  test("ignores non-message.phone.received events", async () => {
+  test("ignores unknown event types", async () => {
     const v = await startVerification(handle.app);
-    const r = await postWebhook(handle.app, { content: v.code, eventType: "phone.heartbeat.online" });
+    const r = await postWebhook(handle.app, { content: v.code, eventType: "phone.unknown.foo" });
     const body = await r.json();
     expect(body.ignored).toBe(true);
 
-    // Still pending — heartbeat event must not consume the code.
     const poll = await (await handle.app.request(`/api/verifications/${v.id}`)).json();
     expect(poll.status).toBe("pending");
+  });
+
+  test("heartbeat events update gateway health and don't consume codes", async () => {
+    const v = await startVerification(handle.app);
+
+    // online heartbeat
+    let r = await postWebhook(handle.app, {
+      content: "ignored",
+      eventType: "phone.heartbeat.online",
+    });
+    expect(r.status).toBe(200);
+    let body = await r.json();
+    expect(body.gateway).toBe(GATEWAY);
+    expect(body.status).toBe("online");
+
+    // verification untouched
+    let poll = await (await handle.app.request(`/api/verifications/${v.id}`)).json();
+    expect(poll.status).toBe("pending");
+
+    // gateways admin endpoint reflects the heartbeat
+    const list = await (await handle.app.request("/api/gateways")).json();
+    expect(list.count).toBe(1);
+    expect(list.online_count).toBe(1);
+    expect(list.items[0].number).toBe(GATEWAY);
+    expect(list.items[0].is_online).toBe(true);
+
+    // offline heartbeat flips status
+    r = await postWebhook(handle.app, {
+      content: "ignored",
+      eventType: "phone.heartbeat.offline",
+    });
+    body = await r.json();
+    expect(body.status).toBe("offline");
+
+    const list2 = await (await handle.app.request("/api/gateways")).json();
+    expect(list2.online_count).toBe(0);
+    expect(list2.items[0].status).toBe("offline");
+
+    // verification still pending — heartbeats never touch verification state
+    poll = await (await handle.app.request(`/api/verifications/${v.id}`)).json();
+    expect(poll.status).toBe("pending");
+  });
+
+  test("selection prefers online phones over offline ones", async () => {
+    const numbers = ["+385990000001", "+385990000002", "+385990000003"];
+    const multi = createApp({
+      signingKey: SIGNING_KEY,
+      gatewayNumbers: numbers,
+      ttlMs: 60_000,
+      codeLen: 6,
+      onlineCutoffMs: 60_000,
+    });
+
+    // Mark only the second number as online via a heartbeat webhook.
+    const headers = {
+      "content-type": "application/json",
+      "x-event-type": "phone.heartbeat.online",
+      authorization: `Bearer ${await buildJwt()}`,
+    };
+    await multi.app.request("/webhook", {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ data: { owner: numbers[1] } }),
+    });
+
+    // Every verification should now pick numbers[1], even though all 3 are
+    // in the static fallback list.
+    for (let i = 0; i < 20; i++) {
+      const v = await startVerification(multi.app);
+      expect(v.gateway_number).toBe(numbers[1]);
+    }
+  });
+
+  test("selection falls back to known phones when none online, then to static", async () => {
+    const numbers = ["+385990000001", "+385990000002"];
+    const fallback = createApp({
+      signingKey: SIGNING_KEY,
+      gatewayNumbers: numbers,
+      ttlMs: 60_000,
+      codeLen: 6,
+      onlineCutoffMs: 60_000,
+    });
+
+    // Cold start: no heartbeats yet — pulls from static fallback.
+    const v1 = await startVerification(fallback.app);
+    expect(numbers).toContain(v1.gateway_number);
+
+    // Mark numbers[0] online then offline. After that it's "known" but not "online".
+    const baseHeaders = {
+      "content-type": "application/json",
+      authorization: `Bearer ${await buildJwt()}`,
+    };
+    for (const eventType of ["phone.heartbeat.online", "phone.heartbeat.offline"]) {
+      await fallback.app.request("/webhook", {
+        method: "POST",
+        headers: { ...baseHeaders, "x-event-type": eventType },
+        body: JSON.stringify({ data: { owner: numbers[0] } }),
+      });
+    }
+
+    // No online phones anywhere → tier "known" picks the offline-but-seen one.
+    for (let i = 0; i < 10; i++) {
+      const v = await startVerification(fallback.app);
+      expect(v.gateway_number).toBe(numbers[0]);
+    }
+  });
+
+  test("allowlist excludes phones from rotation even when online", async () => {
+    const numbers = ["+385990000001", "+385990000002", "+385990000003"];
+    const allow = createApp({
+      signingKey: SIGNING_KEY,
+      gatewayNumbers: numbers,
+      gatewayAllowList: [numbers[0], numbers[2]], // exclude middle
+      ttlMs: 60_000,
+      codeLen: 6,
+      onlineCutoffMs: 60_000,
+    });
+
+    // Even bringing the excluded phone online doesn't put it in rotation.
+    const headers = {
+      "content-type": "application/json",
+      "x-event-type": "phone.heartbeat.online",
+      authorization: `Bearer ${await buildJwt()}`,
+    };
+    await allow.app.request("/webhook", {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ data: { owner: numbers[1] } }),
+    });
+
+    for (let i = 0; i < 20; i++) {
+      const v = await startVerification(allow.app);
+      expect(v.gateway_number).not.toBe(numbers[1]);
+    }
   });
 
   test("single-use: code is invalidated after first match", async () => {

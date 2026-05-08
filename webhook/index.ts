@@ -14,16 +14,24 @@ const PUBLIC_URL =
 const SIGNING_KEY =
   process.env.HTTPSMS_SIGNING_KEY ??
   "wh_sign_dasdasdafrete45345gdfvb767834rfsdfsd";
-const GATEWAY_NUMBERS = (process.env.GATEWAY_NUMBERS ?? process.env.GATEWAY_NUMBER ?? "+385998710482")
-  .split(",")
-  .map((s) => s.trim())
-  .filter(Boolean);
+const csv = (s: string | undefined) =>
+  (s ?? "")
+    .split(",")
+    .map((x) => x.trim())
+    .filter(Boolean);
+const GATEWAY_NUMBERS = csv(
+  process.env.GATEWAY_NUMBERS ?? process.env.GATEWAY_NUMBER ?? "+385998710482"
+);
+const GATEWAY_ALLOW_LIST = csv(process.env.GATEWAY_ALLOW_LIST);
+const ONLINE_CUTOFF_MS = Number(process.env.ONLINE_CUTOFF_MS) || 120_000;
 const TTL_MS = Number(process.env.VERIFICATION_TTL_MS) || 10 * 60 * 1000;
 const CODE_LEN = Number(process.env.CODE_LEN) || 6;
 
 const handle = createApp({
   signingKey: SIGNING_KEY,
   gatewayNumbers: GATEWAY_NUMBERS,
+  gatewayAllowList: GATEWAY_ALLOW_LIST,
+  onlineCutoffMs: ONLINE_CUTOFF_MS,
   ttlMs: TTL_MS,
   codeLen: CODE_LEN,
   publicOrigin: PUBLIC_URL,

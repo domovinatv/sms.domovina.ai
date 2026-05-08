@@ -24,13 +24,22 @@ tag = "v1"
 new_sqlite_classes = ["VerificationStore"]
 
 [vars]
-# Comma-separated list of gateway phone numbers. The DO picks one at random
-# per verification and shows it to the user; webhook accepts SMS on any of
-# them. Add/remove numbers here and `wrangler deploy` to scale gateways.
+# Cold-start fallback. Once gateways send phone.heartbeat.online events,
+# the worker auto-discovers them and uses the dynamic pool. Static config
+# only matters until the first heartbeat arrives.
 GATEWAY_NUMBERS = "+385998710482"
+
+# Optional allowlist (CSV). Empty = any auto-discovered phone is eligible.
+# Set to keep a test phone out of the rotation, e.g. "+385991234567".
+# GATEWAY_ALLOW_LIST = ""
+
 PUBLIC_ORIGIN = "https://otp.domovina.ai"
 VERIFICATION_TTL_MS = "600000"
 CODE_LEN = "6"
+# A gateway is considered "online" if its last heartbeat event arrived
+# within this window. Heartbeat events fire on status transitions, so
+# this is more of a safety bound than a freshness check.
+ONLINE_CUTOFF_MS = "120000"
 
 # Custom domain route — Cloudflare provisions a free TLS cert.
 # Requires zone "domovina.ai" to be on this Cloudflare account.

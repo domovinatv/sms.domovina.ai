@@ -12,16 +12,28 @@
 
 import { DurableObject } from "cloudflare:workers";
 import { createApp } from "./app";
-import type { Storage, Verification } from "./storage";
+import type { GatewayRow, GatewayStatus, Storage, Verification } from "./storage";
 
 export interface Env {
   HTTPSMS_SIGNING_KEY: string;
-  /** Comma-separated list of gateway phone numbers. Falls back to GATEWAY_NUMBER for backwards compat. */
+  /**
+   * Static cold-start gateway phone numbers (CSV). Used only until the
+   * first phone.heartbeat.online events arrive; after that, dynamic
+   * health-tracked pool takes over. Falls back to GATEWAY_NUMBER for
+   * backwards compat.
+   */
   GATEWAY_NUMBERS?: string;
   GATEWAY_NUMBER?: string;
+  /**
+   * Optional CSV allowlist. If set, only phones in this list are used
+   * for selection regardless of heartbeats. Useful to keep a test phone
+   * out of the rotation.
+   */
+  GATEWAY_ALLOW_LIST?: string;
   PUBLIC_ORIGIN: string;
   VERIFICATION_TTL_MS?: string;
   CODE_LEN?: string;
+  ONLINE_CUTOFF_MS?: string;
   VERIFICATION_STORE: DurableObjectNamespace;
 }
 
@@ -35,16 +47,19 @@ export class VerificationStore extends DurableObject<Env> {
 
     const sqlStorage = createSqlStorage(ctx);
 
-    const gatewayNumbers = (env.GATEWAY_NUMBERS ?? env.GATEWAY_NUMBER ?? "")
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean);
+    const csv = (s: string | undefined) =>
+      (s ?? "")
+        .split(",")
+        .map((x) => x.trim())
+        .filter(Boolean);
 
     const handle = createApp({
       signingKey: env.HTTPSMS_SIGNING_KEY,
-      gatewayNumbers,
+      gatewayNumbers: csv(env.GATEWAY_NUMBERS ?? env.GATEWAY_NUMBER),
+      gatewayAllowList: csv(env.GATEWAY_ALLOW_LIST),
       ttlMs: Number(env.VERIFICATION_TTL_MS) || 10 * 60 * 1000,
       codeLen: Number(env.CODE_LEN) || 6,
+      onlineCutoffMs: Number(env.ONLINE_CUTOFF_MS) || 120_000,
       publicOrigin: env.PUBLIC_ORIGIN,
       storage: sqlStorage,
     });
@@ -130,6 +145,18 @@ function createSqlStorage(ctx: DurableObjectState): Storage {
   sql.exec(`CREATE INDEX IF NOT EXISTS idx_status_expires ON verifications(status, expires_at)`);
   sql.exec(`CREATE INDEX IF NOT EXISTS idx_code ON verifications(code)`);
 
+  // Gateway health table: one row per known phone number, kept fresh by
+  // phone.heartbeat.online / .offline webhook events.
+  sql.exec(`
+    CREATE TABLE IF NOT EXISTS gateways (
+      number TEXT PRIMARY KEY,
+      first_seen_at INTEGER NOT NULL,
+      last_heartbeat_at INTEGER NOT NULL,
+      status TEXT NOT NULL
+    )
+  `);
+  sql.exec(`CREATE INDEX IF NOT EXISTS idx_gw_status_hb ON gateways(status, last_heartbeat_at)`);
+
   function getById(id: string): Verification | undefined {
     const rows = sql.exec<VerificationRow>(
       `SELECT * FROM verifications WHERE id = ? LIMIT 1`,
@@ -211,6 +238,44 @@ function createSqlStorage(ctx: DurableObjectState): Storage {
         `UPDATE verifications SET status = 'expired' WHERE status = 'pending' AND expires_at < ?`,
         now
       );
+    },
+
+    recordHeartbeat(number, status, at) {
+      // Upsert: keep first_seen_at on conflict, refresh last_heartbeat_at + status.
+      sql.exec(
+        `INSERT INTO gateways (number, first_seen_at, last_heartbeat_at, status)
+         VALUES (?, ?, ?, ?)
+         ON CONFLICT(number) DO UPDATE SET
+           last_heartbeat_at = excluded.last_heartbeat_at,
+           status = excluded.status`,
+        number,
+        at,
+        at,
+        status
+      );
+    },
+
+    listGateways() {
+      const rows = sql.exec<{
+        number: string;
+        first_seen_at: number;
+        last_heartbeat_at: number;
+        status: GatewayStatus;
+      }>(`SELECT * FROM gateways ORDER BY last_heartbeat_at DESC`).toArray();
+      return rows.map<GatewayRow>((r) => ({
+        number: r.number,
+        firstSeenAt: r.first_seen_at,
+        lastHeartbeatAt: r.last_heartbeat_at,
+        status: r.status,
+      }));
+    },
+
+    onlineGateways(cutoff) {
+      const rows = sql.exec<{ number: string }>(
+        `SELECT number FROM gateways WHERE status = 'online' AND last_heartbeat_at >= ?`,
+        cutoff
+      ).toArray();
+      return rows.map((r) => r.number);
     },
   };
 }

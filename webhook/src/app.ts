@@ -6,7 +6,13 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { verify } from "hono/jwt";
-import { createMemoryStorage, type MemoryStorage, type Storage, type Verification } from "./storage";
+import {
+  createMemoryStorage,
+  type GatewayRow,
+  type MemoryStorage,
+  type Storage,
+  type Verification,
+} from "./storage";
 import { renderHomePage, OG_IMAGE_SVG, LOGO_SVG } from "./views";
 
 const DIM = (s: string) => `\x1b[2m${s}\x1b[0m`;
@@ -78,12 +84,26 @@ function publicView(v: Verification) {
 export interface AppOptions {
   signingKey: string;
   /**
-   * One or more gateway phone numbers. The user-facing instructions show
-   * a randomly-picked number per verification; the webhook accepts SMS
-   * arriving on any of them, so adding/removing numbers is just config.
-   * Single-element array is the legacy single-gateway shape.
+   * Static gateway phone numbers. Used as cold-start fallback when no
+   * heartbeat data is yet available; once gateways start sending
+   * heartbeat.online events, the dynamic pool takes over. May be empty
+   * if you want pure auto-discovery from heartbeats.
    */
   gatewayNumbers: string[];
+  /**
+   * Optional allowlist. If non-empty, only numbers in this list are
+   * eligible for selection (even if other heartbeats arrive). Useful to
+   * exclude a test phone from the rotation. Empty/undefined means any
+   * discovered phone is fine.
+   */
+  gatewayAllowList?: string[];
+  /**
+   * A gateway is considered "online" if its last heartbeat arrived within
+   * this many milliseconds. Default 120000 (2 min) — Android sends every
+   * 15 min normally, but heartbeat.online/offline events are emitted on
+   * status transitions, so the timestamp tracks transitions not pings.
+   */
+  onlineCutoffMs?: number;
   ttlMs: number;
   codeLen: number;
   /** Public origin used in canonical/og:url meta tags. No trailing slash. */
@@ -94,11 +114,43 @@ export interface AppOptions {
   log?: (line: string) => void;
 }
 
-function pickGateway(numbers: string[]): string {
-  if (numbers.length === 0) throw new Error("at least one gateway number required");
-  if (numbers.length === 1) return numbers[0];
-  const idx = crypto.getRandomValues(new Uint32Array(1))[0] % numbers.length;
-  return numbers[idx];
+function randomFrom<T>(items: T[]): T {
+  if (items.length === 1) return items[0];
+  const idx = crypto.getRandomValues(new Uint32Array(1))[0] % items.length;
+  return items[idx];
+}
+
+/**
+ * Tiered gateway selection. Returns the chosen number plus a tier label
+ * for observability:
+ *  1. "online"  — preferred: random among online phones (heartbeat fresh)
+ *  2. "known"   — fallback: random among any-ever-seen phones
+ *  3. "static"  — cold-start: random from the env-configured list
+ */
+function pickGateway(opts: {
+  storage: Storage;
+  staticNumbers: string[];
+  allowList: string[] | undefined;
+  onlineCutoff: number;
+}): { number: string; tier: "online" | "known" | "static" } {
+  const { storage, staticNumbers, allowList, onlineCutoff } = opts;
+  const allow = allowList && allowList.length > 0 ? new Set(allowList) : null;
+  const filter = (n: string) => (allow === null ? true : allow.has(n));
+
+  const online = storage.onlineGateways(onlineCutoff).filter(filter);
+  if (online.length > 0) return { number: randomFrom(online), tier: "online" };
+
+  const known = storage
+    .listGateways()
+    .map((g) => g.number)
+    .filter(filter);
+  if (known.length > 0) return { number: randomFrom(known), tier: "known" };
+
+  const fallback = staticNumbers.filter(filter);
+  if (fallback.length === 0) {
+    throw new Error("no gateway available (no heartbeats, no static config, or all filtered)");
+  }
+  return { number: randomFrom(fallback), tier: "static" };
 }
 
 export interface AppHandle {
@@ -130,6 +182,7 @@ export function createApp(opts: AppOptions): AppHandle {
 
   const sweepExpired = () => storage.sweepExpired(Date.now());
 
+  const onlineCutoffMs = opts.onlineCutoffMs ?? 120_000;
   const publicOrigin = opts.publicOrigin?.replace(/\/+$/, "") ?? "";
 
   const app = new Hono();
@@ -141,7 +194,13 @@ export function createApp(opts: AppOptions): AppHandle {
     const purpose: string | undefined = body?.purpose;
     const id = crypto.randomUUID();
     const code = generateCode({ codeLen: opts.codeLen, existing: storage.pendingCodes() });
-    const gatewayNumber = pickGateway(opts.gatewayNumbers);
+    const pick = pickGateway({
+      storage,
+      staticNumbers: opts.gatewayNumbers,
+      allowList: opts.gatewayAllowList,
+      onlineCutoff: Date.now() - onlineCutoffMs,
+    });
+    const gatewayNumber = pick.number;
     const now = Date.now();
     const v: Verification = {
       id,
@@ -153,7 +212,7 @@ export function createApp(opts: AppOptions): AppHandle {
       purpose,
     };
     storage.create(v);
-    log(`${CYAN("verification.start")} id=${id.slice(0, 8)} code=${BOLD(code)} gateway=${gatewayNumber} purpose=${purpose ?? "-"}`);
+    log(`${CYAN("verification.start")} id=${id.slice(0, 8)} code=${BOLD(code)} gateway=${gatewayNumber} tier=${pick.tier} purpose=${purpose ?? "-"}`);
     return c.json({
       ...publicView(v),
       instructions: `Send an SMS containing the code "${code}" to ${gatewayNumber} from the phone you want to verify. Code is case-insensitive and can be embedded in any text.`,
@@ -177,6 +236,27 @@ export function createApp(opts: AppOptions): AppHandle {
     return c.json({
       count: storage.count(),
       items: items.map(publicView),
+    });
+  });
+
+  // ── Gateway health (admin / debug) ──
+  app.get("/api/gateways", (c) => {
+    const cutoff = Date.now() - onlineCutoffMs;
+    const all = storage.listGateways();
+    return c.json({
+      online_cutoff_ms: onlineCutoffMs,
+      count: all.length,
+      online_count: all.filter((g) => g.status === "online" && g.lastHeartbeatAt >= cutoff).length,
+      static_fallback: opts.gatewayNumbers,
+      allow_list: opts.gatewayAllowList ?? null,
+      items: all.map((g) => ({
+        number: g.number,
+        status: g.status,
+        first_seen_at: new Date(g.firstSeenAt).toISOString(),
+        last_heartbeat_at: new Date(g.lastHeartbeatAt).toISOString(),
+        last_heartbeat_age_seconds: Math.floor((Date.now() - g.lastHeartbeatAt) / 1000),
+        is_online: g.status === "online" && g.lastHeartbeatAt >= cutoff,
+      })),
     });
   });
 
@@ -231,18 +311,35 @@ export function createApp(opts: AppOptions): AppHandle {
     }
     // Production: also reject "missing". Allowed here so manual curl tests work.
 
-    if (eventType !== "message.phone.received") {
-      log(DIM(`  ignored (event type not message.phone.received)`));
-      return c.json({ ok: true, ignored: true });
-    }
-
     const bodyText = await c.req.text();
     let payload: any = null;
     try {
       payload = JSON.parse(bodyText);
     } catch {}
-
     const data = payload?.data ?? payload;
+
+    // Heartbeat events update the gateway health table; we don't proceed
+    // to the message-matching pipeline for these.
+    if (
+      eventType === "phone.heartbeat.online" ||
+      eventType === "phone.heartbeat.offline"
+    ) {
+      const owner: string | undefined = data?.owner;
+      if (!owner) {
+        log(YELLOW(`  heartbeat without owner; ignoring`));
+        return c.json({ ok: true, ignored: true });
+      }
+      const status = eventType === "phone.heartbeat.online" ? "online" : "offline";
+      storage.recordHeartbeat(owner, status, Date.now());
+      log(`  ${CYAN("gateway." + status)} owner=${owner}`);
+      return c.json({ ok: true, gateway: owner, status });
+    }
+
+    if (eventType !== "message.phone.received") {
+      log(DIM(`  ignored (event type ${eventType})`));
+      return c.json({ ok: true, ignored: true });
+    }
+
     const from: string | undefined = data?.contact ?? data?.from;
     const to: string | undefined = data?.owner ?? data?.to;
     const content: string | undefined = data?.content;
