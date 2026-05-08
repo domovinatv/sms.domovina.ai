@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 import { sign } from "hono/jwt";
-import { createApp, type AppHandle } from "../app";
+import { createApp, type AppHandle } from "../src/app";
 
 const SIGNING_KEY = "test_signing_key_secret";
 const GATEWAY = "+385998710482";
@@ -63,7 +63,7 @@ describe("Reverse OTP integration", () => {
   beforeEach(() => {
     handle = createApp({
       signingKey: SIGNING_KEY,
-      gatewayNumber: GATEWAY,
+      gatewayNumbers: [GATEWAY],
       ttlMs: 60_000,
       codeLen: 6,
     });
@@ -154,7 +154,7 @@ describe("Reverse OTP integration", () => {
   test("expired code does not verify", async () => {
     handle = createApp({
       signingKey: SIGNING_KEY,
-      gatewayNumber: GATEWAY,
+      gatewayNumbers: [GATEWAY],
       ttlMs: 0, // immediately expires
       codeLen: 6,
     });
@@ -204,5 +204,51 @@ describe("Reverse OTP integration", () => {
     const ids = body.items.map((i: any) => i.id);
     expect(ids).toContain(a.id);
     expect(ids).toContain(b.id);
+  });
+
+  test("multi-gateway: random selection eventually hits every configured number", async () => {
+    const numbers = ["+385990000001", "+385990000002", "+385990000003"];
+    const multi = createApp({
+      signingKey: SIGNING_KEY,
+      gatewayNumbers: numbers,
+      ttlMs: 60_000,
+      codeLen: 6,
+    });
+    const seen = new Set<string>();
+    // 60 picks across 3 numbers — chance of missing one is (2/3)^60 ≈ 1e-10.
+    for (let i = 0; i < 60; i++) {
+      const v = await startVerification(multi.app);
+      seen.add(v.gateway_number);
+    }
+    for (const n of numbers) expect(seen.has(n)).toBe(true);
+  });
+
+  test("multi-gateway: webhook accepts SMS regardless of which gateway received it", async () => {
+    const numbers = ["+385990000001", "+385990000002"];
+    const multi = createApp({
+      signingKey: SIGNING_KEY,
+      gatewayNumbers: numbers,
+      ttlMs: 60_000,
+      codeLen: 6,
+    });
+    const v = await startVerification(multi.app);
+    // SMS arrives reporting `owner` as a gateway *different* from the one shown
+    // to the user — webhook must still match by code, not by recipient number.
+    const otherGateway = numbers.find((n) => n !== v.gateway_number)!;
+    const headers = {
+      "content-type": "application/json",
+      "x-event-type": "message.phone.received",
+      authorization: `Bearer ${await buildJwt()}`,
+    };
+    const r = await multi.app.request("/webhook", {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        data: { contact: "+385991111111", owner: otherGateway, content: v.code },
+      }),
+    });
+    expect(r.status).toBe(200);
+    const body = await r.json();
+    expect(body.status).toBe("verified");
   });
 });

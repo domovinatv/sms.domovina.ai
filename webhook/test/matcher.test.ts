@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { findCodeInContent, generateCode, CODE_ALPHABET } from "../app";
+import { findCodeInContent, generateCode, CODE_ALPHABET } from "../src/app";
 
 describe("findCodeInContent — substring matching across user-typed messages", () => {
   const STORED = new Set(["A4YTAP"]);

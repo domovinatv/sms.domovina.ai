@@ -1,0 +1,43 @@
+# Cloudflare Worker config for otp.domovina.ai (Reverse OTP service).
+#
+# Secrets (set via `wrangler secret put`):
+#   HTTPSMS_SIGNING_KEY  — HS256 key registered in httpsms admin
+#
+# Public vars are below in [vars]. The custom domain route binds
+# otp.domovina.ai to this worker (zone domovina.ai must already be on
+# Cloudflare for the user's account).
+
+name = "domovina-otp"
+main = "src/worker.ts"
+compatibility_date = "2025-04-01"
+account_id = "7dc7167b7e2e00923bfa7cd697df14e4"
+
+# Single-instance Durable Object holds the SQLite verification store +
+# Hono app. All requests fan into idFromName("global").
+[[durable_objects.bindings]]
+name = "VERIFICATION_STORE"
+class_name = "VerificationStore"
+
+# SQLite storage backend (required for free plan and for sql.exec()).
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["VerificationStore"]
+
+[vars]
+# Comma-separated list of gateway phone numbers. The DO picks one at random
+# per verification and shows it to the user; webhook accepts SMS on any of
+# them. Add/remove numbers here and `wrangler deploy` to scale gateways.
+GATEWAY_NUMBERS = "+385998710482"
+PUBLIC_ORIGIN = "https://otp.domovina.ai"
+VERIFICATION_TTL_MS = "600000"
+CODE_LEN = "6"
+
+# Custom domain route — Cloudflare provisions a free TLS cert.
+# Requires zone "domovina.ai" to be on this Cloudflare account.
+[[routes]]
+pattern = "otp.domovina.ai"
+custom_domain = true
+
+# Observability: enable Workers logs (free tier includes basic logs).
+[observability]
+enabled = true

@@ -5,9 +5,17 @@
   "scripts": {
     "dev": "bun run --hot index.ts",
     "start": "bun run index.ts",
-    "test": "bun test"
+    "test": "bun test",
+    "cf:dev": "wrangler dev",
+    "cf:deploy": "wrangler deploy",
+    "cf:tail": "wrangler tail",
+    "cf:secret": "wrangler secret put HTTPSMS_SIGNING_KEY"
   },
   "dependencies": {
     "hono": "^4.6.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250101.0",
+    "wrangler": "^4.0.0"
   }
 }
