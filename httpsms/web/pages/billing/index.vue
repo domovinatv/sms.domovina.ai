@@ -10,7 +10,7 @@
           <v-icon>{{ mdiArrowLeft }}</v-icon>
         </v-btn>
         <v-toolbar-title>
-          <div class="py-16">Account Usage</div>
+          <div class="py-16">Potrošnja računa</div>
         </v-toolbar-title>
         <v-progress-linear
           :active="loading"
@@ -22,7 +22,7 @@
       <v-container>
         <v-row>
           <v-col cols="12" md="9" offset-md="1" xl="8" offset-xl="2">
-            <h5 class="text-h4 mb-3 mt-3">Current Plan</h5>
+            <h5 class="text-h4 mb-3 mt-3">Trenutni plan</h5>
             <v-row v-if="$store.getters.getUser">
               <v-col md="6" xl="4">
                 <v-alert dense text prominent color="info">
@@ -34,7 +34,7 @@
                         <span v-if="isOnFreePlan">{{ plan.name }}</span>
                         <span v-else-if="subscriptionIsCancelled"
                           ><span class="warning--text">{{ plan.name }}</span> →
-                          Free</span
+                          Besplatno</span
                         >
                         <span v-else>{{ plan.name }}</span>
                       </h1>
@@ -46,7 +46,7 @@
                         "
                         class="text--secondary"
                       >
-                        Your next bill is for <b>${{ plan.price }}</b> on
+                        Sljedeći račun je <b>${{ plan.price }}</b> na dan
                         <b>{{
                           new Date(
                             $store.getters.getUser.subscription_renews_at,
@@ -54,14 +54,14 @@
                         }}</b>
                       </p>
                       <p v-if="isOnLifetimePlan" class="text--secondary">
-                        You are on the life time plan which costs
+                        Koristite doživotni plan koji košta
                         <b>${{ plan.price }}</b>
                       </p>
                       <p
                         v-else-if="subscriptionIsCancelled"
                         class="text--secondary"
                       >
-                        You will be downgraded to the <b>FREE</b> plan on
+                        Bit ćete prebačeni na <b>BESPLATNI</b> plan dana
                         <b>{{
                           new Date(
                             $store.getters.getUser.subscription_ends_at,
@@ -69,7 +69,7 @@
                         }}</b>
                       </p>
                       <p v-else class="text--secondary">
-                        {{ totalMessages }}/{{ plan.messagesPerMonth }} messages
+                        {{ totalMessages }}/{{ plan.messagesPerMonth }} poruka
                       </p>
                     </v-col>
                     <v-col cols="12" class="d-flex mb-2 mt-n6">
@@ -83,13 +83,13 @@
                         :loading="loading"
                         @click="updateDetails"
                       >
-                        Update Plan
+                        Ažuriraj plan
                       </loading-button>
                       <v-btn
                         v-else-if="!isOnLifetimePlan"
                         color="primary"
                         :href="checkoutURL"
-                        >Upgrade Plan</v-btn
+                        >Nadogradi plan</v-btn
                       >
                       <v-spacer></v-spacer>
                       <v-dialog
@@ -103,17 +103,18 @@
                       >
                         <template #activator="{ on, attrs }">
                           <v-btn v-bind="attrs" color="error" text v-on="on">
-                            Cancel Plan
+                            Otkaži plan
                           </v-btn>
                         </template>
                         <v-card>
                           <v-card-text class="pt-4 mb-n6">
                             <h2 class="text--primary text-h5 mb-2">
-                              Are you sure you want to cancel your subscription?
+                              Jeste li sigurni da želite otkazati svoju
+                              pretplatu?
                             </h2>
                             <p>
-                              You will be downgraded to the free plan at the end
-                              of the current billing period on
+                              Bit ćete prebačeni na besplatni plan na kraju
+                              tekućeg obračunskog razdoblja, dana
                               <b>{{
                                 new Date(
                                   $store.getters.getUser.subscription_renews_at,
@@ -123,7 +124,7 @@
                           </v-card-text>
                           <v-card-actions>
                             <v-btn color="primary" @click="dialog = false">
-                              Keep Subscription
+                              Zadrži pretplatu
                             </v-btn>
                             <v-spacer></v-spacer>
                             <loading-button
@@ -133,7 +134,7 @@
                               color="error"
                               @click="cancelPlan"
                             >
-                              Cancel Plan
+                              Otkaži plan
                             </loading-button>
                           </v-card-actions>
                         </v-card>
@@ -143,7 +144,7 @@
                 </v-alert>
               </v-col>
             </v-row>
-            <h2 v-if="isOnFreePlan" class="text-h4 mt-4 mb-2">Upgrade Plan</h2>
+            <h2 v-if="isOnFreePlan" class="text-h4 mt-4 mb-2">Nadogradnja plana</h2>
             <v-row v-if="isOnFreePlan">
               <v-col cols="12" md="6" xl="4">
                 <v-hover v-slot="{ hover }">
@@ -158,12 +159,12 @@
                           <h1
                             class="subtitle-1 font-weight-bold text-uppercase mt-3"
                           >
-                            Pro - Monthly
+                            Pro – mjesečno
                           </h1>
-                          <p class="text--secondary">5,000 messages monthly</p>
+                          <p class="text--secondary">5.000 poruka mjesečno</p>
                         </v-col>
                         <v-col class="shrink">
-                          <span class="text-h5 text--primary">$10</span>/month
+                          <span class="text-h5 text--primary">$10</span>/mj.
                         </v-col>
                       </v-row>
                     </v-card-text>
@@ -183,15 +184,15 @@
                           <h1
                             class="subtitle-1 font-weight-bold text-uppercase mt-3"
                           >
-                            Pro - Yearly
+                            Pro – godišnje
                             <v-chip small color="primary" class="mt-n1"
-                              >2 months free</v-chip
+                              >2 mjeseca besplatno</v-chip
                             >
                           </h1>
-                          <p class="text--secondary">5,000 messages monthly</p>
+                          <p class="text--secondary">5.000 poruka mjesečno</p>
                         </v-col>
                         <v-col class="shrink">
-                          <span class="text-h5 text--primary">$100</span>/year
+                          <span class="text-h5 text--primary">$100</span>/god.
                         </v-col>
                       </v-row>
                     </v-card-text>
@@ -211,14 +212,14 @@
                           <h1
                             class="subtitle-1 font-weight-bold text-uppercase mt-3"
                           >
-                            100k - Monthly
+                            100k – mjesečno
                           </h1>
                           <p class="text--secondary">
-                            100,000 messages monthly
+                            100.000 poruka mjesečno
                           </p>
                         </v-col>
                         <v-col class="shrink">
-                          <span class="text-h5 text--primary">$175</span>/month
+                          <span class="text-h5 text--primary">$175</span>/mj.
                         </v-col>
                       </v-row>
                     </v-card-text>
@@ -226,9 +227,9 @@
                 </v-hover>
               </v-col>
             </v-row>
-            <h5 class="text-h4 mb-3 mt-8">Overview</h5>
+            <h5 class="text-h4 mb-3 mt-8">Pregled</h5>
             <p class="text--secondary">
-              This is the summary of the sent messages and received messages in
+              Ovo je sažetak poslanih i primljenih poruka u razdoblju
               <code
                 v-if="$store.getters.getBillingUsage"
                 class="font-weight-bold"
@@ -250,7 +251,7 @@
                   <h2 class="text-h4 font-weight-bold mt-4">
                     {{ $store.getters.getBillingUsage.sent_messages | decimal }}
                   </h2>
-                  <p class="text--secondary mt-n1">Messages Sent</p>
+                  <p class="text--secondary mt-n1">Poslane poruke</p>
                 </v-alert>
               </v-col>
               <v-col cols="12" md="4">
@@ -270,7 +271,7 @@
                       }}
                     </h2>
                   </div>
-                  <p class="text--secondary mt-n1">Messages Received</p>
+                  <p class="text--secondary mt-n1">Primljene poruke</p>
                 </v-alert>
               </v-col>
               <v-col cols="12" md="4">
@@ -284,15 +285,15 @@
                   <h2 class="text-h4 font-weight-bold mt-4">
                     {{ $store.getters.getBillingUsage.total_cost | money }}
                   </h2>
-                  <p class="text--secondary mt-n1">Total Cost</p>
+                  <p class="text--secondary mt-n1">Ukupni trošak</p>
                 </v-alert>
               </v-col>
             </v-row>
             <template v-if="$store.getters.getUser?.subscription_id != null">
-              <h5 class="text-h4 mb-3 mt-8">Subscription Payments</h5>
+              <h5 class="text-h4 mb-3 mt-8">Plaćanja pretplate</h5>
               <p class="text--secondary">
-                This is a list of your last 10 subscription payments made using
-                our payment provider
+                Ovo je popis vaših posljednjih 10 plaćanja pretplate izvršenih
+                putem našeg pružatelja plaćanja
                 <a
                   class="text-decoration-none"
                   href="https://www.lemonsqueezy.com"
@@ -313,12 +314,12 @@
                       <th v-if="$vuetify.breakpoint.lgAndUp" class="text-left">
                         ID
                       </th>
-                      <th class="text-left">Timestamp</th>
+                      <th class="text-left">Vrijeme</th>
                       <th class="text-left">Status</th>
                       <th v-if="$vuetify.breakpoint.lgAndUp" class="text-left">
-                        Tax
+                        Porez
                       </th>
-                      <th class="text-left">Total</th>
+                      <th class="text-left">Ukupno</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -360,7 +361,7 @@
                           @click="showInvoiceDialog(payment)"
                         >
                           <v-icon left>{{ mdiInvoice }}</v-icon>
-                          Invoice
+                          Račun
                         </v-btn>
                       </td>
                     </tr>
@@ -368,26 +369,25 @@
                 </template>
               </v-simple-table>
             </template>
-            <h5 class="text-h4 mb-3 mt-8">Usage History</h5>
+            <h5 class="text-h4 mb-3 mt-8">Povijest potrošnje</h5>
             <p class="text--secondary">
-              Summary of all the sent and received messages in the past 12
-              months
+              Sažetak svih poslanih i primljenih poruka u posljednjih 12 mjeseci
             </p>
             <v-simple-table>
               <template #default>
                 <thead>
                   <tr class="text-uppercase">
-                    <th class="text-left">Period</th>
+                    <th class="text-left">Razdoblje</th>
                     <th class="text-left">
-                      Sent
-                      <span v-if="$vuetify.breakpoint.lgAndUp">Messages</span>
+                      Poslane
+                      <span v-if="$vuetify.breakpoint.lgAndUp">poruke</span>
                     </th>
                     <th class="text-left">
-                      Received
-                      <span v-if="$vuetify.breakpoint.lgAndUp">Messages</span>
+                      Primljene
+                      <span v-if="$vuetify.breakpoint.lgAndUp">poruke</span>
                     </th>
                     <th class="text-right">
-                      <span v-if="$vuetify.breakpoint.lgAndUp">Total</span> Cost
+                      <span v-if="$vuetify.breakpoint.lgAndUp">Ukupni</span> trošak
                     </th>
                   </tr>
                 </thead>
@@ -424,10 +424,10 @@
       max-width="600px"
     >
       <v-card>
-        <v-card-title class="text-h4"> Generate Invoice </v-card-title>
+        <v-card-title class="text-h4"> Generiranje računa </v-card-title>
         <v-card-subtitle class="mt-n1">
-          Create an invoice for your
-          <b>{{ selectedPayment?.attributes.total_formatted }}</b> payment on
+          Stvorite račun za vaše plaćanje od
+          <b>{{ selectedPayment?.attributes.total_formatted }}</b> dana
           {{ selectedPayment?.attributes.created_at | timestamp }}
         </v-card-subtitle>
         <v-card-text>
@@ -440,8 +440,8 @@
                   :disabled="loading"
                   :error="errorMessages.has('name')"
                   :error-messages="errorMessages.get('name')"
-                  label="Name"
-                  placeholder="e.g Acme Corporation"
+                  label="Naziv"
+                  placeholder="npr. Acme d.o.o."
                   persistent-placeholder
                   outlined
                 ></v-text-field>
@@ -453,8 +453,8 @@
                   :disabled="loading"
                   :error="errorMessages.has('address')"
                   :error-messages="errorMessages.get('address')"
-                  label="Address"
-                  placeholder="e.g 221B Baker Street"
+                  label="Adresa"
+                  placeholder="npr. Ilica 1"
                   persistent-placeholder
                   outlined
                 ></v-text-field>
@@ -468,8 +468,8 @@
                   :disabled="loading"
                   :error="errorMessages.has('city')"
                   :error-messages="errorMessages.get('city')"
-                  label="City"
-                  placeholder="e.g Los Angeles"
+                  label="Grad"
+                  placeholder="npr. Zagreb"
                   persistent-placeholder
                   outlined
                 ></v-text-field>
@@ -482,8 +482,8 @@
                   :disabled="loading"
                   :error="errorMessages.has('state')"
                   :error-messages="errorMessages.get('state')"
-                  label="State"
-                  placeholder="e.g CA"
+                  label="Županija / regija"
+                  placeholder="npr. Grad Zagreb"
                   persistent-placeholder
                   outlined
                 ></v-text-field>
@@ -495,9 +495,9 @@
                   :error="errorMessages.has('state')"
                   :error-messages="errorMessages.get('state')"
                   :items="invoiceStateOptions"
-                  label="State"
+                  label="Županija / regija"
                   outlined
-                  placeholder="e.g CA"
+                  placeholder="npr. Grad Zagreb"
                   persistent-placeholder
                 ></v-autocomplete>
               </v-col>
@@ -510,8 +510,8 @@
                   :disabled="loading"
                   :error="errorMessages.has('zip_code')"
                   :error-messages="errorMessages.get('zip_code')"
-                  label="Zip Code"
-                  placeholder="e.g 46001"
+                  label="Poštanski broj"
+                  placeholder="npr. 10000"
                   persistent-placeholder
                   outlined
                 ></v-text-field>
@@ -524,8 +524,8 @@
                   :error="errorMessages.has('country')"
                   :error-messages="errorMessages.get('country')"
                   :items="countries"
-                  label="Country"
-                  placeholder="e.g United States"
+                  label="Država"
+                  placeholder="npr. Hrvatska"
                   outlined
                   persistent-placeholder
                 ></v-autocomplete>
@@ -540,8 +540,8 @@
                   :error="errorMessages.has('notes')"
                   :error-messages="errorMessages.get('notes')"
                   rows="3"
-                  label="Notes (optional)"
-                  placeholder="e.g Thanks for doing business with us!"
+                  label="Napomene (neobavezno)"
+                  placeholder="npr. Hvala vam na poslovnoj suradnji!"
                   persistent-placeholder
                   outlined
                 ></v-textarea>
@@ -552,11 +552,11 @@
         <v-card-actions class="mt-n8 pb-4">
           <v-btn :loading="loading" color="primary" @click="generateInvoice">
             <v-icon left>{{ mdiDownloadOutline }}</v-icon>
-            Download Invoice
+            Preuzmi račun
           </v-btn>
           <v-spacer></v-spacer>
           <v-btn color="error" text @click="subscriptionInvoiceDialog = false">
-            Close
+            Zatvori
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -890,7 +890,7 @@ export default Vue.extend({
       ],
       plans: [
         {
-          name: 'Free',
+          name: 'Besplatno',
           id: 'free',
           messagesPerMonth: 200,
           price: 0,
@@ -960,7 +960,7 @@ export default Vue.extend({
   },
   head() {
     return {
-      title: 'Usage & Billing - Domovina SMS',
+      title: 'Potrošnja — Domovina SMS',
     }
   },
   computed: {
@@ -1155,7 +1155,7 @@ export default Vue.extend({
         .dispatch('cancelSubscription')
         .then(() => {
           this.$store.dispatch('addNotification', {
-            message: 'Subscription cancelled successfully',
+            message: 'Pretplata uspješno otkazana',
             type: 'success',
           })
           this.$router.push('/')

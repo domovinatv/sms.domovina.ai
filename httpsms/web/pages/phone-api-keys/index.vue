@@ -10,7 +10,7 @@
           <v-icon>{{ mdiArrowLeft }}</v-icon>
         </v-btn>
         <v-toolbar-title>
-          <div class="py-16">Phone API Keys</div>
+          <div class="py-16">API ključevi telefona</div>
         </v-toolbar-title>
         <v-progress-linear
           :active="loading"
@@ -31,14 +31,14 @@
                 class="mt-2 mr-2"
                 indeterminate
               ></v-progress-circular>
-              <h5 class="text-h4">Phone API Keys</h5>
+              <h5 class="text-h4">API ključevi telefona</h5>
               <v-btn
                 color="primary"
                 class="ml-4 mt-1"
                 @click="showCreateAPIKeyDialog = true"
               >
                 <v-icon left>{{ mdiPlus }}</v-icon>
-                Create API Key
+                Stvori API ključ
               </v-btn>
               <v-dialog
                 v-model="showCreateAPIKeyDialog"
@@ -46,17 +46,17 @@
                 max-width="600px"
               >
                 <v-card>
-                  <v-card-title>Create Phone API Key</v-card-title>
+                  <v-card-title>Stvori API ključ telefona</v-card-title>
                   <v-card-subtitle class="mt-2"
-                    >After creating the API key you can use it to login to the
-                    Domovina SMS Android app on your phone</v-card-subtitle
+                    >Nakon stvaranja API ključa možete ga koristiti za prijavu u
+                    Domovina SMS Android aplikaciju na svom telefonu</v-card-subtitle
                   >
                   <v-card-text>
                     <v-form>
                       <v-text-field
                         v-model="formPhoneApiKeyName"
-                        label="Name"
-                        placeholder="Enter a name for your API key"
+                        label="Naziv"
+                        placeholder="Unesite naziv za svoj API ključ"
                         name="api-key"
                         outlined
                         :disabled="loading"
@@ -72,14 +72,14 @@
                       color="primary"
                       :loading="loading"
                       @click="createPhoneApiKey"
-                      >Create Key</v-btn
+                      >Stvori ključ</v-btn
                     >
                     <v-spacer />
                     <v-btn
                       color="default"
                       text
                       @click="showCreateAPIKeyDialog = false"
-                      >Close</v-btn
+                      >Zatvori</v-btn
                     >
                   </v-card-actions>
                 </v-card>
@@ -90,22 +90,22 @@
                 href="https://github.com/domovinatv/sms.domovina.ai/features/phone-api-keys"
                 color="secondary"
                 class="mt-1"
-                >Documentation</v-btn
+                >Dokumentacija</v-btn
               >
             </div>
             <p class="text--secondary">
-              If you have multiple phones, you can create a unique phone API
-              keys for your different Android phones. These API keys can only be
-              used on the specific mobile phone when it calls the Domovina SMS server
-              for specific actions like sending heartbeats, registering received
-              messages, delivery reports etc. If you want to interact with the
-              full
+              Ako imate više telefona, možete stvoriti zasebne API ključeve
+              telefona za različite Android uređaje. Ovi API ključevi mogu se
+              koristiti samo na određenom mobilnom telefonu kada poziva
+              Domovina SMS poslužitelj za određene radnje poput slanja otkucaja,
+              registriranja primljenih poruka, izvješća o dostavi itd. Ako želite
+              koristiti puni
               <a
                 class="text-decoration-none"
                 target="_blank"
                 href="https://sms-api.domovina.ai"
                 >Domovina SMS API</a
-              >, use the API key under your account settings page instead
+              >, umjesto toga koristite API ključ na stranici postavki računa
               <router-link class="text-decoration-none" to="/settings"
                 >https://sms.domovina.ai/settings</router-link
               >.
@@ -114,10 +114,10 @@
               <template #default>
                 <thead>
                   <tr class="text-uppercase subtitle-2">
-                    <th class="text-left">Name</th>
-                    <th class="text-left">Created At</th>
-                    <th class="text-left">Phone Numbers</th>
-                    <th class="text-left">Actions</th>
+                    <th class="text-left">Naziv</th>
+                    <th class="text-left">Stvoreno</th>
+                    <th class="text-left">Brojevi telefona</th>
+                    <th class="text-left">Radnje</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -145,7 +145,7 @@
                               )
                             "
                           >
-                            Remove
+                            Ukloni
                           </v-btn>
                         </li>
                       </ul>
@@ -159,7 +159,7 @@
                         :loading="loading"
                         @click="showPhoneApiKey(phoneApiKey)"
                       >
-                        <v-icon left>{{ mdiEye }}</v-icon> View
+                        <v-icon left>{{ mdiEye }}</v-icon> Prikaži
                       </v-btn>
                       <v-btn
                         class="ml-2"
@@ -168,7 +168,7 @@
                         color="error"
                         @click="showDeletePhoneApiKeyDialog(phoneApiKey)"
                       >
-                        <v-icon left>{{ mdiDelete }}</v-icon> Delete
+                        <v-icon left>{{ mdiDelete }}</v-icon> Obriši
                       </v-btn>
                     </td>
                   </tr>
@@ -185,15 +185,15 @@
       max-width="600"
     >
       <v-card>
-        <v-card-title>Phone API Key QR Code</v-card-title>
+        <v-card-title>QR kod API ključa telefona</v-card-title>
         <v-card-subtitle class="mt-2"
-          >Scan this QR code with the
+          >Skenirajte ovaj QR kod s
           <a
             class="text-decoration-none"
             :href="$store.getters.getAppData.appDownloadUrl"
-            >Domovina SMS app</a
+            >Domovina SMS aplikacijom</a
           >
-          on your Android phone to login.</v-card-subtitle
+          na svom Android telefonu za prijavu.</v-card-subtitle
         >
         <v-card-text class="text-center">
           <v-text-field
@@ -209,12 +209,12 @@
           <copy-button
             :value="activePhoneApiKey?.api_key"
             color="primary"
-            copy-text="Copy API key"
-            notification-text="Phone API Key copied successfully"
+            copy-text="Kopiraj API ključ"
+            notification-text="API ključ telefona uspješno kopiran"
           />
           <v-spacer></v-spacer>
           <v-btn text class="mb-4" @click="showPhoneApiKeyQrCode = false"
-            >Close</v-btn
+            >Zatvori</v-btn
           >
         </v-card-actions>
       </v-card>
@@ -226,20 +226,21 @@
     >
       <v-card>
         <v-card-title class="text-h5 text-break">
-          Are you sure you want to delete the
-          <code>{{ activePhoneApiKey?.name }}</code> API Key?
+          Jeste li sigurni da želite obrisati API ključ
+          <code>{{ activePhoneApiKey?.name }}</code>?
         </v-card-title>
         <v-card-text>
-          You will have to logout and login again on the <b>Domovina SMS</b> Android
-          app on all of the phones which are currently using this API key.
+          Morat ćete se odjaviti i ponovno prijaviti u <b>Domovina SMS</b>
+          Android aplikaciju na svim telefonima koji trenutno koriste ovaj API
+          ključ.
         </v-card-text>
         <v-card-actions class="pb-4">
           <v-btn color="error" :loading="loading" @click="deleteApiKey">
             <v-icon left>{{ mdiDelete }}</v-icon>
-            Delete API Key
+            Obriši API ključ
           </v-btn>
           <v-spacer></v-spacer>
-          <v-btn text @click="deleteApiKeyDialog = false"> Close </v-btn>
+          <v-btn text @click="deleteApiKeyDialog = false"> Zatvori </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -250,15 +251,14 @@
     >
       <v-card>
         <v-card-title class="text-h5 text-break">
-          Are you sure you want to remove this phone number from the Phone API
-          Key?
+          Jeste li sigurni da želite ukloniti ovaj broj telefona iz API ključa?
         </v-card-title>
         <v-card-text>
-          This will remove the
-          <code>{{ activePhoneNumber | phoneNumber }}</code> from your phone API
-          key. You will have to logout and login again on the
-          <b>Domovina SMS</b> Android app on the phone which is currently using this
-          API key.
+          Ovo će ukloniti
+          <code>{{ activePhoneNumber | phoneNumber }}</code> iz vašeg API ključa
+          telefona. Morat ćete se odjaviti i ponovno prijaviti u
+          <b>Domovina SMS</b> Android aplikaciju na telefonu koji trenutno
+          koristi ovaj API ključ.
         </v-card-text>
         <v-card-actions class="pb-4">
           <v-btn
@@ -267,11 +267,11 @@
             @click="removePhoneFromPhoneKey"
           >
             <v-icon left>{{ mdiDelete }}</v-icon>
-            Remove Phone from key
+            Ukloni telefon iz ključa
           </v-btn>
           <v-spacer></v-spacer>
           <v-btn text @click="removePhoneFromApiKeyDialog = false">
-            Close
+            Zatvori
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -347,7 +347,7 @@ export default Vue.extend({
   },
   head() {
     return {
-      title: 'Phone API keys - Domovina SMS',
+      title: 'API ključevi telefona — Domovina SMS',
     }
   },
   computed: {},
@@ -402,7 +402,7 @@ export default Vue.extend({
           (err: any) => {
             if (err) {
               this.$store.dispatch('addNotification', {
-                message: 'Failed to generate phone API key QR code',
+                message: 'Nije uspjelo stvaranje QR koda API ključa telefona',
                 type: 'error',
               })
             }

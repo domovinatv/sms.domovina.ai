@@ -10,7 +10,7 @@
           <v-icon>{{ mdiArrowLeft }}</v-icon>
         </v-btn>
         <v-toolbar-title>
-          <div class="py-16">Search Messages</div>
+          <div class="py-16">Pretraga poruka</div>
         </v-toolbar-title>
         <v-progress-linear
           :active="loading"
@@ -22,12 +22,12 @@
       <v-container>
         <v-row>
           <v-col cols="12">
-            <h5 class="text-h4 mb-3 mt-3">Search Messages</h5>
+            <h5 class="text-h4 mb-3 mt-3">Pretraga poruka</h5>
             <p>
-              On this page, you can search all your messages by phone number,
-              message type, and message status and even using the content of the
-              SMS message. You will also be able to bulk delete messages and
-              even export your messages in a CSV file.
+              Na ovoj stranici možete pretraživati sve svoje poruke po broju
+              telefona, vrsti poruke i statusu poruke, pa čak i prema sadržaju
+              SMS poruke. Možete također skupno brisati poruke i izvoziti svoje
+              poruke u CSV datoteku.
             </p>
             <v-alert v-if="errorTitle" text prominent type="warning">
               <h6 class="subtitle-1 font-weight-bold">{{ errorTitle }}</h6>
@@ -45,7 +45,7 @@
                   :items="phoneNumberSelectItems"
                   multiple
                   dense
-                  label="Phone Numbers"
+                  label="Brojevi telefona"
                   outlined
                 ></v-select>
               </v-col>
@@ -57,7 +57,7 @@
                   :items="messageTypeSelectItems"
                   dense
                   multiple
-                  label="Message Types"
+                  label="Vrste poruka"
                   outlined
                 ></v-select>
               </v-col>
@@ -69,7 +69,7 @@
                   :items="messageStatusSelectItems"
                   dense
                   multiple
-                  label="Message Status"
+                  label="Status poruke"
                   outlined
                 ></v-select>
               </v-col>
@@ -80,7 +80,7 @@
                   v-model="formQuery"
                   :error="errorMessages.has('query')"
                   :error-messages="errorMessages.get('query')"
-                  label="Search Query"
+                  label="Pojam pretrage"
                   outlined
                   dense
                   clearable
@@ -96,7 +96,7 @@
                   @click="fetchMessages(true)"
                 >
                   <v-icon left>{{ mdiMagnify }}</v-icon>
-                  Search Messages
+                  Pretraži poruke
                 </v-btn>
               </v-col>
             </v-row>
@@ -104,7 +104,7 @@
         </v-card>
         <v-row>
           <v-col cols="12" class="mt-16 mb-n2 d-flex">
-            <h2 class="text-h4">Search Results</h2>
+            <h2 class="text-h4">Rezultati pretrage</h2>
             <v-dialog
               v-model="showDeleteDialog"
               overlay-opacity="0.9"
@@ -121,17 +121,17 @@
                   v-on="on"
                 >
                   <v-icon left>{{ mdiDelete }}</v-icon>
-                  Delete messages
+                  Obriši poruke
                 </v-btn>
               </template>
               <v-card>
                 <v-card-title class="text-h5 text-break">
-                  Are you sure you want to delete the
-                  {{ selectedMessages.length }} selected messages?
+                  Jeste li sigurni da želite obrisati
+                  {{ selectedMessages.length }} odabranih poruka?
                 </v-card-title>
                 <v-card-text>
-                  The messages will be deleted permanently from the Domovina SMS
-                  server and cannot be recovered.
+                  Poruke će biti trajno obrisane s Domovina SMS poslužitelja i
+                  neće se moći vratiti.
                 </v-card-text>
                 <v-card-actions class="pb-4">
                   <v-btn
@@ -140,10 +140,10 @@
                     @click="deleteMessages"
                   >
                     <v-icon left>{{ mdiDelete }}</v-icon>
-                    Yes Delete Messages
+                    Da, obriši poruke
                   </v-btn>
                   <v-spacer></v-spacer>
-                  <v-btn text @click="showDeleteDialog = false"> Close </v-btn>
+                  <v-btn text @click="showDeleteDialog = false"> Zatvori </v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -157,7 +157,7 @@
               @click="exportMessages"
             >
               <v-icon left>{{ mdiExport }}</v-icon>
-              Export to CSV
+              Izvezi u CSV
             </v-btn>
           </v-col>
           <v-col cols="12">
@@ -172,8 +172,8 @@
               :loading="loading"
               :footer-props="footerProps"
               show-select
-              loading-text="Loading... Please wait"
-              no-data-text="You don't have any messages yet"
+              loading-text="Učitavanje... molimo pričekajte"
+              no-data-text="Još nemate nijednu poruku"
               class="elevation-1"
             >
               <template #[`item.created_at`]="props">
@@ -188,15 +188,15 @@
               <template #[`item.type`]="props">
                 <span v-if="props.item.type === 'call/missed'">
                   <v-icon small color="error">{{ mdiCallMissed }}</v-icon>
-                  missed call
+                  propušten poziv
                 </span>
                 <span v-if="props.item.type === 'mobile-originated'">
                   <v-icon small>{{ mdiCallReceived }}</v-icon>
-                  inbound
+                  dolazna
                 </span>
                 <span v-if="props.item.type === 'mobile-terminated'">
                   <v-icon small color="secondary">{{ mdiCallMade }}</v-icon>
-                  outbound
+                  odlazna
                 </span>
               </template>
               <template #[`item.status`]="props">
@@ -207,7 +207,7 @@
                   outlined
                 >
                   <v-icon small left>{{ mdiAlert }}</v-icon>
-                  Expired
+                  Isteklo
                 </v-chip>
 
                 <v-chip
@@ -217,7 +217,7 @@
                   outlined
                 >
                   <v-icon small left>{{ mdiCheckAll }}</v-icon>
-                  Delivered
+                  Dostavljeno
                 </v-chip>
 
                 <v-chip
@@ -227,12 +227,12 @@
                   outlined
                 >
                   <v-icon small left>{{ mdiCheckAll }}</v-icon>
-                  Received
+                  Primljeno
                 </v-chip>
 
                 <v-chip v-else-if="props.item.status === 'sent'" small outlined>
                   <v-icon small left>{{ mdiCheck }}</v-icon>
-                  Sent
+                  Poslano
                 </v-chip>
 
                 <v-chip
@@ -242,7 +242,7 @@
                   outlined
                 >
                   <v-icon small left>{{ mdiAlert }}</v-icon>
-                  Failed
+                  Neuspjelo
                 </v-chip>
 
                 <v-chip v-else small color="cyan" outlined>
@@ -344,18 +344,18 @@ export default Vue.extend({
       messages: [] as EntitiesMessage[],
       totalMessages: -1,
       headers: [
-        { text: 'Created At', value: 'created_at' },
-        { text: 'Owner', value: 'owner' },
-        { text: 'Contact', value: 'contact' },
-        { text: 'Message Type', value: 'type' },
+        { text: 'Stvoreno', value: 'created_at' },
+        { text: 'Vlasnik', value: 'owner' },
+        { text: 'Kontakt', value: 'contact' },
+        { text: 'Vrsta poruke', value: 'type' },
         { text: 'Status', value: 'status' },
-        { text: 'Message Content', value: 'content', sortable: false },
+        { text: 'Sadržaj poruke', value: 'content', sortable: false },
       ],
     }
   },
   head() {
     return {
-      title: 'Search your Messages - Domovina SMS',
+      title: 'Pretraga poruka — Domovina SMS',
     }
   },
   computed: {
@@ -369,19 +369,19 @@ export default Vue.extend({
     },
     messageTypeSelectItems() {
       return [
-        { text: 'Outbound', value: 'mobile-terminated' },
-        { text: 'Inbound', value: 'mobile-originated' },
-        { text: 'Missed Calls', value: 'call/missed' },
+        { text: 'Odlazne', value: 'mobile-terminated' },
+        { text: 'Dolazne', value: 'mobile-originated' },
+        { text: 'Propušteni pozivi', value: 'call/missed' },
       ]
     },
     messageStatusSelectItems() {
       return [
-        { value: 'pending', text: 'Pending' },
-        { value: 'sent', text: 'Sent' },
-        { value: 'delivered', text: 'Delivered' },
-        { value: 'failed', text: 'Failed' },
-        { value: 'expired', text: 'Expired' },
-        { value: 'received', text: 'Received' },
+        { value: 'pending', text: 'U tijeku' },
+        { value: 'sent', text: 'Poslano' },
+        { value: 'delivered', text: 'Dostavljeno' },
+        { value: 'failed', text: 'Neuspjelo' },
+        { value: 'expired', text: 'Isteklo' },
+        { value: 'received', text: 'Primljeno' },
       ]
     },
   },
@@ -420,7 +420,7 @@ export default Vue.extend({
     exportMessages() {
       let csvContent = 'data:text/csv;charset=utf-8,'
       csvContent +=
-        'Message ID,Created At,Owner,Contact,Message Type,Status,Message Content\n'
+        'ID poruke,Stvoreno,Vlasnik,Kontakt,Vrsta poruke,Status,Sadržaj poruke\n'
       this.selectedMessages.forEach((message) => {
         csvContent += `${message.id},${new Date(
           message.created_at,
@@ -441,7 +441,7 @@ export default Vue.extend({
       link.click()
 
       this.$store.dispatch('addNotification', {
-        message: 'The selected messages have been exported successfully',
+        message: 'Odabrane poruke uspješno su izvezene',
         type: 'success',
       })
     },
@@ -460,14 +460,14 @@ export default Vue.extend({
       )
         .then(() => {
           this.$store.dispatch('addNotification', {
-            message: 'The selected messages have been deleted successfully',
+            message: 'Odabrane poruke uspješno su obrisane',
             type: 'success',
           })
           this.selectedMessages = []
         })
         .catch(() => {
           this.$store.dispatch('addNotification', {
-            message: 'Error while deleting the selected messages',
+            message: 'Pogreška prilikom brisanja odabranih poruka',
             type: 'error',
           })
         })
@@ -513,7 +513,7 @@ export default Vue.extend({
             .catch((error: AxiosError<ResponsesUnprocessableEntity>) => {
               this.errorTitle = capitalize(
                 error.response?.data?.message ??
-                  'Error while searching messages',
+                  'Pogreška prilikom pretrage poruka',
               )
               this.errorMessages = getErrorMessages(error)
             })

@@ -11,7 +11,7 @@
             outlined
             dense
             :disabled="owners.length === 0"
-            placeholder="Phone Numbers"
+            placeholder="Brojevi telefona"
             :class="{ 'mb-n6': !$store.getters.getOwner }"
             :items="owners"
             :value="$store.getters.getOwner"
@@ -63,8 +63,8 @@
               <v-icon v-else x-small>{{ mdiCircle }}</v-icon>
             </v-btn>
           </template>
-          <h4>Last Heartbeat</h4>
-          {{ $store.getters.getHeartbeat.timestamp | humanizeTime }} ago
+          <h4>Posljednji otkucaj</h4>
+          prije {{ $store.getters.getHeartbeat.timestamp | humanizeTime }}
         </v-tooltip>
       </div>
     </div>
@@ -92,13 +92,13 @@
                   v-if="!$store.getters.getIsArchived"
                   :class="{ 'pr-16': $vuetify.breakpoint.mdAndUp }"
                 >
-                  Archived
+                  Arhiviraj
                 </span>
                 <span
                   v-if="$store.getters.getIsArchived"
                   :class="{ 'pr-16': $vuetify.breakpoint.mdAndUp }"
                 >
-                  Unarchived
+                  Vrati iz arhive
                 </span>
               </v-list-item-title>
             </v-list-item-content>
@@ -114,7 +114,7 @@
             <v-list-item-content class="ml-n3">
               <v-list-item-title class="pr-16 py-1">
                 <span :class="{ 'pr-16': $vuetify.breakpoint.mdAndUp }">
-                  New Message
+                  Nova poruka
                 </span>
               </v-list-item-title>
             </v-list-item-content>
@@ -130,7 +130,7 @@
             <v-list-item-content class="ml-n3">
               <v-list-item-title class="pr-16 py-1">
                 <span :class="{ 'pr-16': $vuetify.breakpoint.mdAndUp }">
-                  Bulk Messages
+                  Masovne poruke
                 </span>
               </v-list-item-title>
             </v-list-item-content>
@@ -146,7 +146,7 @@
             <v-list-item-content class="ml-n3">
               <v-list-item-title class="pr-16 py-1">
                 <span :class="{ 'pr-16': $vuetify.breakpoint.mdAndUp }">
-                  Search Messages
+                  Pretraga poruka
                 </span>
               </v-list-item-title>
             </v-list-item-content>
@@ -158,7 +158,7 @@
             <v-list-item-content class="ml-n3">
               <v-list-item-title class="pr-16 py-1">
                 <span :class="{ 'pr-16': $vuetify.breakpoint.mdAndUp }">
-                  Settings
+                  Postavke
                 </span>
               </v-list-item-title>
             </v-list-item-content>
@@ -170,7 +170,7 @@
             <v-list-item-content class="ml-n3">
               <v-list-item-title class="pr-16 py-1">
                 <span :class="{ 'pr-16': $vuetify.breakpoint.mdAndUp }">
-                  Phone API Keys
+                  API ključevi telefona
                 </span>
               </v-list-item-title>
             </v-list-item-content>
@@ -182,7 +182,7 @@
             @click="
               $store.dispatch('addNotification', {
                 type: 'info',
-                message: 'Downloading the Domovina SMS Android App',
+                message: 'Preuzimanje Domovina SMS Android aplikacije',
               })
             "
           >
@@ -192,7 +192,7 @@
             <v-list-item-content class="ml-n3">
               <v-list-item-title class="pr-16 py-1">
                 <span :class="{ 'pr-16': $vuetify.breakpoint.mdAndUp }">
-                  Install App
+                  Instalacija aplikacije
                 </span>
               </v-list-item-title>
             </v-list-item-content>
@@ -204,7 +204,7 @@
             <v-list-item-content class="ml-n3">
               <v-list-item-title class="pr-16 py-1">
                 <span :class="{ 'pr-16': $vuetify.breakpoint.mdAndUp }">
-                  Usage & Billing
+                  Potrošnja
                 </span>
               </v-list-item-title>
             </v-list-item-content>
@@ -216,7 +216,7 @@
             <v-list-item-content class="ml-n3">
               <v-list-item-title class="pr-16 py-1">
                 <span :class="{ 'pr-16': $vuetify.breakpoint.mdAndUp }">
-                  Logout
+                  Odjava
                 </span>
               </v-list-item-title>
             </v-list-item-content>
@@ -307,7 +307,7 @@ export default class MessageThreadHeader extends Vue {
       this.$store.dispatch('resetState')
       this.$store.dispatch('addNotification', {
         type: 'info',
-        message: 'You have successfully logged out',
+        message: 'Uspješno ste odjavljeni',
       })
       this.$router.push({ name: 'index' })
     })

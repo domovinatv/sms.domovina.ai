@@ -10,7 +10,7 @@
           <v-icon>{{ mdiArrowLeft }}</v-icon>
         </v-btn>
         <v-toolbar-title>
-          <div class="py-16">Bulk Messages</div>
+          <div class="py-16">Masovne poruke</div>
         </v-toolbar-title>
         <v-progress-linear
           :active="loading"
@@ -22,32 +22,32 @@
       <v-container>
         <v-row>
           <v-col cols="12">
-            <h5 class="text-h4 mb-3 mt-3">Bulk Messages</h5>
+            <h5 class="text-h4 mb-3 mt-3">Masovne poruke</h5>
             <p>
-              Fill in our bulk SMS
+              Ispunite naš
               <a
                 class="text-decoration-none"
                 download
                 href="/templates/domovina-sms-bulk.csv"
-                >CSV template</a
+                >CSV predložak</a
               >
-              or our
+              ili
               <a
                 class="text-decoration-none"
                 download
                 href="/templates/domovina-sms-bulk.xlsx"
-                >Excel template</a
+                >Excel predložak</a
               >
-              and upload it here to send your SMS messages to multiple
-              recipients at once. You can also configure
+              za masovne SMS poruke i učitajte ga ovdje kako biste poslali SMS
+              poruke većem broju primatelja odjednom. Možete također postaviti
               <nuxt-link
                 class="text-decoration-none"
                 to="/settings/#send-schedules"
-                >send schedules</nuxt-link
+                >rasporede slanja</nuxt-link
               >
-              on your phone to make sure messages are sent out at specific times
-              of the day e.g
-              <span class="text--secondary">Mon - Fri 9am - 5pm.</span>
+              na svom telefonu kako biste osigurali da se poruke šalju u
+              određeno doba dana, npr.
+              <span class="text--secondary">pon – pet 9 – 17 h.</span>
             </p>
             <v-alert v-if="errorTitle" text prominent type="warning">
               <h6 class="subtitle-1 font-weight-bold">{{ errorTitle }}</h6>
@@ -63,12 +63,12 @@
             <v-form @submit.prevent="sendBulkMessages">
               <v-file-input
                 v-model="formFile"
-                label="File"
+                label="Datoteka"
                 :prepend-icon="null"
                 accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                 :error-messages="errorMessages.get('document')"
                 persistent-placeholder
-                placeholder="Click here to upload your bulk SMS file."
+                placeholder="Kliknite ovdje za učitavanje datoteke s masovnim SMS porukama."
                 :append-icon="mdiMicrosoftExcel"
                 outlined
               ></v-file-input>
@@ -81,16 +81,16 @@
                   large
                 >
                   <v-icon left>{{ mdiSendCheck }}</v-icon>
-                  Send Bulk Messages
+                  Pošalji masovne poruke
                 </v-btn>
                 <v-spacer></v-spacer>
                 <v-btn
                   v-if="$vuetify.breakpoint.mdAndUp"
                   plain
                   color="info"
-                  href="mailto:support@domovina.ai?subject=I'm having trouble with the bulk messages"
+                  href="mailto:support@domovina.ai?subject=Imam problema s masovnim porukama"
                 >
-                  I Need Help
+                  Trebam pomoć
                 </v-btn>
               </div>
             </v-form>
@@ -152,7 +152,7 @@ export default Vue.extend({
   },
   head() {
     return {
-      title: 'Send Bulk Messages - Domovina SMS',
+      title: 'Pošalji masovne poruke — Domovina SMS',
     }
   },
   computed: {},
@@ -177,7 +177,7 @@ export default Vue.extend({
         .catch((error: AxiosError<ResponsesUnprocessableEntity>) => {
           this.errorTitle = capitalize(
             error.response?.data?.message ??
-              'Error while sending bulk messages',
+              'Pogreška prilikom slanja masovnih poruka',
           )
           this.errorMessages = getErrorMessages(error)
           this.loading = false

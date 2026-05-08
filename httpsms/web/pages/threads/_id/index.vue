@@ -36,7 +36,7 @@
                 <v-list-item-content class="ml-n3">
                   <v-list-item-title class="pr-16 py-1">
                     <span :class="{ 'pr-16': $vuetify.breakpoint.mdAndUp }">
-                      Archive
+                      Arhiviraj
                     </span>
                   </v-list-item-title>
                 </v-list-item-content>
@@ -54,7 +54,7 @@
                 <v-list-item-content class="ml-n3">
                   <v-list-item-title class="pr-16 py-1">
                     <span :class="{ 'pr-16': $vuetify.breakpoint.mdAndUp }">
-                      Unarchive
+                      Vrati iz arhive
                     </span>
                   </v-list-item-title>
                 </v-list-item-content>
@@ -68,7 +68,7 @@
                 </v-list-item-icon>
                 <v-list-item-content class="ml-n3">
                   <v-list-item-title class="pr-16 py-1">
-                    Delete Thread
+                    Obriši razgovor
                   </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
@@ -128,7 +128,7 @@
                       </v-list-item-icon>
                       <v-list-item-content class="ml-n3">
                         <v-list-item-title class="pr-16 py-1">
-                          Resend Message
+                          Ponovno pošalji poruku
                         </v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>
@@ -138,7 +138,7 @@
                       </v-list-item-icon>
                       <v-list-item-content class="ml-n3">
                         <v-list-item-title class="pr-16 py-1">
-                          Copy Message ID
+                          Kopiraj ID poruke
                         </v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>
@@ -148,7 +148,7 @@
                       </v-list-item-icon>
                       <v-list-item-content class="ml-n3">
                         <v-list-item-title class="pr-16 py-1">
-                          Delete Message
+                          Obriši poruku
                         </v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>
@@ -170,7 +170,7 @@
                       message.content
                     }}</span>
                     <span v-else class="text--secondary"
-                      >Missed phone call</span
+                      >Propušten poziv</span
                     >
                   </v-card-text>
                 </v-card>
@@ -262,7 +262,7 @@
                       </v-list-item-icon>
                       <v-list-item-content class="ml-n3">
                         <v-list-item-title class="pr-16 py-1">
-                          Resend Message
+                          Ponovno pošalji poruku
                         </v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>
@@ -272,7 +272,7 @@
                       </v-list-item-icon>
                       <v-list-item-content class="ml-n3">
                         <v-list-item-title class="pr-16 py-1">
-                          Copy Message ID
+                          Kopiraj ID poruke
                         </v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>
@@ -282,7 +282,7 @@
                       </v-list-item-icon>
                       <v-list-item-content class="ml-n3">
                         <v-list-item-title class="pr-16 py-1">
-                          Delete Message
+                          Obriši poruku
                         </v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>
@@ -310,8 +310,8 @@
                 :rules="formMessageRules"
                 :placeholder="
                   contactIsPhoneNumber
-                    ? 'Type your message here'
-                    : 'You cannot send messages to ' + contact
+                    ? 'Upišite poruku ovdje'
+                    : 'Ne možete slati poruke na ' + contact
                 "
                 rounded
                 @keydown.enter="sendMessage"
@@ -373,7 +373,7 @@ export default Vue.extend({
       (v) =>
         v === '' ||
         (v && v.length <= 320) ||
-        'Message must be less than 320 characters',
+        'Poruka mora imati manje od 320 znakova',
     ]
     return {
       mdiSend,
@@ -395,11 +395,11 @@ export default Vue.extend({
       mdiRefresh,
       mdiSim,
       simOptions: [
-        { title: 'Default', code: 'DEFAULT', value: 0 },
+        { title: 'Zadano', code: 'DEFAULT', value: 0 },
         { title: 'SIM 1', code: 'SIM1', value: 1 },
         { title: 'SIM 2', code: 'SIM2', value: 2 },
       ],
-      simSelected: { title: 'Default', code: 'DEFAULT', value: 0 },
+      simSelected: { title: 'Zadano', code: 'DEFAULT', value: 0 },
       formMessage: '',
       formMessageRules,
       submitting: false,
@@ -409,7 +409,7 @@ export default Vue.extend({
   },
   head() {
     return {
-      title: 'Messages - Domovina SMS',
+      title: 'Poruke — Domovina SMS',
     }
   },
   computed: {
@@ -588,7 +588,7 @@ export default Vue.extend({
     async copyMessageId(message: Message) {
       await navigator.clipboard.writeText(message.id).then(() => {
         this.$store.dispatch('addNotification', {
-          message: 'Message ID copied to clipboard',
+          message: 'ID poruke kopiran u međuspremnik',
           type: 'success',
         } as NotificationRequest)
       })

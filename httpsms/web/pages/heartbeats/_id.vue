@@ -6,7 +6,7 @@
           <v-icon>{{ mdiArrowLeft }}</v-icon>
         </v-btn>
         <v-toolbar-title
-          >Heartbeats
+          >Otkucaji
           <v-icon x-small class="mx-2" color="primary">{{ mdiCircle }}</v-icon>
           <span v-if="$store.getters.getOwner">{{
             $store.getters.getOwner | phoneNumber
@@ -17,10 +17,10 @@
         <v-row>
           <v-col cols="12">
             <p>
-              Every 15 minutes, the Domovina SMS app on your Android phone sends a
-              heartbeat event to the Domovina SMS API to show that it is alive. The
-              reason for this is because the Android operating system sometimes
-              kills an application to save battery
+              Svakih 15 minuta Domovina SMS aplikacija na vašem Android
+              telefonu šalje otkucaj prema Domovina SMS API-ju kako bi pokazala
+              da je aktivna. Razlog za to jest što Android operativni sustav
+              ponekad ugasi aplikaciju radi uštede baterije
               <a
                 href="https://dontkillmyapp.com"
                 class="text-decoration-none"
@@ -29,9 +29,9 @@
               >.
             </p>
             <p>
-              If Domovina SMS doesn't get any heartbeat event in a 1-hour interval,
-              you will get an email notification about it so you can check if
-              there is an issue with your Android phone.
+              Ako Domovina SMS u razdoblju od jednog sata ne primi nijedan
+              otkucaj, dobit ćete obavijest e-poštom kako biste mogli provjeriti
+              postoji li problem s vašim Android telefonom.
             </p>
           </v-col>
           <v-col v-if="$vuetify.breakpoint.mdAndUp" cols="12" class="px-0">
@@ -39,8 +39,8 @@
           </v-col>
           <v-col cols="12">
             <p>
-              The table below shows the last 100 heartbeat events received from
-              the Domovina SMS app on your Android phone.
+              Tablica u nastavku prikazuje posljednjih 100 otkucaja primljenih
+              od Domovina SMS aplikacije na vašem Android telefonu.
             </p>
             <v-data-table
               :value="selected"
@@ -87,21 +87,21 @@ export default {
       selected: [3, 6],
       dataTableHeaders: [
         {
-          text: 'HEARTBEAT ID',
+          text: 'ID OTKUCAJA',
           align: 'start',
           sortable: false,
           value: 'id',
         },
-        { text: 'PHONE NUMBER', value: 'owner', sortable: false },
-        { text: 'RECEIVED AT', value: 'timestamp' },
-        { text: 'TIME INTERVAL', value: 'interval' },
+        { text: 'BROJ TELEFONA', value: 'owner', sortable: false },
+        { text: 'PRIMLJENO', value: 'timestamp' },
+        { text: 'VREMENSKI INTERVAL', value: 'interval' },
       ],
     }
   },
 
   head() {
     return {
-      title: 'Heartbeats - Http SMS',
+      title: 'Otkucaji — Domovina SMS',
     }
   },
 
@@ -228,7 +228,7 @@ export default {
       start.setMilliseconds(start.getMilliseconds() + duration)
       return (
         formatDuration(intervalToDuration({ start: new Date(), end: start })) ||
-        '0 seconds'
+        '0 sekundi'
       )
     },
 

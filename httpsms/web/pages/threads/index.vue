@@ -10,16 +10,16 @@
           :src="require('assets/img/person-texting.svg')"
         ></v-img>
         <div class="text-center">
-          <h3 class="text-h5 mt-4">Select a Message</h3>
+          <h3 class="text-h5 mt-4">Odaberite razgovor</h3>
           <p class="text--secondary">
-            Don't hesitate to
+            Slobodno nam se javite
             <a
               href="https://discord.gg/kGk8HVqeEZ"
               target="_blank"
               class="text-decoration-none"
-              >message us on Discord</a
+              >porukom na Discordu</a
             >
-            if you have any questions
+            ako imate pitanja
           </p>
         </div>
       </div>
@@ -39,7 +39,7 @@ export default {
   middleware: ['auth'],
   head() {
     return {
-      title: 'Threads - Domovina SMS',
+      title: 'Razgovori — Domovina SMS',
     }
   },
   async mounted() {

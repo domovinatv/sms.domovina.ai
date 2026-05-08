@@ -9,7 +9,7 @@
       v-if="!$store.getters.getLoadingThreads && $store.getters.getIsArchived"
       class="warning py-1 text-center text-uppercase text-subtitle-1"
     >
-      Archived Messages
+      Arhivirane poruke
     </div>
     <v-sheet
       v-if="
@@ -28,7 +28,7 @@
           :src="require('assets/img/person-texting.svg')"
         ></v-img>
         <p v-if="$store.getters.getOwner" class="text--secondary">
-          Start sending messages
+          Započnite slati poruke
         </p>
       </div>
       <v-btn
@@ -39,7 +39,7 @@
         <v-icon>
           {{ mdiPlus }}
         </v-icon>
-        New Message
+        Nova poruka
       </v-btn>
     </v-sheet>
     <div
@@ -50,15 +50,15 @@
       class="px-4 text-center"
     >
       <p>
-        Install the mobile app on your android phone to start sending messages.
-        You can also
+        Instalirajte mobilnu aplikaciju na svoj Android telefon kako biste
+        počeli slati poruke. Možete nam i
         <a
           href="https://discord.gg/kGk8HVqeEZ"
           target="_blank"
           class="text-decoration-none"
-          >message us on Discord</a
+          >poslati poruku na Discordu</a
         >
-        to help set things up.
+        za pomoć pri postavljanju.
       </p>
       <v-btn
         class="primary"
@@ -66,14 +66,14 @@
         @click="
           $store.dispatch('addNotification', {
             type: 'info',
-            message: 'Downloading the Domovina SMS Android App',
+            message: 'Preuzimanje Domovina SMS Android aplikacije',
           })
         "
       >
         <v-icon>
           {{ mdiDownload }}
         </v-icon>
-        Install App
+        Instalacija aplikacije
       </v-btn>
     </div>
     <v-list two-line class="px-0 py-0" subheader>

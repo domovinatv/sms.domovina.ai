@@ -11,12 +11,12 @@
           <v-avatar tile size="45" class="mt-n8 mr-4">
             <v-img contain :src="require('@/assets/img/logo.svg')"></v-img>
           </v-avatar>
-          <span class="text-h3">Welcome</span>
+          <span class="text-h3">Dobrodošli</span>
         </div>
         <p class="subtitle-1 text-center text--secondary mt-1 mb-4">
-          Join <b>16,212+</b> happy users who have sent or
+          Prijavite se kako biste počeli slati i primati
           <br />
-          received more than <b>5,921,545+</b> SMS messages
+          SMS poruke putem Domovina SMS-a
         </p>
         <v-card max-width="360" class="mx-auto">
           <v-card-text class="px-0">
@@ -46,7 +46,7 @@ export default Vue.extend({
   },
   head() {
     return {
-      title: 'Login To Your Account - Http SMS',
+      title: 'Prijava — Domovina SMS',
     }
   },
   mounted() {

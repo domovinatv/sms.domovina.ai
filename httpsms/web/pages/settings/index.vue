@@ -10,7 +10,7 @@
           <v-icon>{{ mdiArrowLeft }}</v-icon>
         </v-btn>
         <v-toolbar-title>
-          <div class="py-16">Settings</div>
+          <div class="py-16">Postavke</div>
         </v-toolbar-title>
       </v-app-bar>
       <v-container class="mt-16">
@@ -45,17 +45,17 @@
                 :value="$store.getters.getUser.timezone"
                 class="mx-auto mt-2"
                 style="max-width: 250px"
-                label="Timezone"
+                label="Vremenska zona"
                 :items="timezones"
                 @change="updateTimezone"
               ></v-autocomplete>
             </div>
 
-            <h5 class="text-h4 mb-3 mt-3">API Key</h5>
+            <h5 class="text-h4 mb-3 mt-3">API ključ</h5>
             <p class="text--secondary">
-              Use your API Key in the <code>x-api-key</code> HTTP Header when
-              sending requests to
-              <code>https://sms-api.domovina.ai</code> endpoints.
+              Koristite svoj API ključ u <code>x-api-key</code> HTTP zaglavlju
+              prilikom slanja zahtjeva na krajnje točke
+              <code>https://sms-api.domovina.ai</code>.
             </p>
             <div v-if="apiKey === ''" class="mb-n9 pl-3 pt-5">
               <v-progress-circular
@@ -80,8 +80,8 @@
               <copy-button
                 :value="apiKey"
                 color="primary"
-                copy-text="Copy API Key"
-                notification-text="API Key copied successfully"
+                copy-text="Kopiraj API ključ"
+                notification-text="API ključ uspješno kopiran"
               ></copy-button>
               <v-btn
                 v-if="$vuetify.breakpoint.mdAndUp"
@@ -90,7 +90,7 @@
                 @click="showQrCodeDialog = true"
               >
                 <v-icon left>{{ mdiQrcode }}</v-icon>
-                Show QR Code
+                Prikaži QR kod
               </v-btn>
               <v-dialog
                 v-model="showQrCodeDialog"
@@ -99,14 +99,14 @@
               >
                 <v-card>
                   <v-card-title class="justify-center"
-                    >API Key QR Code</v-card-title
+                    >QR kod API ključa</v-card-title
                   >
                   <v-card-subtitle class="mt-2 text-center"
-                    >Scan this QR code with the
+                    >Skenirajte ovaj QR kod s
                     <a :href="$store.getters.getAppData.appDownloadUrl"
-                      >Domovina SMS app</a
+                      >Domovina SMS aplikacijom</a
                     >
-                    on your Android phone to login.</v-card-subtitle
+                    na svom Android telefonu za prijavu.</v-card-subtitle
                   >
                   <v-card-text class="text-center">
                     <canvas ref="qrCodeCanvas"></canvas>
@@ -117,7 +117,7 @@
                       block
                       class="mb-4"
                       @click="showQrCodeDialog = false"
-                      >Close</v-btn
+                      >Zatvori</v-btn
                     >
                   </v-card-actions>
                 </v-card>
@@ -126,7 +126,7 @@
                 v-if="$vuetify.breakpoint.lgAndUp"
                 class="ml-4"
                 :href="$store.getters.getAppData.documentationUrl"
-                >Documentation</v-btn
+                >Dokumentacija</v-btn
               >
               <v-spacer></v-spacer>
               <v-dialog
@@ -143,17 +143,17 @@
                     v-on="on"
                   >
                     <v-icon left>{{ mdiRefresh }}</v-icon>
-                    Rotate API Key
+                    Obnovi API ključ
                   </v-btn>
                 </template>
                 <v-card>
                   <v-card-title class="text-h5 text-break">
-                    Are you sure you want to rotate your API Key?
+                    Jeste li sigurni da želite obnoviti svoj API ključ?
                   </v-card-title>
                   <v-card-text>
-                    You will have to logout and login again on the
-                    <b>Domovina SMS</b> Android app with your new API key after you
-                    rotate it.
+                    Morat ćete se odjaviti i ponovno prijaviti u
+                    <b>Domovina SMS</b> Android aplikaciju s novim API ključem
+                    nakon što ga obnovite.
                   </v-card-text>
                   <v-card-actions class="pb-4">
                     <v-btn
@@ -162,21 +162,21 @@
                       @click="rotateApiKey"
                     >
                       <v-icon left>{{ mdiRefresh }}</v-icon>
-                      Yes Rotate Key
+                      Da, obnovi ključ
                     </v-btn>
                     <v-spacer></v-spacer>
                     <v-btn text @click="showRotateApiKey = false">
-                      Close
+                      Zatvori
                     </v-btn>
                   </v-card-actions>
                 </v-card>
               </v-dialog>
             </div>
-            <h5 id="webhook-settings" class="text-h4 mb-3 mt-12">Webhooks</h5>
+            <h5 id="webhook-settings" class="text-h4 mb-3 mt-12">Webhookovi</h5>
             <p class="text--secondary">
-              Webhooks allow us to send events to your server for example when
-              the android phone receives an SMS message we can forward the
-              message to your server.
+              Webhookovi nam omogućuju slanje događaja na vaš poslužitelj —
+              primjerice, kada Android telefon primi SMS poruku, možemo je
+              proslijediti na vaš poslužitelj.
             </p>
             <div v-if="loadingWebhooks">
               <v-progress-circular
@@ -196,9 +196,9 @@
                     </th>
                     <th class="text-left text-break">Callback URL</th>
                     <th v-if="$vuetify.breakpoint.lgAndUp" class="text-center">
-                      Events
+                      Događaji
                     </th>
-                    <th class="text-center">Action</th>
+                    <th class="text-center">Radnja</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -226,7 +226,7 @@
                       >
                         <v-icon small>{{ mdiSquareEditOutline }}</v-icon>
                         <span v-if="!$vuetify.breakpoint.mdAndDown">
-                          Edit
+                          Uredi
                         </span>
                       </v-btn>
                     </td>
@@ -237,23 +237,23 @@
             <div class="d-flex">
               <v-btn color="primary" @click="onWebhookCreate">
                 <v-icon left>{{ mdiLinkVariant }}</v-icon>
-                Add webhook
+                Dodaj webhook
               </v-btn>
               <v-btn
                 v-if="$vuetify.breakpoint.lgAndUp"
                 class="ml-4"
                 href="https://github.com/domovinatv/sms.domovina.ai/webhooks/introduction"
-                >Documentation</v-btn
+                >Dokumentacija</v-btn
               >
             </div>
 
             <h5 id="discord-settings" class="text-h4 mb-3 mt-12">
-              Discord Integration
+              Discord integracija
             </h5>
             <p class="text--secondary">
-              Send and receive SMS messages without leaving your discord server
-              with the Domovina SMS discord app using the
-              <code>/domovina-sms</code> command.
+              Šaljite i primajte SMS poruke bez napuštanja svog Discord
+              poslužitelja putem Domovina SMS Discord aplikacije koristeći
+              naredbu <code>/domovina-sms</code>.
             </p>
             <div v-if="loadingDiscordIntegrations">
               <v-progress-circular
@@ -268,10 +268,10 @@
               <template #default>
                 <thead>
                   <tr class="text-uppercase subtitle-2">
-                    <th class="text-left">Name</th>
-                    <th class="text-left">Server ID</th>
-                    <th class="text-left">Channel ID</th>
-                    <th class="text-center">Action</th>
+                    <th class="text-left">Naziv</th>
+                    <th class="text-left">ID poslužitelja</th>
+                    <th class="text-left">ID kanala</th>
+                    <th class="text-center">Radnja</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -295,7 +295,7 @@
                       >
                         <v-icon small>{{ mdiSquareEditOutline }}</v-icon>
                         <span v-if="!$vuetify.breakpoint.mdAndDown">
-                          Edit
+                          Uredi
                         </span>
                       </v-btn>
                     </td>
@@ -311,13 +311,13 @@
                 class="mr-2"
                 :src="require('assets/img/discord-logo.svg')"
               ></v-img>
-              Add Discord
+              Dodaj Discord
             </v-btn>
 
-            <h5 id="phones" class="text-h4 mb-3 mt-12">Phones</h5>
+            <h5 id="phones" class="text-h4 mb-3 mt-12">Telefoni</h5>
             <p class="text--secondary">
-              List of mobile phones which are registered for sending and
-              receiving SMS messages.
+              Popis mobilnih telefona registriranih za slanje i primanje SMS
+              poruka.
             </p>
             <v-simple-table>
               <template #default>
@@ -326,13 +326,13 @@
                     <th v-if="$vuetify.breakpoint.xlOnly" class="text-left">
                       ID
                     </th>
-                    <th class="text-left">Phone Number</th>
+                    <th class="text-left">Broj telefona</th>
                     <th v-if="$vuetify.breakpoint.lgAndUp" class="text-center">
-                      Retries
+                      Pokušaji
                     </th>
-                    <th class="text-center">Rate</th>
-                    <th class="text-center">Updated At</th>
-                    <th class="text-center">Action</th>
+                    <th class="text-center">Brzina</th>
+                    <th class="text-center">Ažurirano</th>
+                    <th class="text-center">Radnja</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -352,7 +352,7 @@
                       <span v-if="phone.messages_per_minute"
                         >{{ phone.messages_per_minute }}/min</span
                       >
-                      <span v-else>Unlimited</span>
+                      <span v-else>Neograničeno</span>
                     </td>
                     <td class="text-center">
                       {{ phone.updated_at | timestamp }}
@@ -367,7 +367,7 @@
                       >
                         <v-icon small>{{ mdiSquareEditOutline }}</v-icon>
                         <span v-if="!$vuetify.breakpoint.mdAndDown">
-                          Edit
+                          Uredi
                         </span>
                       </v-btn>
                     </td>
@@ -377,26 +377,27 @@
             </v-simple-table>
 
             <h5 id="send-schedules" class="text-h4 mb-3 mt-12">
-              Send Schedules
+              Rasporedi slanja
             </h5>
             <p class="text--secondary">
-              Create availability schedules and attach them to each phone.
-              Outgoing messages sent outside the schedule window are queued and
-              delivered when the schedule opens according to your
+              Stvorite rasporede dostupnosti i pridružite ih pojedinom telefonu.
+              Odlazne poruke poslane izvan vremenskog okvira rasporeda stavljaju
+              se u red čekanja te se isporučuju kad se raspored otvori, u
+              skladu s vašom
               <a
                 class="text-decoration-none"
                 href="https://github.com/domovinatv/sms.domovina.ai/features/control-sms-send-rate"
-                >configured send rate</a
+                >postavljenom brzinom slanja</a
               >.
             </p>
             <v-simple-table>
               <template #default>
                 <thead>
                   <tr class="text-uppercase subtitle-2">
-                    <th class="text-left">Name</th>
-                    <th class="text-left">Timezone</th>
-                    <th class="text-left">Schedule</th>
-                    <th class="text-center">Action</th>
+                    <th class="text-left">Naziv</th>
+                    <th class="text-left">Vremenska zona</th>
+                    <th class="text-left">Raspored</th>
+                    <th class="text-center">Radnja</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -427,7 +428,7 @@
                       >
                         <v-icon small>{{ mdiSquareEditOutline }}</v-icon>
                         <span v-if="!$vuetify.breakpoint.mdAndDown">
-                          Edit
+                          Uredi
                         </span>
                       </v-btn>
                     </td>
@@ -437,43 +438,43 @@
             </v-simple-table>
             <v-btn color="primary" class="mt-4" @click="openCreateSchedule">
               <v-icon left>{{ mdiCalendarClock }}</v-icon>
-              Create Send Schedule
+              Stvori raspored slanja
             </v-btn>
 
             <h5 id="email-notifications" class="text-h4 mb-3 mt-12">
-              Email Notifications
+              Obavijesti e-poštom
             </h5>
             <p class="text--secondary">
-              Manage the email notifications which you receive from Domovina SMS.
-              Feel free to turn on/off individual notifications anytime so you
-              don't get overloaded with emails
+              Upravljajte obavijestima e-poštom koje primate od Domovina SMS-a.
+              Slobodno bilo kada uključite ili isključite pojedine obavijesti
+              kako vas ne bi pretrpale e-pošte.
             </p>
             <v-switch
               v-model="notificationSettings.heartbeat_enabled"
-              label="Heartbeat emails"
+              label="Obavijesti o otkucajima"
               :disabled="updatingEmailNotifications"
-              hint="This switch controls email notifications we send when we don't receive a heartbeat from your phone for 1 hour."
+              hint="Ova sklopka kontrolira obavijesti e-poštom koje šaljemo kada od vašeg telefona ne primimo otkucaj 1 sat."
               persistent-hint
             ></v-switch>
             <v-switch
               v-model="notificationSettings.webhook_enabled"
-              label="Webhook and discord emails"
+              label="Obavijesti za webhook i Discord"
               :disabled="updatingEmailNotifications"
-              hint="This switch controls email notifications we send when we can't forward events to your discord server or to your webhook."
+              hint="Ova sklopka kontrolira obavijesti e-poštom koje šaljemo kada ne uspijemo proslijediti događaje na vaš Discord poslužitelj ili webhook."
               persistent-hint
             ></v-switch>
             <v-switch
               v-model="notificationSettings.message_status_enabled"
-              label="Message status emails"
+              label="Obavijesti o statusu poruka"
               :disabled="updatingEmailNotifications"
-              hint="This switch controls email notifications we send when we your message is failed or expired."
+              hint="Ova sklopka kontrolira obavijesti e-poštom koje šaljemo kada vaša poruka nije uspjela ili je istekla."
               persistent-hint
             ></v-switch>
             <v-switch
               v-model="notificationSettings.newsletter_enabled"
-              label="Newsletter emails"
+              label="Newsletter"
               :disabled="updatingEmailNotifications"
-              hint="This switch controls newsletter emails about new features, updates, and promotions."
+              hint="Ova sklopka kontrolira newsletter e-pošte o novim značajkama, ažuriranjima i promocijama."
               persistent-hint
             ></v-switch>
             <v-btn
@@ -483,25 +484,25 @@
               @click="saveEmailNotifications"
             >
               <v-icon left>{{ mdiContentSave }}</v-icon>
-              Save Notification Settings
+              Spremi postavke obavijesti
             </v-btn>
 
             <h5 id="email-notifications" class="text-h4 error--text mb-3 mt-12">
-              Delete Account
+              Brisanje računa
             </h5>
             <p v-if="hasActiveSubscription" class="text--secondary">
-              You cannot delete your account because you have an active
-              subscription on Domovina SMS.
+              Ne možete obrisati svoj račun jer imate aktivnu pretplatu na
+              Domovina SMS-u.
               <router-link class="text-decoration-none" to="/billing"
-                >Cancel your subscription</router-link
+                >Otkažite pretplatu</router-link
               >
-              before deleting your account.
+              prije brisanja svog računa.
             </p>
             <p v-else class="text--secondary">
-              You can delete all your data on Domovina SMS by clicking the button
-              below. This action is <b>irreversible</b> and all your data will
-              be permanently deleted from the Domovina SMS database instantly and it
-              cannot be recovered.
+              Klikom na gumb u nastavku možete obrisati sve svoje podatke na
+              Domovina SMS-u. Ova radnja je <b>nepovratna</b> i svi vaši podaci
+              bit će trajno i odmah izbrisani iz Domovina SMS baze podataka te
+              se neće moći vratiti.
             </p>
             <v-btn
               color="error"
@@ -511,7 +512,7 @@
               @click="showDeleteAccountDialog = true"
             >
               <v-icon left>{{ mdiDelete }}</v-icon>
-              Delete your Account
+              Obriši račun
             </v-btn>
             <v-dialog
               v-model="showDeleteAccountDialog"
@@ -520,12 +521,12 @@
             >
               <v-card>
                 <v-card-title class="justify-center text-center"
-                  >Delete your Domovina SMS account</v-card-title
+                  >Obriši svoj Domovina SMS račun</v-card-title
                 >
                 <v-card-text class="mt-2 text-center">
-                  Are you sure you want to delete your account? This action is
-                  <b>irreversible</b> and all your data will be permanently
-                  deleted from the Domovina SMS database instantly.
+                  Jeste li sigurni da želite obrisati svoj račun? Ova radnja
+                  je <b>nepovratna</b> i svi vaši podaci bit će trajno i odmah
+                  izbrisani iz Domovina SMS baze podataka.
                 </v-card-text>
                 <v-card-actions>
                   <v-btn
@@ -537,7 +538,7 @@
                     <v-icon v-if="$vuetify.breakpoint.lgAndUp" left>{{
                       mdiDelete
                     }}</v-icon>
-                    Delete My Account
+                    Obriši moj račun
                   </v-btn>
                   <v-spacer></v-spacer>
                   <v-btn
@@ -545,9 +546,9 @@
                     @click="showDeleteAccountDialog = false"
                   >
                     <span v-if="$vuetify.breakpoint.lgAndUp"
-                      >Keep My account</span
+                      >Zadrži moj račun</span
                     >
-                    <span v-else>Close</span>
+                    <span v-else>Zatvori</span>
                   </v-btn>
                 </v-card-actions>
               </v-card>
@@ -559,7 +560,7 @@
 
     <v-dialog v-model="showPhoneEdit" overlay-opacity="0.9" max-width="700px">
       <v-card>
-        <v-card-title>Edit Phone</v-card-title>
+        <v-card-title>Uredi telefon</v-card-title>
         <v-card-text v-if="activePhone" class="mt-6">
           <v-container>
             <v-row>
@@ -576,7 +577,7 @@
                   outlined
                   disabled
                   dense
-                  label="Phone Number"
+                  label="Broj telefona"
                   :value="activePhone.phone_number"
                 >
                 </v-text-field>
@@ -592,7 +593,7 @@
                   outlined
                   disabled
                   dense
-                  label="FCM Token"
+                  label="FCM token"
                   :value="activePhone.fcm_token"
                 >
                 </v-textarea>
@@ -601,7 +602,7 @@
                   outlined
                   type="number"
                   dense
-                  label="Message Expiration (seconds)"
+                  label="Istek poruke (sekunde)"
                 >
                 </v-text-field>
                 <v-text-field
@@ -609,7 +610,7 @@
                   outlined
                   type="number"
                   dense
-                  label="Messages Per Minute"
+                  label="Poruka u minuti"
                 >
                 </v-text-field>
                 <v-text-field
@@ -617,14 +618,14 @@
                   outlined
                   type="number"
                   dense
-                  placeholder="How many retries when sending an SMS"
-                  label="Max Send Attempts"
+                  placeholder="Koliko pokušaja prilikom slanja SMS-a"
+                  label="Maksimalan broj pokušaja slanja"
                   min="1"
                   max="5"
                   :rules="[
                     (v) =>
                       (v >= 1 && v <= 5) ||
-                      'Max send attempts must be between 1 and 5',
+                      'Maksimalan broj pokušaja slanja mora biti između 1 i 5',
                   ]"
                 >
                 </v-text-field>
@@ -634,23 +635,23 @@
                   :readonly="sendSchedules.length === 0"
                   dense
                   clearable
-                  label="Send Schedule"
+                  label="Raspored slanja"
                   :items="sendSchedules"
                   item-text="name"
                   item-value="id"
                   :multiple="false"
-                  hint="Attach a send schedule to this phone"
+                  hint="Pridruži raspored slanja ovom telefonu"
                   persistent-hint
                 ></v-autocomplete>
                 <v-textarea
                   v-model="activePhone.missed_call_auto_reply"
                   outlined
                   dense
-                  label="Missed Call AutoReply"
+                  label="Automatski odgovor na propušteni poziv"
                   persistent-placeholder
                   persistent-hint
-                  placeholder="We are currently closed at the moment, please send us a text message from  09:00 to 17:00"
-                  hint="Here you can configure an automated SMS message which is sent to the caller when this phone has a missed call"
+                  placeholder="Trenutno smo zatvoreni, molimo pošaljite nam poruku između 09:00 i 17:00"
+                  hint="Ovdje možete konfigurirati automatsku SMS poruku koja se šalje pozivatelju kada ovaj telefon ima propušten poziv"
                 >
                 </v-textarea>
               </v-col>
@@ -662,7 +663,7 @@
             <v-icon v-if="$vuetify.breakpoint.lgAndUp" small>
               {{ mdiContentSave }}
             </v-icon>
-            Update
+            Ažuriraj
           </v-btn>
           <v-spacer></v-spacer>
           <v-btn
@@ -674,7 +675,7 @@
             <v-icon v-if="$vuetify.breakpoint.lgAndUp" small>
               {{ mdiDelete }}
             </v-icon>
-            Delete
+            Obriši
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -683,8 +684,8 @@
     <v-dialog v-model="showWebhookEdit" overlay-opacity="0.9" max-width="600px">
       <v-card>
         <v-card-title>
-          <span v-if="!activeWebhook.id">Add a new&nbsp;</span>
-          <span v-else>Edit&nbsp;</span>
+          <span v-if="!activeWebhook.id">Dodaj novi&nbsp;</span>
+          <span v-else>Uredi&nbsp;</span>
           webhook
         </v-card-title>
         <v-card-text>
@@ -708,7 +709,7 @@
                 persistent-hint
                 :error="errorMessages.has('url')"
                 :error-messages="errorMessages.get('url')"
-                hint="A POST request will be sent to this URL every time an event is triggered in Domovina SMS."
+                hint="POST zahtjev će biti poslan na ovaj URL svaki put kada se u Domovina SMS-u pokrene događaj."
                 placeholder="https://example.com/webhook"
               >
               </v-text-field>
@@ -719,17 +720,17 @@
                 class="mt-6"
                 persistent-placeholder
                 persistent-hint
-                label="Signing Key (optional)"
+                label="Ključ za potpisivanje (neobavezno)"
                 placeholder="******************"
                 :error="errorMessages.has('signing_key')"
                 :error-messages="errorMessages.get('signing_key')"
-                hint="The signing key is used to verify the webhook is sent from Domovina SMS."
+                hint="Ključ za potpisivanje koristi se za provjeru da je webhook poslan iz Domovina SMS-a."
               >
               </v-text-field>
               <v-select
                 v-model="activeWebhook.events"
                 :items="events"
-                label="Events"
+                label="Događaji"
                 multiple
                 outlined
                 persistent-placeholder
@@ -737,13 +738,13 @@
                 dense
                 :error="errorMessages.has('events')"
                 :error-messages="errorMessages.get('events')"
-                hint="Select multiple Domovina SMS events to watch for"
+                hint="Odaberite više Domovina SMS događaja koje želite pratiti"
                 persistent-hint
               ></v-select>
               <v-select
                 v-model="activeWebhook.phone_numbers"
                 :items="phoneNumbers"
-                label="Phone Numbers"
+                label="Brojevi telefona"
                 multiple
                 outlined
                 persistent-placeholder
@@ -751,7 +752,7 @@
                 dense
                 :error="errorMessages.has('phone_numbers')"
                 :error-messages="errorMessages.get('phone_numbers')"
-                hint="Select multiple phone numbers to watch for events"
+                hint="Odaberite više brojeva telefona za praćenje događaja"
                 persistent-hint
               ></v-select>
             </v-col>
@@ -764,7 +765,7 @@
             :loading="updatingWebhook"
             @click="createWebhook"
           >
-            Save Webhook
+            Spremi webhook
           </loading-button>
           <loading-button
             v-else
@@ -776,7 +777,7 @@
             <v-icon v-if="$vuetify.breakpoint.lgAndUp" small>
               {{ mdiContentSave }}
             </v-icon>
-            Update Webhook
+            Ažuriraj webhook
           </loading-button>
           <v-spacer></v-spacer>
           <v-btn
@@ -790,7 +791,7 @@
             <v-icon v-if="$vuetify.breakpoint.lgAndUp" small>
               {{ mdiDelete }}
             </v-icon>
-            Delete
+            Obriši
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -799,17 +800,18 @@
     <v-dialog v-model="showDiscordEdit" overlay-opacity="0.9" max-width="700px">
       <v-card>
         <v-card-title>
-          <span v-if="!activeDiscord.id">Add a new&nbsp;</span>
-          <span v-else>Edit&nbsp;</span>
-          discord integration
+          <span v-if="!activeDiscord.id">Dodaj novu&nbsp;</span>
+          <span v-else>Uredi&nbsp;</span>
+          Discord integraciju
         </v-card-title>
         <v-card-text>
           <v-row>
             <v-col class="pt-8">
               <p class="mt-n4 subtitle-1">
-                Click the button below to add the Domovina SMS bot to your discord
-                server. You need to do this so we can have permission to send
-                and receive messages on your discord server.
+                Kliknite gumb u nastavku kako biste dodali Domovina SMS bota na
+                svoj Discord poslužitelj. To je potrebno kako bismo imali
+                ovlasti za slanje i primanje poruka na vašem Discord
+                poslužitelju.
               </p>
               <v-btn
                 color="#5865f2"
@@ -818,7 +820,7 @@
                 href="https://discord.com/api/oauth2/authorize?client_id=1095780203256627291&permissions=2147485760&scope=bot%20applications.commands"
               >
                 <v-icon left>{{ mdiConnection }}</v-icon>
-                Add Discord Bot
+                Dodaj Discord bota
               </v-btn>
               <v-text-field
                 v-if="activeDiscord.id"
@@ -833,13 +835,13 @@
                 v-model="activeDiscord.name"
                 outlined
                 dense
-                label="Name"
+                label="Naziv"
                 persistent-placeholder
                 persistent-hint
                 :error="errorMessages.has('name')"
                 :error-messages="errorMessages.get('name')"
-                hint="The name of the discord integration"
-                placeholder="e.g Game Server"
+                hint="Naziv Discord integracije"
+                placeholder="npr. Igrački poslužitelj"
               >
               </v-text-field>
               <v-text-field
@@ -849,11 +851,11 @@
                 class="mt-6"
                 persistent-placeholder
                 persistent-hint
-                label="Discord Server ID"
-                placeholder="e.g 1095778291488653372"
+                label="ID Discord poslužitelja"
+                placeholder="npr. 1095778291488653372"
                 :error="errorMessages.has('server_id')"
                 :error-messages="errorMessages.get('server_id')"
-                hint="You can get this by right clicking on your server and clicking Copy Server ID."
+                hint="Možete ga dobiti tako da desnim klikom na svoj poslužitelj odaberete Copy Server ID."
               >
               </v-text-field>
               <v-text-field
@@ -863,11 +865,11 @@
                 class="mt-6"
                 persistent-placeholder
                 persistent-hint
-                label="Discord Incoming Channel ID"
-                placeholder="e.g 1095778291488653372"
+                label="ID Discord dolaznog kanala"
+                placeholder="npr. 1095778291488653372"
                 :error="errorMessages.has('incoming_channel_id')"
                 :error-messages="errorMessages.get('incoming_channel_id')"
-                hint="You can get this by right clicking on your discord channel and clicking Copy Chanel ID."
+                hint="Možete ga dobiti tako da desnim klikom na svoj Discord kanal odaberete Copy Channel ID."
               >
               </v-text-field>
             </v-col>
@@ -880,7 +882,7 @@
             :loading="updatingDiscord"
             @click="createDiscord"
           >
-            Save Discord Integration
+            Spremi Discord integraciju
           </loading-button>
           <loading-button
             v-else
@@ -891,7 +893,7 @@
             <v-icon v-if="$vuetify.breakpoint.lgAndUp" small>
               {{ mdiContentSave }}
             </v-icon>
-            Update Discord Integration
+            Ažuriraj Discord integraciju
           </loading-button>
           <v-spacer></v-spacer>
           <v-btn
@@ -904,7 +906,7 @@
             <v-icon v-if="$vuetify.breakpoint.lgAndUp" small>
               {{ mdiDelete }}
             </v-icon>
-            Delete
+            Obriši
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -917,8 +919,8 @@
     >
       <v-card>
         <v-card-title>
-          <span v-if="!activeSchedule.id">Create Message Send Schedule</span>
-          <span v-else>Edit Message Send Schedule</span>
+          <span v-if="!activeSchedule.id">Stvori raspored slanja poruka</span>
+          <span v-else>Uredi raspored slanja poruka</span>
         </v-card-title>
         <v-card-text
           class="mt-4"
@@ -931,8 +933,8 @@
                 outlined
                 dense
                 persistent-placeholder
-                label="Schedule Name"
-                placeholder="e.g Business Hours"
+                label="Naziv rasporeda"
+                placeholder="npr. Radno vrijeme"
                 :error="errorMessages.has('name')"
                 :error-messages="errorMessages.get('name')"
               />
@@ -943,7 +945,7 @@
                 dense
                 outlined
                 :items="timezones"
-                label="Timezone"
+                label="Vremenska zona"
                 :class="{ 'mt-n6 mb-0': $vuetify.breakpoint.mdAndDown }"
                 :error="errorMessages.has('timezone')"
                 :error-messages="errorMessages.get('timezone')"
@@ -998,7 +1000,7 @@
                         outlined
                         :error="scheduleWindowError(day.value)"
                         type="time"
-                        label="Start"
+                        label="Početak"
                         hide-details="auto"
                       />
                     </div>
@@ -1013,7 +1015,7 @@
                         outlined
                         :error="scheduleWindowError(day.value)"
                         type="time"
-                        label="End"
+                        label="Kraj"
                         hide-details="auto"
                       />
                     </div>
@@ -1053,7 +1055,7 @@
             :loading="savingSchedule"
             @click="saveSchedule"
           >
-            Save Schedule
+            Spremi raspored
           </loading-button>
           <loading-button
             v-else
@@ -1064,7 +1066,7 @@
             <v-icon v-if="$vuetify.breakpoint.lgAndUp" small>
               {{ mdiContentSave }}
             </v-icon>
-            Update Schedule
+            Ažuriraj raspored
           </loading-button>
           <v-spacer></v-spacer>
           <v-btn
@@ -1077,10 +1079,10 @@
             <v-icon v-if="$vuetify.breakpoint.lgAndUp" small left>
               {{ mdiDelete }}
             </v-icon>
-            Delete
+            Obriši
           </v-btn>
           <v-btn v-else text color="error" @click="showScheduleEdit = false">
-            Close
+            Zatvori
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -1088,11 +1090,11 @@
 
     <v-dialog v-model="showScheduleDelete" max-width="500">
       <v-card>
-        <v-card-title>Delete schedule</v-card-title>
+        <v-card-title>Brisanje rasporeda</v-card-title>
         <v-card-text>
-          Are you sure you want to delete <b>{{ activeSchedule.name }}</b
-          >? Phones attached to this schedule will no longer have schedule-based
-          restrictions.
+          Jeste li sigurni da želite obrisati <b>{{ activeSchedule.name }}</b
+          >? Telefoni pridruženi ovom rasporedu više neće imati ograničenja
+          temeljena na rasporedu.
         </v-card-text>
         <v-card-actions>
           <v-btn
@@ -1100,10 +1102,10 @@
             :loading="savingSchedule"
             @click="deleteSchedule"
           >
-            Delete
+            Obriši
           </v-btn>
           <v-spacer />
-          <v-btn text @click="showScheduleDelete = false">Cancel</v-btn>
+          <v-btn text @click="showScheduleDelete = false">Odustani</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -1238,19 +1240,19 @@ export default Vue.extend({
         }>
       },
       weekDays: [
-        { value: 1, label: 'Monday' },
-        { value: 2, label: 'Tuesday' },
-        { value: 3, label: 'Wednesday' },
-        { value: 4, label: 'Thursday' },
-        { value: 5, label: 'Friday' },
-        { value: 6, label: 'Saturday' },
-        { value: 0, label: 'Sunday' },
+        { value: 1, label: 'Ponedjeljak' },
+        { value: 2, label: 'Utorak' },
+        { value: 3, label: 'Srijeda' },
+        { value: 4, label: 'Četvrtak' },
+        { value: 5, label: 'Petak' },
+        { value: 6, label: 'Subota' },
+        { value: 0, label: 'Nedjelja' },
       ],
     }
   },
   head() {
     return {
-      title: 'Settings - Domovina SMS',
+      title: 'Postavke — Domovina SMS',
     }
   },
   computed: {
@@ -1311,7 +1313,7 @@ export default Vue.extend({
         toCanvas(canvas, text, { errorCorrectionLevel: 'H' }, (err) => {
           if (err) {
             this.$store.dispatch('addNotification', {
-              message: 'Failed to generate API key QR code',
+              message: 'Nije uspjelo stvaranje QR koda API ključa',
               type: 'error',
             })
           }
@@ -1434,7 +1436,7 @@ export default Vue.extend({
         .dispatch('createDiscord', this.activeDiscord)
         .then(() => {
           this.$store.dispatch('addNotification', {
-            message: 'Discord integration created successfully',
+            message: 'Discord integracija uspješno stvorena',
             type: 'success',
           })
           this.showDiscordEdit = false
@@ -1454,7 +1456,7 @@ export default Vue.extend({
         .dispatch('saveEmailNotifications', this.notificationSettings)
         .then(() => {
           this.$store.dispatch('addNotification', {
-            message: 'Email notifications saved successfully',
+            message: 'Postavke obavijesti e-poštom uspješno spremljene',
             type: 'success',
           })
           this.updateEmailNotifications()
@@ -1471,7 +1473,7 @@ export default Vue.extend({
         .dispatch('updateDiscordIntegration', this.activeDiscord)
         .then(() => {
           this.$store.dispatch('addNotification', {
-            message: 'Discord integration updated successfully',
+            message: 'Discord integracija uspješno ažurirana',
             type: 'success',
           })
           this.showDiscordEdit = false
@@ -1491,7 +1493,7 @@ export default Vue.extend({
         .dispatch('deleteDiscordIntegration', discordId)
         .then(() => {
           this.$store.dispatch('addNotification', {
-            message: 'Discord integration deleted successfully',
+            message: 'Discord integracija uspješno obrisana',
             type: 'success',
           })
           this.showDiscordEdit = false
@@ -1509,7 +1511,7 @@ export default Vue.extend({
         .dispatch('createWebhook', this.activeWebhook)
         .then(() => {
           this.$store.dispatch('addNotification', {
-            message: 'Webhook created successfully',
+            message: 'Webhook uspješno stvoren',
             type: 'success',
           })
           this.showWebhookEdit = false
@@ -1529,13 +1531,13 @@ export default Vue.extend({
         .dispatch('updateTimezone', timezone)
         .then(() => {
           this.$store.dispatch('addNotification', {
-            message: 'Timezone updated successfully',
+            message: 'Vremenska zona uspješno ažurirana',
             type: 'success',
           })
         })
         .catch(() => {
           this.$store.dispatch('addNotification', {
-            message: 'Failed to update timezone',
+            message: 'Nije uspjelo ažuriranje vremenske zone',
             type: 'error',
           })
         })
@@ -1548,7 +1550,7 @@ export default Vue.extend({
         .dispatch('updateWebhook', this.activeWebhook)
         .then(() => {
           this.$store.dispatch('addNotification', {
-            message: 'Webhook updated successfully',
+            message: 'Webhook uspješno ažuriran',
             type: 'success',
           })
           this.showWebhookEdit = false
@@ -1578,7 +1580,7 @@ export default Vue.extend({
         .dispatch('deleteWebhook', webhookId)
         .then(() => {
           this.$store.dispatch('addNotification', {
-            message: 'Webhook deleted successfully',
+            message: 'Webhook uspješno obrisan',
             type: 'success',
           })
           this.showWebhookEdit = false
@@ -1631,7 +1633,7 @@ export default Vue.extend({
         .dispatch('deleteUserAccount')
         .then((message: string) => {
           this.$store.dispatch('addNotification', {
-            message: message ?? 'Your account has been deleted successfully',
+            message: message ?? 'Vaš račun je uspješno obrisan',
             type: 'success',
           })
           this.$fire.auth.signOut().then(() => {
@@ -1639,7 +1641,7 @@ export default Vue.extend({
             this.$store.dispatch('resetState')
             this.$store.dispatch('addNotification', {
               type: 'info',
-              message: 'You have successfully logged out',
+              message: 'Uspješno ste odjavljeni',
             })
             this.$router.push({ name: 'index' })
           })
@@ -1824,7 +1826,7 @@ export default Vue.extend({
 
         this.$store.dispatch('addNotification', {
           type: 'success',
-          message: 'Send schedule saved successfully',
+          message: 'Raspored slanja uspješno spremljen',
         })
 
         this.showScheduleEdit = false
@@ -1835,7 +1837,7 @@ export default Vue.extend({
         } else {
           this.$store.dispatch('addNotification', {
             type: 'error',
-            message: 'Failed to save send schedule',
+            message: 'Nije uspjelo spremanje rasporeda slanja',
           })
         }
       } finally {
@@ -1859,7 +1861,7 @@ export default Vue.extend({
 
         this.$store.dispatch('addNotification', {
           type: 'success',
-          message: 'Send schedule deleted successfully',
+          message: 'Raspored slanja uspješno obrisan',
         })
 
         this.showScheduleDelete = false
@@ -1868,7 +1870,7 @@ export default Vue.extend({
       } catch (error) {
         this.$store.dispatch('addNotification', {
           type: 'error',
-          message: 'Failed to delete send schedule',
+          message: 'Nije uspjelo brisanje rasporeda slanja',
         })
       } finally {
         this.savingSchedule = false

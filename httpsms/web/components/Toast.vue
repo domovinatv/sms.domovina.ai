@@ -20,7 +20,7 @@
         v-bind="attrs"
         @click="disableNotification"
       >
-        <span class="font-weight-bold">Close</span>
+        <span class="font-weight-bold">Zatvori</span>
       </v-btn>
     </template>
   </v-snackbar>

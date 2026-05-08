@@ -19,7 +19,7 @@
               style="max-width: 32px"
               alt="Domovina SMS Logo"
             />
-            Loading the Domovina SMS dashboard
+            Učitavanje Domovina SMS nadzorne ploče
           </h2>
           <v-progress-circular
             indeterminate

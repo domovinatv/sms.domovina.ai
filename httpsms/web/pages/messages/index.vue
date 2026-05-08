@@ -6,7 +6,7 @@
           <v-icon>{{ mdiArrowLeft }}</v-icon>
         </v-btn>
         <v-toolbar-title
-          >New Message
+          >Nova poruka
           <v-icon x-small class="mx-2" color="primary">{{ mdiCircle }}</v-icon>
           {{ $store.getters.getOwner | phoneNumber }}</v-toolbar-title
         >
@@ -22,8 +22,8 @@
                 :error="errors.has('to')"
                 :error-messages="errors.get('to')"
                 outlined
-                placeholder="Recipient phone number e.g +18005550199"
-                label="Phone Number"
+                placeholder="Broj telefona primatelja, npr. +385912345678"
+                label="Broj telefona"
               ></v-text-field>
               <v-textarea
                 persistent-placeholder
@@ -32,8 +32,8 @@
                 :error-messages="errors.get('content')"
                 :disabled="sending"
                 outlined
-                placeholder="Enter your message here"
-                label="Content"
+                placeholder="Upišite poruku ovdje"
+                label="Sadržaj"
               ></v-textarea>
               <v-textarea
                 persistent-placeholder
@@ -45,9 +45,9 @@
                 outlined
                 rows="2"
                 class="mb-8"
-                hint="The message will be sent as an MMS when a comma separated list of attachment URLs are present"
+                hint="Poruka će biti poslana kao MMS kada je naveden popis URL-ova privitaka odvojenih zarezima"
                 placeholder="https://example.com/image.jpg, https://example.com/video.mp4"
-                label="Attachment URLs (optional)"
+                label="URL-ovi privitaka (neobavezno)"
               ></v-textarea>
               <v-btn
                 type="submit"
@@ -56,7 +56,7 @@
                 :block="$vuetify.breakpoint.mdAndDown"
               >
                 <v-icon>{{ mdiSend }}</v-icon>
-                Send Message
+                Pošalji poruku
               </v-btn>
             </v-form>
           </v-col>
@@ -80,11 +80,11 @@ export default {
       mdiCircle,
       mdiSim,
       simOptions: [
-        { title: 'Default', code: 'DEFAULT' },
+        { title: 'Zadano', code: 'DEFAULT' },
         { title: 'SIM 1', code: 'SIM1' },
         { title: 'SIM 2', code: 'SIM2' },
       ],
-      simSelected: { title: 'Default', code: 'DEFAULT' },
+      simSelected: { title: 'Zadano', code: 'DEFAULT' },
       sending: false,
       formPhoneNumber: '',
       formContent: '',
@@ -94,7 +94,7 @@ export default {
   },
   head() {
     return {
-      title: 'New Message - Domovina SMS',
+      title: 'Nova poruka — Domovina SMS',
     }
   },
 
@@ -117,7 +117,7 @@ export default {
         })
         .then(() => {
           this.$store.dispatch('addNotification', {
-            message: 'Message Sent!',
+            message: 'Poruka poslana!',
             type: 'success',
           })
           this.$router.push({ name: 'threads' })
@@ -132,7 +132,7 @@ export default {
             errors.set(
               'to',
               response.data.data.to.map((x) =>
-                x.replace('to field', 'phone number field'),
+                x.replace('to field', 'polje broja telefona'),
               ),
             )
           }

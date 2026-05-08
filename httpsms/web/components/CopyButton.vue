@@ -22,8 +22,8 @@ export default class CopyButton extends Vue {
   @Prop({ required: false, type: String, default: 'default' }) color!: string
   @Prop({ required: false, type: Boolean, default: false }) block!: boolean
   @Prop({ required: false, type: Boolean, default: false }) large!: boolean
-  @Prop({ required: false, type: String, default: 'Copy' }) copyText!: string
-  @Prop({ required: false, type: String, default: 'Copied' })
+  @Prop({ required: false, type: String, default: 'Kopiraj' }) copyText!: string
+  @Prop({ required: false, type: String, default: 'Kopirano' })
   notificationText!: string
 
   disabled = false

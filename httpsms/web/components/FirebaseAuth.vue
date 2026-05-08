@@ -49,7 +49,7 @@ export default class FirebaseAuth extends Vue {
           authResult: firebase.auth.UserCredential,
         ) => {
           this.$store.dispatch('addNotification', {
-            message: 'Login successfull!',
+            message: 'Uspješna prijava!',
             type: 'success',
           } as NotificationRequest)
 
@@ -69,7 +69,7 @@ export default class FirebaseAuth extends Vue {
             container.getElementsByClassName('firebaseui-idp-text-long'),
           ).forEach((item: Element) => {
             item.textContent =
-              item.textContent?.replace('Sign in with', 'Continue with') || null
+              item.textContent?.replace('Sign in with', 'Nastavi s') || null
           })
         },
       },

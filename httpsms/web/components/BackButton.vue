@@ -6,7 +6,7 @@
     @click="goBack"
   >
     <v-icon>{{ mdiArrowLeft }}</v-icon>
-    Go Back
+    Natrag
   </v-btn>
 </template>
 
