@@ -1,17 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- Base application theme. Domovina SMS — light by default, brand colors. -->
     <style name="Theme.HttpSMS" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/blue_500</item>
-        <item name="colorPrimaryVariant">@color/blue_700</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/pink_500</item>
-        <item name="colorSecondaryVariant">@color/pink_A400</item>
-        <item name="colorOnSecondary">@color/white</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor">#121212</item>
-        <!-- Customize your theme here. -->
+        <!-- Primary brand color (Croatian flag navy). -->
+        <item name="colorPrimary">@color/domovina_navy</item>
+        <item name="colorPrimaryVariant">@color/domovina_navy_dark</item>
+        <item name="colorOnPrimary">@color/domovina_white</item>
+        <!-- Secondary brand color (Croatian flag red). -->
+        <item name="colorSecondary">@color/domovina_red</item>
+        <item name="colorSecondaryVariant">@color/domovina_red_dark</item>
+        <item name="colorOnSecondary">@color/domovina_white</item>
+        <!-- Status bar matches primary brand color. -->
+        <item name="android:statusBarColor">@color/domovina_navy</item>
 
         <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">false</item>
     </style>

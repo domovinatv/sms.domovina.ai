@@ -147,13 +147,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             val message = getMessage(applicationContext, messageID) ?: return Result.failure()
             if (!Settings.getActiveStatus(applicationContext, message.sim)) {
                 Timber.w("[${message.sim}] SIM is not active, stopping processing")
-                handleFailed(applicationContext, messageID, "Outgoing messages have been disabled on the mobile app")
+                handleFailed(applicationContext, messageID, applicationContext.getString(R.string.error_outgoing_disabled))
                 return Result.failure()
             }
 
             if (message.encrypted && Settings.getEncryptionKey(applicationContext).isNullOrEmpty()) {
                 Timber.w("[${message.sim}] message is encrypted but the encryption key is empty")
-                handleFailed(applicationContext, messageID, "Outgoing message is encrypted but mobile app has no encryption key")
+                handleFailed(applicationContext, messageID, applicationContext.getString(R.string.error_no_encryption_key))
                 return Result.failure()
             }
             if (message.encrypted) {
@@ -161,7 +161,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                     Encrypter.decrypt(Settings.getEncryptionKey(applicationContext)!!, message.content)
                 } catch (exception: Exception) {
                     Timber.e(exception)
-                    handleFailed(applicationContext, messageID, "Cannot decrypt the outgoing message. Check your encryption key on the Android app.")
+                    handleFailed(applicationContext, messageID, applicationContext.getString(R.string.error_decrypt_failed))
                     return Result.failure()
                 }
             }
@@ -204,7 +204,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 for ((index, attachment) in message.attachments!!.withIndex()) {
                     val file = apiService.downloadAttachment(applicationContext, attachment, message.id, index)
                     if (file.first == null || file.second == null) {
-                        handleFailed(applicationContext, message.id, "Failed to download attachment or file size exceeded 1.5MB.")
+                        handleFailed(applicationContext, message.id, "Preuzimanje privitka nije uspjelo ili je veličina premašila 1,5 MB.")
                         return Result.failure()
                     }
                     downloadedFiles.add(Pair(file.first!!, file.second!!))
@@ -260,7 +260,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
                 if (pduBytes == null) {
                     Timber.e("PduComposer failed to generate PDU byte array")
-                    handleFailed(applicationContext, message.id, "Failed to compose MMS PDU.")
+                    handleFailed(applicationContext, message.id, "Sastavljanje MMS PDU-a nije uspjelo.")
                     return Result.failure()
                 }
 
@@ -286,7 +286,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
             } catch (e: Exception) {
                 Timber.e(e, "Failed to send MMS for message ID [${message.id}]")
-                handleFailed(applicationContext, message.id, e.message ?: "Internal error while building or sending MMS.")
+                handleFailed(applicationContext, message.id, e.message ?: "Interna greška pri sastavljanju ili slanju MMS-a.")
                 return Result.failure()
             } finally {
                 // Clean up any downloaded temporary files

@@ -184,7 +184,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
-                android:backgroundTint="@color/black"
+                android:backgroundTint="@color/domovina_navy"
                 android:drawableTint="@color/white"
                 android:padding="10dp"
                 android:text="@string/main_log_out"

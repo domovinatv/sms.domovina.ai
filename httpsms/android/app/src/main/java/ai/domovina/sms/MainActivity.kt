@@ -383,7 +383,7 @@ class MainActivity : AppCompatActivity() {
                     showHeartbeatError(exception)
                     return@run
                 }
-                Toast.makeText(context, "Heartbeat sent successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.toast_heartbeat_sent), Toast.LENGTH_SHORT).show()
 
                 setLastHeartbeatTimestamp(this)
             }
@@ -420,13 +420,13 @@ class MainActivity : AppCompatActivity() {
         }
         val scroll = android.widget.ScrollView(this).apply { addView(tv) }
         androidx.appcompat.app.AlertDialog.Builder(this)
-            .setTitle("Heartbeat error")
+            .setTitle(R.string.dialog_heartbeat_error_title)
             .setView(scroll)
-            .setPositiveButton("OK", null)
-            .setNeutralButton("Copy") { _, _ ->
+            .setPositiveButton("U redu", null)
+            .setNeutralButton("Kopiraj") { _, _ ->
                 val cm = getSystemService(android.content.ClipboardManager::class.java)
                 cm.setPrimaryClip(android.content.ClipData.newPlainText("heartbeat-error", message))
-                Toast.makeText(this, "Copied to clipboard", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.toast_copied_to_clipboard), Toast.LENGTH_SHORT).show()
             }
             .show()
     }

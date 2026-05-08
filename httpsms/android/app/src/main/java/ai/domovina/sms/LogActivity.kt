@@ -41,7 +41,7 @@ class LogActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        title = "Gateway events"
+        title = getString(R.string.log_activity_title)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val root = LinearLayout(this).apply {
@@ -60,17 +60,17 @@ class LogActivity : AppCompatActivity() {
             setPadding(16, 8, 16, 8)
         }
         toolbar.addView(Button(this).apply {
-            text = "Copy all"
+            text = "Kopiraj sve"
             setOnClickListener {
                 val text = InMemoryLog.snapshot().joinToString("\n") { eventToText(it) }
                 getSystemService(ClipboardManager::class.java)
                     .setPrimaryClip(ClipData.newPlainText("gateway-events", text))
-                Toast.makeText(this@LogActivity, "Copied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@LogActivity, getString(R.string.toast_copied_to_clipboard), Toast.LENGTH_SHORT).show()
             }
             layoutParams = LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f).apply { marginEnd = 8 }
         })
         toolbar.addView(Button(this).apply {
-            text = "Clear"
+            text = "Očisti"
             setOnClickListener {
                 InMemoryLog.clear()
                 lastSize = -1
@@ -87,7 +87,7 @@ class LogActivity : AppCompatActivity() {
         listView.adapter = adapter
 
         emptyView = TextView(this).apply {
-            text = "No events yet.\nSend or receive an SMS to see it here."
+            text = getString(R.string.log_activity_empty)
             setTextColor(0xFF707070.toInt())
             textSize = 14f
             gravity = Gravity.CENTER

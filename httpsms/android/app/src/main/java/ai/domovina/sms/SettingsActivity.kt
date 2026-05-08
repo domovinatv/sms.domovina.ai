@@ -136,10 +136,10 @@ class SettingsActivity : AppCompatActivity() {
     private fun onLogoutClick() {
         Timber.d("logout button clicked")
         MaterialAlertDialogBuilder(this)
-            .setTitle("Confirm")
-            .setMessage("Are you sure you want to logout of the httpSMS App?")
-            .setNeutralButton("Cancel"){ _, _ -> Timber.d("logout dialog canceled") }
-            .setPositiveButton("Logout"){_, _ ->
+            .setTitle("Potvrda")
+            .setMessage(R.string.dialog_logout_message)
+            .setNeutralButton("Odustani"){ _, _ -> Timber.d("logout dialog canceled") }
+            .setPositiveButton("Odjava"){_, _ ->
                 Timber.d("logging out user")
                 Settings.setApiKeyAsync(this, null)
                 Settings.setSIM1PhoneNumber(this, null)
