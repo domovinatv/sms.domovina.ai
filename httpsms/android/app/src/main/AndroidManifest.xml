@@ -8,6 +8,10 @@
         android:required="false" />
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- Lets us best-effort prefill the SIM1 phone number on the login screen
+         using SubscriptionManager.getPhoneNumber() on Android 13+. Many
+         carriers don't expose MSISDN via the SIM, so this is purely UX. -->
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />

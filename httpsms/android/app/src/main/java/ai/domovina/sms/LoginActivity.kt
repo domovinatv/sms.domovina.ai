@@ -119,24 +119,48 @@ class LoginActivity : AppCompatActivity() {
         Timber.d("default server url [${serverUrlInput.text.toString()}] set successfully")
     }
 
-    @SuppressLint("HardwareIds")
+    @SuppressLint("HardwareIds", "MissingPermission")
     @Suppress("DEPRECATION")
     private fun getPhoneNumber(context: Context): String? {
-        val telephonyManager = this.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_SMS
-            ) != PackageManager.PERMISSION_GRANTED
+        // Prefer the modern SubscriptionManager API on Android 13+. Falls back
+        // to the deprecated TelephonyManager.line1Number for older devices.
+        // Both routinely return empty on Croatian carriers (A1, T-HT, Telemach
+        // generally don't write MSISDN to the SIM); we just try our best and
+        // leave the field empty if nothing comes back so the user can type it.
+        var resolved: String? = null
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS)
+            == PackageManager.PERMISSION_GRANTED
         ) {
-            Timber.e("cannot get owner because permissions are not granted")
+            try {
+                val sm = getSystemService(android.telephony.SubscriptionManager::class.java)
+                val active = sm?.activeSubscriptionInfoList ?: emptyList()
+                resolved = active.asSequence()
+                    .map { sm?.getPhoneNumber(it.subscriptionId) }
+                    .firstOrNull { !it.isNullOrBlank() }
+            } catch (e: SecurityException) {
+                Timber.w(e, "SubscriptionManager.getPhoneNumber denied")
+            }
+        }
+
+        if (resolved.isNullOrBlank()) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
+                == PackageManager.PERMISSION_GRANTED
+            ) {
+                val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+                resolved = telephonyManager.line1Number
+            }
+        }
+
+        if (resolved.isNullOrBlank()) {
+            Timber.d("could not auto-detect SIM1 phone number; user must enter it manually")
             return Settings.getSIM1PhoneNumber(this)
         }
 
-        if (telephonyManager.line1Number != null && telephonyManager.line1Number  != "") {
-            Settings.setSIM1PhoneNumber(context, telephonyManager.line1Number)
-        }
-
-        return telephonyManager.line1Number
+        Timber.i("auto-detected SIM1 phone number [$resolved]")
+        Settings.setSIM1PhoneNumber(context, resolved)
+        return resolved
     }
 
     private fun requestPermissions() {
@@ -151,6 +175,7 @@ class LoginActivity : AppCompatActivity() {
             Manifest.permission.SEND_SMS,
             Manifest.permission.RECEIVE_SMS,
             Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.READ_PHONE_NUMBERS,
             Manifest.permission.READ_SMS,
         )
 
