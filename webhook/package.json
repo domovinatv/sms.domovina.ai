@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "bun run --hot index.ts",
-    "start": "bun run index.ts"
+    "start": "bun run index.ts",
+    "test": "bun test"
   },
   "dependencies": {
     "hono": "^4.6.0"
