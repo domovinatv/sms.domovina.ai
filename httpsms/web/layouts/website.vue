@@ -1,77 +1,61 @@
 <template>
   <v-app>
-    <v-divider class="tricolor-stripe" />
     <v-app-bar
+      app
       elevate-on-scroll
       color="white"
-      height="70"
-      fixed
+      :height="$vuetify.breakpoint.xsOnly ? 60 : 72"
       light
       flat
       class="brand-app-bar"
     >
-      <v-container>
-        <v-row>
-          <v-col class="w-full d-flex align-center">
-            <nuxt-link
-              to="/"
-              class="text-decoration-none d-flex align-center"
-            >
-              <v-avatar tile size="40">
-                <v-img contain :src="require('@/assets/img/logo.svg')"></v-img>
-              </v-avatar>
-              <h3
-                v-if="$vuetify.breakpoint.smAndUp"
-                class="brand-wordmark ml-2"
-              >
-                <span class="brand-name">DOMOVINA</span><span class="brand-tld">.ai</span>
-                <span class="brand-sub">SMS</span>
-              </h3>
-            </nuxt-link>
-            <v-spacer></v-spacer>
-            <v-btn
-              v-show="
-                $vuetify.breakpoint.lgAndUp &&
-                $store.getters.getAuthUser === null
-              "
-              large
-              text
-              color="primary"
-              class="my-5 mr-2"
-              :to="{ name: 'login' }"
-            >
-              Prijava
-            </v-btn>
-            <v-btn
-              v-show="$store.getters.getAuthUser === null"
-              exact-path
-              color="primary"
-              :class="{
-                'mt-5': $vuetify.breakpoint.mdAndUp,
-                'mt-1': !$vuetify.breakpoint.mdAndUp,
-              }"
-              :large="$vuetify.breakpoint.lgAndUp"
-              :to="{ name: 'login' }"
-            >
-              Započni
-              <span v-show="$vuetify.breakpoint.lgAndUp">&nbsp;besplatno</span>
-            </v-btn>
-            <v-btn
-              v-show="$store.getters.getAuthUser !== null"
-              exact-path
-              color="primary"
-              :class="{
-                'mt-5': $vuetify.breakpoint.mdAndUp,
-                'mt-1': !$vuetify.breakpoint.mdAndUp,
-              }"
-              :large="$vuetify.breakpoint.lgAndUp"
-              :to="{ name: 'threads' }"
-            >
-              Dashboard
-            </v-btn>
-          </v-col>
-        </v-row>
-      </v-container>
+      <div class="brand-app-bar__inner d-flex align-center w-full">
+        <nuxt-link
+          to="/"
+          class="text-decoration-none d-flex align-center brand-link"
+          aria-label="Domovina SMS — početna"
+        >
+          <v-avatar
+            tile
+            :size="$vuetify.breakpoint.xsOnly ? 36 : 44"
+            class="brand-link__logo"
+          >
+            <v-img contain :src="require('@/assets/img/logo.svg')"></v-img>
+          </v-avatar>
+          <span class="brand-wordmark ml-2">
+            <span class="brand-name">DOMOVINA</span><span class="brand-tld">.ai</span><span class="brand-sub">SMS</span>
+          </span>
+        </nuxt-link>
+        <v-spacer></v-spacer>
+        <v-btn
+          v-if="$vuetify.breakpoint.mdAndUp && $store.getters.getAuthUser === null"
+          text
+          color="primary"
+          class="mr-2"
+          :to="{ name: 'login' }"
+        >
+          Prijava
+        </v-btn>
+        <v-btn
+          v-if="$store.getters.getAuthUser === null"
+          color="primary"
+          depressed
+          :small="$vuetify.breakpoint.xsOnly"
+          :to="{ name: 'login' }"
+        >
+          Započni
+          <span v-show="$vuetify.breakpoint.smAndUp">&nbsp;besplatno</span>
+        </v-btn>
+        <v-btn
+          v-if="$store.getters.getAuthUser !== null"
+          color="primary"
+          depressed
+          :small="$vuetify.breakpoint.xsOnly"
+          :to="{ name: 'threads' }"
+        >
+          Dashboard
+        </v-btn>
+      </div>
     </v-app-bar>
     <v-main>
       <toast></toast>
@@ -314,15 +298,49 @@ export default Vue.extend({
 <style lang="scss">
 .v-application {
   .brand-app-bar {
-    border-bottom: 1px solid #e1e5ea;
+    border-bottom: 1px solid #e1e5ea !important;
+    // Croatian tricolour shows as a 3px accent on the bottom of the header
+    // — replaces the old separate <v-divider> stripe so the header reads
+    // as one unified element on all viewports.
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 3px;
+      background: linear-gradient(
+        to right,
+        #ff0000 0%,
+        #ff0000 33.33%,
+        #ffffff 33.33%,
+        #ffffff 66.66%,
+        #002f6c 66.66%,
+        #002f6c 100%
+      );
+      pointer-events: none;
+    }
+    .v-toolbar__content {
+      padding: 0 1rem;
+    }
+  }
+  .brand-app-bar__inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .brand-link {
+    min-width: 0; // allow truncation in flex
+    flex-shrink: 1;
   }
   .brand-wordmark {
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     font-weight: 800;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.03em;
     line-height: 1;
     display: inline-flex;
     align-items: baseline;
+    white-space: nowrap;
     .brand-name {
       color: #002f6c;
     }
@@ -331,10 +349,22 @@ export default Vue.extend({
     }
     .brand-sub {
       color: #5a6570;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       font-weight: 700;
-      margin-left: 0.5rem;
-      letter-spacing: 0.12em;
+      margin-left: 0.45rem;
+      letter-spacing: 0.14em;
+      padding: 2px 6px;
+      border: 1px solid #e1e5ea;
+      border-radius: 3px;
+      align-self: center;
+    }
+  }
+  @media (max-width: 360px) {
+    .brand-wordmark {
+      font-size: 0.9rem;
+      .brand-sub {
+        display: none; // very narrow phones — drop the SMS badge
+      }
     }
   }
   .tricolor-stripe {
