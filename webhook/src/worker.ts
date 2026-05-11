@@ -34,6 +34,13 @@ export interface Env {
   VERIFICATION_TTL_MS?: string;
   CODE_LEN?: string;
   ONLINE_CUTOFF_MS?: string;
+  /**
+   * Basic-auth creds for /admin/* (UI + audit log). Both set via
+   * `wrangler secret put ADMIN_USER` / `ADMIN_PASS`. If either is missing
+   * the /admin/* tree fails closed with 503 (app.ts).
+   */
+  ADMIN_USER?: string;
+  ADMIN_PASS?: string;
   VERIFICATION_STORE: DurableObjectNamespace;
 }
 
@@ -61,6 +68,8 @@ export class VerificationStore extends DurableObject<Env> {
       codeLen: Number(env.CODE_LEN) || 6,
       onlineCutoffMs: Number(env.ONLINE_CUTOFF_MS) || 120_000,
       publicOrigin: env.PUBLIC_ORIGIN,
+      adminUser: env.ADMIN_USER,
+      adminPass: env.ADMIN_PASS,
       storage: sqlStorage,
     });
 
@@ -193,16 +202,29 @@ function createSqlStorage(ctx: DurableObjectState): Storage {
       return rows.length > 0 ? rowToVerification(rows[0]) : undefined;
     },
 
-    list(limit) {
-      const rows = sql.exec<VerificationRow>(
-        `SELECT * FROM verifications ORDER BY created_at DESC LIMIT ?`,
-        limit
-      ).toArray();
+    list({ limit, offset = 0, status }) {
+      const rows = status
+        ? sql.exec<VerificationRow>(
+            `SELECT * FROM verifications WHERE status = ? ORDER BY created_at DESC LIMIT ? OFFSET ?`,
+            status,
+            limit,
+            offset
+          ).toArray()
+        : sql.exec<VerificationRow>(
+            `SELECT * FROM verifications ORDER BY created_at DESC LIMIT ? OFFSET ?`,
+            limit,
+            offset
+          ).toArray();
       return rows.map(rowToVerification);
     },
 
-    count() {
-      const rows = sql.exec<{ c: number }>(`SELECT COUNT(*) as c FROM verifications`).toArray();
+    count(status) {
+      const rows = status
+        ? sql.exec<{ c: number }>(
+            `SELECT COUNT(*) as c FROM verifications WHERE status = ?`,
+            status
+          ).toArray()
+        : sql.exec<{ c: number }>(`SELECT COUNT(*) as c FROM verifications`).toArray();
       return rows[0]?.c ?? 0;
     },
 

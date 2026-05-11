@@ -28,8 +28,8 @@ export interface Storage {
   create(v: Verification): void;
   getById(id: string): Verification | undefined;
   getByCode(code: string): Verification | undefined;
-  list(limit: number): Verification[];
-  count(): number;
+  list(opts: { limit: number; offset?: number; status?: Status }): Verification[];
+  count(status?: Status): number;
   /** Codes currently held by pending verifications (for collision check). */
   pendingCodes(): Set<string>;
   /** Mark expired and remove from code index. Returns updated row. */
@@ -90,14 +90,19 @@ export function createMemoryStorage(): MemoryStorage {
       return id ? verifications.get(id) : undefined;
     },
 
-    list(limit) {
-      return Array.from(verifications.values())
-        .sort((a, b) => b.createdAt - a.createdAt)
-        .slice(0, limit);
+    list({ limit, offset = 0, status }) {
+      let arr = Array.from(verifications.values()).sort(
+        (a, b) => b.createdAt - a.createdAt
+      );
+      if (status) arr = arr.filter((v) => v.status === status);
+      return arr.slice(offset, offset + limit);
     },
 
-    count() {
-      return verifications.size;
+    count(status) {
+      if (!status) return verifications.size;
+      let n = 0;
+      for (const v of verifications.values()) if (v.status === status) n++;
+      return n;
     },
 
     pendingCodes() {

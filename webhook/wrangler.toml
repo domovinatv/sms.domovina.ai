@@ -41,10 +41,18 @@ CODE_LEN = "6"
 # this is more of a safety bound than a freshness check.
 ONLINE_CUTOFF_MS = "120000"
 
-# Custom domain route — Cloudflare provisions a free TLS cert.
+# Custom domain routes — Cloudflare provisions free TLS certs.
 # Requires zone "domovina.ai" to be on this Cloudflare account.
 [[routes]]
 pattern = "otp.domovina.ai"
+custom_domain = true
+
+# Typo coverage: opt.domovina.ai is a common mistype of otp.domovina.ai.
+# The worker serves a 301 redirect to the canonical host (handler in
+# src/app.ts). Routing both hostnames to the same worker is what lets the
+# redirect run on Cloudflare's edge.
+[[routes]]
+pattern = "opt.domovina.ai"
 custom_domain = true
 
 # Observability: enable Workers logs (free tier includes basic logs).

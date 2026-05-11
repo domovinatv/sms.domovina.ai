@@ -12,10 +12,12 @@
     "cf:secret": "wrangler secret put HTTPSMS_SIGNING_KEY"
   },
   "dependencies": {
-    "hono": "^4.6.0"
+    "hono": "^4.6.0",
+    "qrcode-svg": "^1.1.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250101.0",
+    "@types/qrcode-svg": "^1.1.5",
     "wrangler": "^4.0.0"
   }
 }

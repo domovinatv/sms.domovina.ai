@@ -4,16 +4,19 @@
  * the Cloudflare Worker uses a SQLite-backed Durable Object.
  */
 import { Hono } from "hono";
+import { basicAuth } from "hono/basic-auth";
 import { cors } from "hono/cors";
 import { verify } from "hono/jwt";
 import {
   createMemoryStorage,
   type GatewayRow,
   type MemoryStorage,
+  type Status,
   type Storage,
   type Verification,
 } from "./storage";
-import { renderHomePage, OG_IMAGE_SVG, LOGO_SVG } from "./views";
+import { renderAdminPage, renderHomePage, OG_IMAGE_SVG, LOGO_SVG } from "./views";
+import QRCode from "qrcode-svg";
 
 const DIM = (s: string) => `\x1b[2m${s}\x1b[0m`;
 const CYAN = (s: string) => `\x1b[36m${s}\x1b[0m`;
@@ -81,6 +84,27 @@ function publicView(v: Verification) {
   };
 }
 
+/**
+ * Body that the user sends as the verification SMS. Used both by the
+ * mobile "Otvori SMS aplikaciju" deep link and by the desktop QR payload
+ * so both flows produce the same outbound text.
+ *
+ * Constraints we honor:
+ * - **Single segment (≤160 chars, GSM-7).** No Croatian diacritics, so the
+ *   carrier doesn't switch to UCS-2 (which would halve the segment to 70).
+ * - **No false-positive risk against `findCodeInContent`.** Generated codes
+ *   are 6 chars from the alphabet `ACDEFGHJKMNPQRTUVWXY3467` (no
+ *   B/I/L/O/S/Z/0/1/2/5/8/9). The longest run of alphabet chars anywhere
+ *   in this template is "TVRDA" (5) inside "potvrda", so a 6-char random
+ *   code cannot accidentally appear as a substring of the surrounding copy.
+ * - **Tells the user to come back to the browser** — in iOS Messages the
+ *   sender otherwise has no obvious cue to switch back to Safari/Chrome
+ *   after sending, which was the original UX gap.
+ */
+export function buildSmsBody(code: string): string {
+  return `Potvrda broja na DOMOVINA.ai. Vrati se u browser nakon slanja. Kod: ${code}`;
+}
+
 export interface AppOptions {
   signingKey: string;
   /**
@@ -108,6 +132,13 @@ export interface AppOptions {
   codeLen: number;
   /** Public origin used in canonical/og:url meta tags. No trailing slash. */
   publicOrigin?: string;
+  /**
+   * Basic-auth credentials gating the /admin/* surface (UI + JSON list).
+   * If either is missing/empty the entire /admin/* tree returns 503 — we
+   * never want an unauthenticated audit log exposed by accident.
+   */
+  adminUser?: string;
+  adminPass?: string;
   /** Optional custom storage backend. Defaults to in-memory. */
   storage?: Storage;
   /** Optional log sink. Defaults to console.log unless NODE_ENV=test. */
@@ -186,6 +217,20 @@ export function createApp(opts: AppOptions): AppHandle {
   const publicOrigin = opts.publicOrigin?.replace(/\/+$/, "") ?? "";
 
   const app = new Hono();
+
+  // Typo-domain redirect: opt.domovina.ai → otp.domovina.ai (preserves
+  // path + query). The "opt"/"otp" letter swap is a common mistype, so we
+  // serve a permanent redirect so bookmarks/links converge on the canonical
+  // host. Must run before any other route to avoid serving HTML on opt.*.
+  app.use("*", async (c, next) => {
+    const url = new URL(c.req.url);
+    if (url.hostname === "opt.domovina.ai") {
+      url.hostname = "otp.domovina.ai";
+      return c.redirect(url.toString(), 301);
+    }
+    return next();
+  });
+
   app.use("/api/*", cors());
 
   // ── Start verification ──
@@ -215,7 +260,35 @@ export function createApp(opts: AppOptions): AppHandle {
     log(`${CYAN("verification.start")} id=${id.slice(0, 8)} code=${BOLD(code)} gateway=${gatewayNumber} tier=${pick.tier} purpose=${purpose ?? "-"}`);
     return c.json({
       ...publicView(v),
+      sms_body: buildSmsBody(code),
       instructions: `Pošaljite SMS koji sadrži kod „${code}" na broj ${gatewayNumber} s telefona koji želite potvrditi. Kod nije osjetljiv na velika i mala slova te može biti unutar bilo kojeg teksta.`,
+    });
+  });
+
+  // ── QR code: encodes the sms: URI so a desktop user can scan with their
+  // phone and land in the SMS composer with number + code pre-filled. Used
+  // by the landing page only on desktop (matchMedia hover:hover + pointer:fine).
+  app.get("/api/verifications/:id/qr.svg", (c) => {
+    const id = c.req.param("id");
+    const v = storage.getById(id);
+    if (!v) return c.json({ error: "not_found" }, 404);
+    const smsUri = `sms:${v.gatewayNumber}?body=${encodeURIComponent(buildSmsBody(v.code))}`;
+    const svg = new QRCode({
+      content: smsUri,
+      padding: 1,
+      width: 256,
+      height: 256,
+      color: "#002F6C",
+      background: "#FFFFFF",
+      ecl: "M",
+      join: true,
+      container: "svg-viewbox",
+    }).svg();
+    return new Response(svg, {
+      headers: {
+        "content-type": "image/svg+xml; charset=utf-8",
+        "cache-control": "private, max-age=300",
+      },
     });
   });
 
@@ -230,17 +303,51 @@ export function createApp(opts: AppOptions): AppHandle {
     return c.json(publicView(v));
   });
 
-  // ── Admin / debug list ──
-  app.get("/api/verifications", (c) => {
-    const items = storage.list(100);
+  // ── Admin surface (Basic Auth) ──
+  // Everything under /admin/* is PII-sensitive (full audit log of phone
+  // numbers that completed verification). Fail closed: if creds are not
+  // configured, the whole subtree returns 503 rather than going public.
+  if (opts.adminUser && opts.adminPass) {
+    app.use(
+      "/admin/*",
+      basicAuth({
+        username: opts.adminUser,
+        password: opts.adminPass,
+        realm: "DOMOVINA.ai admin",
+      })
+    );
+  } else {
+    app.use("/admin/*", (c) => c.text("admin not configured", 503));
+  }
+
+  app.get("/admin", (c) => c.html(renderAdminPage()));
+
+  // Paginated, filterable verification list. Limit caps at 200 so a stray
+  // ?limit=99999 can't fan out into a giant SQL scan.
+  app.get("/admin/api/verifications", (c) => {
+    const url = new URL(c.req.url);
+    const rawStatus = url.searchParams.get("status");
+    const status: Status | undefined =
+      rawStatus === "pending" || rawStatus === "verified" || rawStatus === "expired"
+        ? rawStatus
+        : undefined;
+    const limit = Math.max(1, Math.min(200, Number(url.searchParams.get("limit")) || 50));
+    const offset = Math.max(0, Number(url.searchParams.get("offset")) || 0);
+    const items = storage.list({ limit, offset, status });
     return c.json({
-      count: storage.count(),
+      total: storage.count(status),
+      total_all: storage.count(),
+      verified_count: storage.count("verified"),
+      pending_count: storage.count("pending"),
+      expired_count: storage.count("expired"),
+      limit,
+      offset,
+      status: status ?? null,
       items: items.map(publicView),
     });
   });
 
-  // ── Gateway health (admin / debug) ──
-  app.get("/api/gateways", (c) => {
+  app.get("/admin/api/gateways", (c) => {
     const cutoff = Date.now() - onlineCutoffMs;
     const all = storage.listGateways();
     return c.json({
