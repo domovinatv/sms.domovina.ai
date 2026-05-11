@@ -4,8 +4,11 @@
     android:height="108dp"
     android:viewportWidth="512"
     android:viewportHeight="512">
-    <!-- Domovina D-logo, scaled into the safe zone for adaptive launcher icon. -->
-    <group android:pivotX="256" android:pivotY="256" android:scaleX="0.78" android:scaleY="0.78">
+    <!-- Domovina D-logo, scaled into the safe zone for adaptive launcher icon.
+         108dp safe zone is the inner 66dp circle; the path itself already
+         occupies ~72% of the 512 viewport, so 0.65 keeps the logo comfortably
+         inside that safe zone with launcher-typical padding around it. -->
+    <group android:pivotX="256" android:pivotY="256" android:scaleX="0.65" android:scaleY="0.65">
         <!-- D-shape filled with vertical Croatian tricolour gradient -->
         <path android:pathData="M72,64 H248 C354.071,64 440,149.929 440,256 C440,362.071 354.071,448 248,448 H72 V64 Z">
             <aapt:attr name="android:fillColor">
